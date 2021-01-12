@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.wallet.WalletFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/wallet_mywallets_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/add_icon"
+        app:layout_constraintStart_toStartOf="@+id/wallet_mywallets_header"
+        app:layout_constraintTop_toBottomOf="@+id/wallet_mywallets_header" />
+
+    <TextView
+        android:id="@+id/wallet_mywallets_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="My Wallets"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="#707070"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/wallet_mywallets_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wallet_mywallets_icon" />
+
+    <TextView
+        android:id="@+id/wallet_mygoals_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="My Goals"
+        android:textColor="#707070"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wallet_mywallets_recycler" />
+
+    <ImageView
+        android:id="@+id/wallet_mygoals_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/add_icon"
+        app:layout_constraintStart_toStartOf="@+id/wallet_mygoals_header"
+        app:layout_constraintTop_toBottomOf="@+id/wallet_mygoals_header" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/wallet_mygoals_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wallet_mygoals_icon" />
+
+    <TextView
+        android:id="@+id/wallets_categories_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Categories"
+        android:textColor="#707070"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wallet_mygoals_recycler" />
+
+    <ImageView
+        android:id="@+id/wallets_categories_add"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/add_icon"
+        app:layout_constraintStart_toStartOf="@+id/wallets_categories_header"
+        app:layout_constraintTop_toBottomOf="@+id/wallets_categories_header" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wallets_categories_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wallets_categories_add" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</ScrollView>

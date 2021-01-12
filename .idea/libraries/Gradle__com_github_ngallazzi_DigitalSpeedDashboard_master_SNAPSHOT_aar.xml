@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.ngallazzi:DigitalSpeedDashboard:master-SNAPSHOT@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/776d093e0c34a950b7e49db934136cd1/jetified-DigitalSpeedDashboard-master-SNAPSHOT/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/776d093e0c34a950b7e49db934136cd1/jetified-DigitalSpeedDashboard-master-SNAPSHOT/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/776d093e0c34a950b7e49db934136cd1/jetified-DigitalSpeedDashboard-master-SNAPSHOT/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ngallazzi/DigitalSpeedDashboard/master-SNAPSHOT/23894d5b69f245eaa62ba13b6233b81658a13de5/DigitalSpeedDashboard-master-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

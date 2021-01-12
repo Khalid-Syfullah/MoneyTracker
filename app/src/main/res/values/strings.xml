@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">MoneyTracker</string>
+    <string name="title_home">Home</string>
+    <string name="title_transactions">Transactions</string>
+    <string name="title_wallet">Wallet</string>
+    <string name="title_graphs">Graphs</string>
+    <string name="transaction">Transactions</string>
+    <string name="graphs">Graphs</string>
+    <string-array name="time_range">
+        <item>Weekly</item>
+        <item>Daily</item>
+        <item>Monthly</item>
+    </string-array>
+
+    <string name="dash">-</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="change_language">Change Language</string>
+    <string name="cancel">Cancel</string>
+    <string name="inside_title">Title</string>
+    <string name="burn">Burn</string>
+    <string name="add">Add</string>
+    <string name="cons">Consumed</string>
+    <string name="pie_chart_title">Calories Burned vs. Calories Consumed</string>
+    <string name="title_notifications">Notifications</string>
+
+
+</resources>
