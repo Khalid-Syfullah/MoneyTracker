@@ -12,6 +12,13 @@
         <item>Monthly</item>
     </string-array>
 
+    <string-array name="currencies">
+
+        <item>USD</item>
+        <item>BDT</item>
+
+    </string-array>
+
     <string name="dash">-</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="change_language">Change Language</string>

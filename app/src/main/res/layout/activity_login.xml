@@ -1,9 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:id="@+id/login_topEmptyView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/lightTeal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+
+        android:id="@+id/loginLabelImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/login_label_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_topEmptyView" />
+
+
+        <EditText
+            android:id="@+id/logInEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/edit_text_background"
+            android:fontFamily="@font/montserrat"
+            android:hint="Email"
+            android:padding="16dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginLabelImage" />
+
+        <EditText
+            android:id="@+id/logInPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_background"
+            android:fontFamily="@font/montserrat"
+            android:hint="Password"
+            android:padding="16dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintEnd_toEndOf="@+id/logInEmail"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/logInEmail"
+            app:layout_constraintTop_toBottomOf="@+id/logInEmail" />
+
+
+    <TextView
+        android:id="@+id/logInBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:textAlignment="center"
+
+        android:background="@drawable/income_expense_btn_selected"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/montserrat_bold"
+
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/logInPassword"
+        app:layout_constraintStart_toStartOf="@+id/logInPassword"
+        app:layout_constraintTop_toBottomOf="@+id/logInPassword" />
+
+        <TextView
+            android:id="@+id/login_no_accountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:fontFamily="@font/montserrat"
+            android:text="Don't have an account?"
+            android:textAlignment="center"
+
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logInBtn" />
+
+    <TextView
+        android:id="@+id/login_sign_up_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+        android:text="SignUp"
+        android:textColor="#EC6194"
+        android:textSize="14sp"
+        android:textAlignment="center"
+        android:fontFamily="@font/montserrat"
+        app:layout_constraintBottom_toBottomOf="@+id/login_no_accountText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/login_no_accountText"
+        app:layout_constraintTop_toTopOf="@+id/login_no_accountText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

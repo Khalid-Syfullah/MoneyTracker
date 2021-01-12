@@ -136,10 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
-            case R.id.actionbar_profileIcon:
-                Toast.makeText(getApplicationContext(),"Profile Listening",Toast.LENGTH_SHORT).show();
-                break;
-
             case R.id.actionbar_notifications:
                 Toast.makeText(getApplicationContext(),"Notification Listening",Toast.LENGTH_SHORT).show();
                 break;
@@ -220,10 +216,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.LENGTH_SHORT).show();
         }
 
-        if (v.getId() == R.id.actionbar_profileIcon) {
-            Toast.makeText(MainActivity.this, "Profile",
-                    Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void revealFAB(View view) {

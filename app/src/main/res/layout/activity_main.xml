@@ -44,22 +44,15 @@
             android:id="@+id/actionbar_notifications"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="clickEvent"
             android:layout_marginEnd="16dp"
+            android:onClick="clickEvent"
             android:src="@drawable/notification"
+
             app:layout_constraintBottom_toBottomOf="@+id/actionbar_menu"
-            app:layout_constraintEnd_toStartOf="@+id/actionbar_profileIcon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/actionbar_menu" />
 
-        <ImageView
-            android:id="@+id/actionbar_profileIcon"
-            android:onClick="clickEvent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/profile_user"
-            app:layout_constraintBottom_toBottomOf="@+id/actionbar_notifications"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/actionbar_notifications" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

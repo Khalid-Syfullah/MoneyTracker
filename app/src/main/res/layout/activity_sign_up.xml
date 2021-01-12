@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignInActivity">
+    tools:context=".SignUpActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <View
-        android:id="@+id/topEmptyView"
+        android:id="@+id/login_topEmptyView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="#101010"
+        android:background="@color/lightTeal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
 
-        android:id="@+id/imageView2"
+        android:id="@+id/loginLabelImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -25,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topEmptyView" />
+        app:layout_constraintTop_toBottomOf="@+id/login_topEmptyView" />
 
     <EditText
         android:id="@+id/signUpName"
@@ -43,7 +46,7 @@
         app:layout_constraintCircleRadius="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/loginLabelImage" />
 
     <EditText
         android:id="@+id/signUpEmail"
@@ -96,21 +99,57 @@
         app:layout_constraintStart_toStartOf="@+id/signUpPassword"
         app:layout_constraintTop_toBottomOf="@+id/signUpPassword" />
 
-    <TextView
-        android:id="@+id/signUpBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Up"
-        android:padding="16dp"
+        <TextView
+            android:id="@+id/signUpBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
 
-        android:background="@drawable/submit_btn"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/montserrat"
+            android:background="@drawable/submit_btn"
+            android:fontFamily="@font/montserrat_bold"
+            android:padding="16dp"
+            android:text="Sign Up"
+            android:textAlignment="center"
 
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/signUpRetypePassword"
-        app:layout_constraintStart_toStartOf="@+id/signUpRetypePassword"
-        app:layout_constraintTop_toBottomOf="@+id/signUpRetypePassword" />
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/signUpRetypePassword"
+            app:layout_constraintStart_toStartOf="@+id/signUpRetypePassword"
+            app:layout_constraintTop_toBottomOf="@+id/signUpRetypePassword" />
+
+        <TextView
+            android:id="@+id/signUp_already_have_accountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:fontFamily="@font/montserrat"
+            android:text="Already have an account?"
+
+            android:textAlignment="center"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signUpBtn" />
+
+        <TextView
+            android:id="@+id/signUp_login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="8dp"
+            android:text="Login"
+            android:textColor="#EC6194"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:fontFamily="@font/montserrat"
+            app:layout_constraintBottom_toBottomOf="@+id/signUp_already_have_accountText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/signUp_already_have_accountText"
+            app:layout_constraintTop_toTopOf="@+id/signUp_already_have_accountText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
