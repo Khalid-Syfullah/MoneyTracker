@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/menu"
-            android:onClick="clickEvent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,22 +43,11 @@
             android:id="@+id/actionbar_notifications"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="clickEvent"
             android:layout_marginEnd="16dp"
             android:src="@drawable/notification"
             app:layout_constraintBottom_toBottomOf="@+id/actionbar_menu"
-            app:layout_constraintEnd_toStartOf="@+id/actionbar_profileIcon"
-            app:layout_constraintTop_toTopOf="@+id/actionbar_menu" />
-
-        <ImageView
-            android:id="@+id/actionbar_profileIcon"
-            android:onClick="clickEvent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/profile_user"
-            app:layout_constraintBottom_toBottomOf="@+id/actionbar_notifications"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/actionbar_notifications" />
+            app:layout_constraintTop_toTopOf="@+id/actionbar_menu" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -188,7 +176,7 @@
                     app:strokeWidth="2dp" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/nav_header_image"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginTop="16dp"
@@ -204,10 +192,10 @@
                     android:text="Bkash"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                    app:layout_constraintBottom_toBottomOf="@+id/nav_header_image"
                     app:layout_constraintEnd_toStartOf="@+id/transaction_popup_card_amount"
-                    app:layout_constraintStart_toEndOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="@+id/imageView" />
+                    app:layout_constraintStart_toEndOf="@+id/nav_header_image"
+                    app:layout_constraintTop_toTopOf="@+id/nav_header_image" />
 
                 <EditText
                     android:id="@+id/transaction_popup_card_amount"
@@ -251,7 +239,7 @@
                     android:textColor="@color/white"
                     app:drawableStartCompat="@drawable/calendar"
                     app:layout_constraintEnd_toEndOf="@+id/transaction_popup_card_amount"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
+                    app:layout_constraintStart_toStartOf="@+id/nav_header_image"
                     app:layout_constraintTop_toBottomOf="@+id/transaction_popup_card_amount" />
 
                 <TextView
@@ -273,7 +261,7 @@
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/transaction_popup_card_amount"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
+                    app:layout_constraintStart_toStartOf="@+id/nav_header_image"
                     app:layout_constraintTop_toBottomOf="@+id/dateText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -292,7 +280,7 @@
         android:fitsSystemWindows="true"
         android:visibility="visible"
         app:headerLayout="@layout/nav_header_dashboard"
-        app:menu="@menu/activity_dashboard_drawer" />
+        app:menu="@menu/drawer_menu" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
