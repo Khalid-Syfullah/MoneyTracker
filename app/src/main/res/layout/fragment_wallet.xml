@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <ImageView
-        android:id="@+id/wallet_mywallets_icon"
+        android:id="@+id/wallet_add_wallet_btn"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="16dp"
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wallet_mywallets_icon" />
+        app:layout_constraintTop_toBottomOf="@+id/wallet_add_wallet_btn" />
 
     <TextView
         android:id="@+id/wallet_mygoals_header"

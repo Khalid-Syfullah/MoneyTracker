@@ -148,10 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-        if(id == R.id.profile){
-
-        }
-        else if (id == R.id.english) {
+      if (id == R.id.english) {
             languageAlertDialog("en");
         }
         else if (id == R.id.bangla) {
