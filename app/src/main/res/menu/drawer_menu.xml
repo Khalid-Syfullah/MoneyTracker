@@ -5,9 +5,7 @@
 
     <group>
 
-        <item
-            android:id="@+id/profile"
-            android:title="Profile" />
+
 
         <item android:title="Change language">
             <menu>
@@ -19,6 +17,13 @@
                     android:title="বাংলা" />
             </menu>
         </item>
+
+        <item
+            android:id="@+id/export"
+            android:title="Export" />
+        <item
+            android:id="@+id/backup"
+            android:title="Backup" />
 
 
     </group>
