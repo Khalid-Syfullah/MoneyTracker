@@ -71,24 +71,30 @@ public class WalletFragment extends Fragment {
     }
 
     private void showAddWalletAlertDialog() {
-        Dialog dialog=new Dialog(getContext());
-        dialog.setContentView(R.layout.new_wallet_alert);
-        Spinner walletTypes=dialog.findViewById(R.id.wallet_alert_type_spinner);
-        Spinner currencies=dialog.findViewById(R.id.wallet_alert_currency_spinner);
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
+        builder.setView(R.layout.new_wallet_alert);
 
-        String[] walletItems=getResources().getStringArray(R.array.wallet_types);
-        String[] currencyItems=getResources().getStringArray(R.array.currencies);
+        builder.show();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, walletItems);
-        ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, currencyItems);
 
-        currencies.setAdapter(currencyAdapter);
-        walletTypes.setAdapter(adapter);
-        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
-        currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
+//                Dialog dialog=new Dialog(getContext());
+//        dialog.setContentView(R.layout.new_wallet_alert);
+//        Spinner walletTypes=dialog.findViewById(R.id.wallet_alert_type_spinner);
+//        Spinner currencies=dialog.findViewById(R.id.wallet_alert_currency_spinner);
+//
+//        String[] walletItems=getResources().getStringArray(R.array.wallet_types);
+//        String[] currencyItems=getResources().getStringArray(R.array.currencies);
+//
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, walletItems);
+//        ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, currencyItems);
+//
+//        currencies.setAdapter(currencyAdapter);
+//        walletTypes.setAdapter(adapter);
+//        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+//        currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+//
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.show();
 
     }
 }
