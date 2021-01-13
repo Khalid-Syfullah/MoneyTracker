@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.tars.moneytracker.ui.notification.NotificationFragment;
+import com.tars.moneytracker.ui.profile.ProfileFragment;
 
 import java.util.Locale;
 
@@ -40,10 +44,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private  boolean isPopupExpense=false,isCardOn=false;
     private View outsideCard;
     private Button incomeBtn,expenseBtn;
+    private TextView profileBtn;
+    private ImageView menuBtn, notificationBtn;
 
     private DrawerLayout drawerLayout;
     private BottomNavigationView bottomNavigationView;
     private NavigationView drawerNavigationView;
+
 
     SharedPreferences langPrefs;
     String lang="not set";
@@ -55,45 +62,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
-
-
-        addBtn = findViewById(R.id.income_expense_btn);
-
+        container=findViewById(R.id.income_expense_card_container);
         outsideCard=findViewById(R.id.outside_card);
-        incomeBtn=findViewById(R.id.home_trans_popup_income_btn);
-        expenseBtn=findViewById(R.id.home_trans_popup_expense);
 
         drawerNavigationView = findViewById(R.id.nav_drawer_view);
         bottomNavigationView = findViewById(R.id.nav_view);
+        View headerView = drawerNavigationView.getHeaderView(0);
         drawerLayout = findViewById(R.id.drawer_layout);
 
         addBtn = findViewById(R.id.income_expense_btn);
-        container=findViewById(R.id.income_expense_card_container);
-
+        profileBtn = headerView.findViewById(R.id.nav_header_button);
+        menuBtn = findViewById(R.id.actionbar_menu);
+        notificationBtn = findViewById(R.id.actionbar_notifications);
+        incomeBtn=findViewById(R.id.home_trans_popup_income_btn);
+        expenseBtn=findViewById(R.id.home_trans_popup_expense);
 
 
         incomeBtn.setOnClickListener(this);
         expenseBtn.setOnClickListener(this);
         addBtn.setOnClickListener(this);
         outsideCard.setOnClickListener(this);
+        profileBtn.setOnClickListener(this);
+        menuBtn.setOnClickListener(this);
+        notificationBtn.setOnClickListener(this);
 
 
         drawerNavigationView.setNavigationItemSelectedListener(this);
-
-
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_transactions, R.id.navigation_wallet, R.id.navigation_graphs)
-                .build();
-        navView.setItemIconTintList(null);
-
-
+        bottomNavigationView.setItemIconTintList(null);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupWithNavController(navView, navController);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
 
@@ -136,8 +135,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
+            case R.id.nav_header_button:
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,new ProfileFragment()).addToBackStack("tars").commit();
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                } else{
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
+                break;
+
+            case R.id.actionbar_menu:
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                } else{
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
+                break;
+
             case R.id.actionbar_notifications:
-                Toast.makeText(getApplicationContext(),"Notification Listening",Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,new NotificationFragment()).addToBackStack("tars").commit();
                 break;
             default:
                 break;
@@ -148,7 +164,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-      if (id == R.id.english) {
+
+        if(id == R.id.export){
+            Toast.makeText(getApplicationContext(),"Export Listening",Toast.LENGTH_SHORT).show();
+
+        }
+        else if(id == R.id.backup) {
+            Toast.makeText(getApplicationContext(), "Backup Listening", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.english) {
             languageAlertDialog("en");
         }
         else if (id == R.id.bangla) {
@@ -196,23 +220,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void clickEvent(View v) {
-        if (v.getId() == R.id.actionbar_menu) {
-
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-            } else{
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        }
-
-        if (v.getId() == R.id.actionbar_notifications) {
-            Toast.makeText(MainActivity.this, "Notifications",
-                    Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     private void revealFAB(View view) {
