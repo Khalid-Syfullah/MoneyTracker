@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,13 +22,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,24 +39,43 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
+    public static boolean isPopupExpense=false;
+    public static boolean isCardOn=false;
+    public static boolean isNavOn=false;
     private View addBtn ;
-    private ConstraintLayout container;
-    private  boolean isPopupExpense=false,isCardOn=false;
     private View outsideCard;
     private Button incomeBtn,expenseBtn;
     private TextView profileBtn;
     private ImageView menuBtn, notificationBtn;
 
     private DrawerLayout drawerLayout;
+    private View fragmentBig;
+    private View fragmentNavHost;
+    private ConstraintLayout container;
+
     private BottomNavigationView bottomNavigationView;
     private NavigationView drawerNavigationView;
-
 
     SharedPreferences langPrefs;
     String lang="not set";
     public static final String Language_pref="Language";
     public static final String Selected_language="Selected Language";
 
+    @Override
+    public void onBackPressed() {
+
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
+        if(isNavOn){
+        fragmentBig.setVisibility(View.GONE);
+        fragmentNavHost.setVisibility(View.VISIBLE);
+        isNavOn=false;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerNavigationView = findViewById(R.id.nav_drawer_view);
         bottomNavigationView = findViewById(R.id.nav_view);
         View headerView = drawerNavigationView.getHeaderView(0);
+
         drawerLayout = findViewById(R.id.drawer_layout);
+        fragmentBig = findViewById(R.id.big_fragment);
+        fragmentNavHost = findViewById(R.id.nav_host_fragment);
 
         addBtn = findViewById(R.id.income_expense_btn);
         profileBtn = headerView.findViewById(R.id.nav_header_button);
@@ -86,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         profileBtn.setOnClickListener(this);
         menuBtn.setOnClickListener(this);
         notificationBtn.setOnClickListener(this);
-
 
         drawerNavigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setItemIconTintList(null);
@@ -153,7 +174,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.actionbar_notifications:
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,new NotificationFragment()).addToBackStack("tars").commit();
+                if(!isNavOn) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.big_fragment, new NotificationFragment()).addToBackStack("tars").commit();
+                    fragmentBig.setVisibility(View.VISIBLE);
+                    fragmentNavHost.setVisibility(View.GONE);
+                    isNavOn=true;
+                }
                 break;
             default:
                 break;
