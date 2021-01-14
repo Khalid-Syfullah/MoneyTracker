@@ -12,7 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <com.github.mikephil.charting.charts.PieChart
@@ -38,27 +38,29 @@
 
         <TextView
             android:id="@+id/graphs_overview_header"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:text="Spending Overview"
             android:textColor="#707070"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/graphs_overview_spinner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/graphs_category_header"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="Category Spending"
             android:textColor="#707070"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/graphs_category_spinner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/graphs_overview_barchart" />
 
@@ -66,35 +68,40 @@
             android:id="@+id/graphs_monthly_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:text="Monthly Credits"
             android:textColor="#707070"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/graphs_category_piechart" />
 
         <Spinner
             android:id="@+id/graphs_overview_spinner"
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:entries="@array/time_range"
-            android:gravity="end"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="@+id/graphs_overview_header"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/graphs_overview_header"
             app:layout_constraintTop_toTopOf="@+id/graphs_overview_header" />
 
         <Spinner
             android:id="@+id/graphs_category_spinner"
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:entries="@array/time_range"
-            android:gravity="end"
+
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="@+id/graphs_category_header"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/graphs_category_header"
             app:layout_constraintTop_toTopOf="@+id/graphs_category_header" />
 
         <org.eazegraph.lib.charts.StackedBarChart

@@ -64,7 +64,6 @@
                 android:backgroundTint="@color/white"
                 android:entries="@array/wallet_types"
                 android:fontFamily="@font/montserrat"
-
                 android:hint="12000"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
