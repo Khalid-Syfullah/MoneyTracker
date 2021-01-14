@@ -45,12 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View addBtn ;
     private View outsideCard;
     private Button incomeBtn,expenseBtn;
-    private TextView profileBtn;
-    private ImageView menuBtn, notificationBtn;
+    private TextView navHeaderProfileBtn, navHeaderTitle;
+    private ImageView menuBtn, notificationBtn, navHeaderProfileIcon;
 
     private DrawerLayout drawerLayout;
-    private View fragmentBig;
-    private View fragmentNavHost;
     private ConstraintLayout container;
 
     private BottomNavigationView bottomNavigationView;
@@ -80,20 +78,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentNavHost = findViewById(R.id.nav_host_fragment);
 
         addBtn = findViewById(R.id.income_expense_btn);
-        profileBtn = headerView.findViewById(R.id.nav_header_button);
         menuBtn = findViewById(R.id.actionbar_menu);
         notificationBtn = findViewById(R.id.actionbar_notifications);
         incomeBtn=findViewById(R.id.home_trans_popup_income_btn);
         expenseBtn=findViewById(R.id.home_trans_popup_expense);
+        navHeaderTitle=headerView.findViewById(R.id.nav_header_title);
+        navHeaderProfileIcon=headerView.findViewById(R.id.nav_header_image);
+        navHeaderProfileBtn = headerView.findViewById(R.id.view_profile_button);
 
 
         incomeBtn.setOnClickListener(this);
         expenseBtn.setOnClickListener(this);
         addBtn.setOnClickListener(this);
         outsideCard.setOnClickListener(this);
-        profileBtn.setOnClickListener(this);
+        navHeaderProfileBtn.setOnClickListener(this);
         menuBtn.setOnClickListener(this);
         notificationBtn.setOnClickListener(this);
+        navHeaderTitle.setOnClickListener(this);
+        navHeaderProfileIcon.setOnClickListener(this);
 
         drawerNavigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setItemIconTintList(null);
@@ -150,8 +152,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
-            case R.id.nav_header_button:
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,new ProfileFragment()).addToBackStack(null).commit();
+            case R.id.nav_header_image:
+            case R.id.nav_header_title:
+            case R.id.view_profile_button:
+                getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new ProfileFragment()).addToBackStack("tars").commit();
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 } else{

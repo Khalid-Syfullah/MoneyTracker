@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/nav_header_image" />
 
     <TextView
-        android:id="@+id/nav_header_button"
+        android:id="@+id/view_profile_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_bold"
