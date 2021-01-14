@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 
 public class HomeFragment extends Fragment {
 

@@ -1,9 +1,6 @@
 package com.tars.moneytracker.ui.wallet;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
-import com.tars.moneytracker.ui.home.GoalsAdapter;
-import com.tars.moneytracker.ui.home.WalletAdapter;
+import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 
 public class WalletFragment extends Fragment {
 

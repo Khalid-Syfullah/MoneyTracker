@@ -1,4 +1,4 @@
-package com.tars.moneytracker.ui.notification;
+package com.tars.moneytracker.ui.notification.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,14 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.ui.notification.viewHolders.NotificationsViewHolder;
 
-public class NotificationAdapter extends RecyclerView.Adapter {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationsViewHolder> {
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NotificationsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context=parent.getContext();
         View view= LayoutInflater.from(context).inflate(R.layout.child_notification,parent,false);
-        RecyclerView.ViewHolder mvh=new RecyclerView.ViewHolder(view) {
+        NotificationsViewHolder mvh=new NotificationsViewHolder(view) {
             @Override
             public String toString() {
                 return super.toString();
@@ -26,7 +27,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull NotificationsViewHolder holder, int position) {
 
     }
 

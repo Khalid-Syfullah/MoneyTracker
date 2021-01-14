@@ -1,4 +1,4 @@
-package com.tars.moneytracker.ui.transaction;
+package com.tars.moneytracker.ui.transaction.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,8 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.ui.transaction.viewHolders.TransactionsViewHolder;
 
-public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionsViewHolder>{
 
     Context ctx;
     public TransactionAdapter() {
@@ -21,11 +22,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TransactionsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         ctx = parent.getContext();
         View view = LayoutInflater.from(ctx).inflate(R.layout.child_transaction, parent, false);
-        RecyclerView.ViewHolder viewHolder= new RecyclerView.ViewHolder(view){
+        TransactionsViewHolder viewHolder= new TransactionsViewHolder(view){
             @Override
             public String toString() {
                 return super.toString();
@@ -35,7 +36,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TransactionsViewHolder holder, int position) {
         Animation animation = AnimationUtils.loadAnimation(ctx, R.anim.zoom_in);
         holder.itemView.startAnimation(animation);
     }

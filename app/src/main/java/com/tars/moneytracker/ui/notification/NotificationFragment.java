@@ -6,18 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tars.moneytracker.MainActivity;
 import com.tars.moneytracker.R;
-import com.tars.moneytracker.ui.profile.ProfileFragment;
-import com.tars.moneytracker.ui.transaction.TransactionAdapter;
+import com.tars.moneytracker.ui.notification.adapters.NotificationAdapter;
 
 public class NotificationFragment extends Fragment {
 
