@@ -75,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        fragmentNavHost = findViewById(R.id.nav_host_fragment);
-
         addBtn = findViewById(R.id.income_expense_btn);
         menuBtn = findViewById(R.id.actionbar_menu);
         notificationBtn = findViewById(R.id.actionbar_notifications);
