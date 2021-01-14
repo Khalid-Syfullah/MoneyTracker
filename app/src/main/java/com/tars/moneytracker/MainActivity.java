@@ -14,21 +14,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
+
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -63,21 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String Language_pref="Language";
     public static final String Selected_language="Selected Language";
 
-    @Override
-    public void onBackPressed() {
 
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else{
-            super.onBackPressed();
-        }
-        if(isNavOn){
-        fragmentBig.setVisibility(View.GONE);
-        fragmentNavHost.setVisibility(View.VISIBLE);
-        isNavOn=false;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View headerView = drawerNavigationView.getHeaderView(0);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        fragmentBig = findViewById(R.id.big_fragment);
+
         fragmentNavHost = findViewById(R.id.nav_host_fragment);
 
         addBtn = findViewById(R.id.income_expense_btn);
@@ -167,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.nav_header_button:
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,new ProfileFragment()).addToBackStack("tars").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,new ProfileFragment()).addToBackStack(null).commit();
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 } else{
@@ -184,12 +168,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.actionbar_notifications:
-                if(!isNavOn) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.big_fragment, new NotificationFragment()).addToBackStack("tars").commit();
-                    fragmentBig.setVisibility(View.VISIBLE);
-                    fragmentNavHost.setVisibility(View.GONE);
-                    isNavOn=true;
-                }
+                    getSupportFragmentManager().beginTransaction().add(R.id.drawer_layout, new NotificationFragment()).addToBackStack("nt").commit();
+
                 break;
             default:
                 break;
@@ -319,6 +299,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent refresh = new Intent(this, MainActivity.class);
         startActivity(refresh);
         finish();
+    }
+    @Override
+    public void onBackPressed() {
+
+        if (isCardOn) {
+            hideFAB(container);
+            isCardOn=false;
+        } else {
+            FragmentManager fm = getSupportFragmentManager();
+            if (fm.getBackStackEntryCount() > 0) {
+                if (fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName().equals("nt")) {
+
+                    fm.popBackStack("nt", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fm.beginTransaction().remove(new NotificationFragment()).commit();
+                }
+
+            } else {
+
+                super.onBackPressed();
+            }
+        }
     }
 
 }

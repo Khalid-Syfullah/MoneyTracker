@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="30dp">
+    android:layout_marginBottom="30dp"
+    android:background="@color/lightTeal"
+    >
 
     <TextView
         android:id="@+id/notification_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
-        android:text="Add Salary 15,000 BDT. to Wallet Cash"
+        android:text="Add Salary 15,000 BDT. to Wallet Cash sdsa adadadaad"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:textStyle="bold"
