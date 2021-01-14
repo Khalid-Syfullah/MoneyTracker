@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
 
+    xmlns:tools="http://schemas.android.com/tools"
     android:backgroundTint="@color/transparent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -26,7 +27,7 @@
             android:background="@color/lightTeal">
 
             <EditText
-                android:id="@+id/wallet_alert_header"
+                android:id="@+id/goal_alert_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -34,7 +35,7 @@
                 android:layout_marginEnd="32dp"
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/montserrat"
-                android:hint="Enter Wallet name"
+                android:hint="Enter Goal title"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textColorHint="#AAFFFFFF"
@@ -43,56 +44,88 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/wallet_alert_type_text"
+                android:id="@+id/goal_alert_type_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/montserrat"
-                android:text="Wallet Type"
+                android:text="Goal Type"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/wallet_alert_header" />
+                app:layout_constraintTop_toBottomOf="@+id/goal_alert_header" />
 
-            <Spinner
-                android:id="@+id/wallet_alert_type_spinner"
+            <EditText
+                android:id="@+id/goal_alert_type_edittext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/white"
                 android:entries="@array/wallet_types"
-                android:gravity="end"
-                app:layout_constraintBottom_toBottomOf="@+id/wallet_alert_type_text"
+                android:fontFamily="@font/montserrat"
+
+                android:hint="12000"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/white"
+                android:textColorHint="#AAFFFFFF"
+                app:layout_constraintBottom_toBottomOf="@+id/goal_alert_type_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/wallet_alert_type_text" />
+                app:layout_constraintTop_toTopOf="@+id/goal_alert_type_text" />
 
             <TextView
-                android:id="@+id/wallet_alert_currency_text"
+                android:id="@+id/goal_alert_currency_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/montserrat"
                 android:text="Currency"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/wallet_alert_type_text"
-                app:layout_constraintTop_toBottomOf="@+id/wallet_alert_type_text" />
+                app:layout_constraintStart_toStartOf="@+id/goal_alert_type_text"
+                app:layout_constraintTop_toBottomOf="@+id/goal_alert_type_text" />
 
             <Spinner
-                android:id="@+id/wallet_alert_currency_spinner"
+                android:id="@+id/goal_alert_currency_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/white"
                 android:entries="@array/currencies"
-                app:layout_constraintBottom_toBottomOf="@+id/wallet_alert_currency_text"
+                app:layout_constraintBottom_toBottomOf="@+id/goal_alert_currency_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/wallet_alert_currency_text"
-                app:layout_constraintTop_toTopOf="@+id/wallet_alert_currency_text" />
+                app:layout_constraintTop_toTopOf="@+id/goal_alert_currency_text" />
+
+            <TextView
+                android:id="@+id/goal_alert_date_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/montserrat"
+                android:text="Due date"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/goal_alert_currency_text"
+                app:layout_constraintTop_toBottomOf="@+id/goal_alert_currency_text" />
+
+            <TextView
+                android:id="@+id/goal_alert_dateView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:text="20-01-2021"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/goal_alert_date_label"
+                app:layout_constraintEnd_toEndOf="@+id/goal_alert_currency_spinner"
+                app:layout_constraintStart_toStartOf="@+id/goal_alert_currency_spinner"
+                app:layout_constraintTop_toTopOf="@+id/goal_alert_date_label" />
+
 
             <Button
 
-                android:id="@+id/wallet_alert_save_button"
+                android:id="@+id/goal_alert_save_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -102,18 +135,18 @@
                 android:text="save"
                 android:textColor="@color/lightTeal"
                 android:textSize="12sp"
-                app:cornerRadius="10dp"
 
+                app:cornerRadius="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/wallet_alert_delete_button"
+                app:layout_constraintEnd_toStartOf="@+id/goal_alert_delete_button"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/wallet_alert_currency_text"
+                app:layout_constraintTop_toBottomOf="@+id/goal_alert_date_label"
                 app:strokeColor="@color/white"
                 app:strokeWidth="2dp" />
 
             <Button
 
-                android:id="@+id/wallet_alert_delete_button"
+                android:id="@+id/goal_alert_delete_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/lightTeal"
@@ -122,11 +155,11 @@
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 app:cornerRadius="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/wallet_alert_save_button"
+                app:layout_constraintBottom_toBottomOf="@+id/goal_alert_save_button"
 
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/wallet_alert_save_button"
-                app:layout_constraintTop_toTopOf="@+id/wallet_alert_save_button"
+                app:layout_constraintStart_toEndOf="@+id/goal_alert_save_button"
+                app:layout_constraintTop_toTopOf="@+id/goal_alert_save_button"
                 app:strokeColor="@color/white"
                 app:strokeWidth="2dp" />
 

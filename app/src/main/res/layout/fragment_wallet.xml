@@ -32,12 +32,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wallet_mywallets_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wallet_add_wallet_btn" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wallet_mywallets_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wallet_add_wallet_btn" />
 
     <TextView
         android:id="@+id/wallet_mygoals_header"
@@ -54,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/wallet_mywallets_recycler" />
 
     <ImageView
-        android:id="@+id/wallet_mygoals_icon"
+        android:id="@+id/wallet_add_goals_btn"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="16dp"
@@ -62,12 +63,13 @@
         app:layout_constraintStart_toStartOf="@+id/wallet_mygoals_header"
         app:layout_constraintTop_toBottomOf="@+id/wallet_mygoals_header" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wallet_mygoals_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wallet_mygoals_icon" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wallet_mygoals_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wallet_add_goals_btn" />
 
     <TextView
         android:id="@+id/wallets_categories_header"
@@ -97,6 +99,7 @@
             android:layout_height="wrap_content"
 
 
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

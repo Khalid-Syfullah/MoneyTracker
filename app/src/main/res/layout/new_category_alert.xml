@@ -26,7 +26,7 @@
             android:background="@color/lightTeal">
 
             <EditText
-                android:id="@+id/wallet_alert_header"
+                android:id="@+id/category_alert_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -34,7 +34,7 @@
                 android:layout_marginEnd="32dp"
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/montserrat"
-                android:hint="Enter Wallet name"
+                android:hint="Enter Category name"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textColorHint="#AAFFFFFF"
@@ -43,77 +43,55 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/wallet_alert_type_text"
+                android:id="@+id/category_alert_type_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/montserrat"
-                android:text="Wallet Type"
+                android:text="Choose Icon"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/wallet_alert_header" />
+                app:layout_constraintTop_toBottomOf="@+id/category_alert_header" />
 
-            <Spinner
-                android:id="@+id/wallet_alert_type_spinner"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/new_category_choose_icon_recycler"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:entries="@array/wallet_types"
-                android:gravity="end"
-                app:layout_constraintBottom_toBottomOf="@+id/wallet_alert_type_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/wallet_alert_type_text" />
 
-            <TextView
-                android:id="@+id/wallet_alert_currency_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/montserrat"
-                android:text="Currency"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/wallet_alert_type_text"
-                app:layout_constraintTop_toBottomOf="@+id/wallet_alert_type_text" />
-
-            <Spinner
-                android:id="@+id/wallet_alert_currency_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:entries="@array/currencies"
-                app:layout_constraintBottom_toBottomOf="@+id/wallet_alert_currency_text"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/wallet_alert_currency_text"
-                app:layout_constraintTop_toTopOf="@+id/wallet_alert_currency_text" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/category_alert_type_text" />
+
 
             <Button
 
-                android:id="@+id/wallet_alert_save_button"
+                android:id="@+id/category_alert_save_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/montserrat_bold"
                 android:text="save"
                 android:textColor="@color/lightTeal"
+
                 android:textSize="12sp"
                 app:cornerRadius="10dp"
-
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/wallet_alert_delete_button"
+                app:layout_constraintEnd_toStartOf="@+id/category_alert_delete_button"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/wallet_alert_currency_text"
+                app:layout_constraintTop_toBottomOf="@+id/new_category_choose_icon_recycler"
                 app:strokeColor="@color/white"
                 app:strokeWidth="2dp" />
 
             <Button
 
-                android:id="@+id/wallet_alert_delete_button"
+                android:id="@+id/category_alert_delete_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/lightTeal"
@@ -122,11 +100,11 @@
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 app:cornerRadius="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/wallet_alert_save_button"
+                app:layout_constraintBottom_toBottomOf="@+id/category_alert_save_button"
 
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/wallet_alert_save_button"
-                app:layout_constraintTop_toTopOf="@+id/wallet_alert_save_button"
+                app:layout_constraintStart_toEndOf="@+id/category_alert_save_button"
+                app:layout_constraintTop_toTopOf="@+id/category_alert_save_button"
                 app:strokeColor="@color/white"
                 app:strokeWidth="2dp" />
 
