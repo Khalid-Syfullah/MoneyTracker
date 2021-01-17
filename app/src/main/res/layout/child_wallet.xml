@@ -20,7 +20,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/cashTextView"
+                android:id="@+id/walletName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -48,7 +48,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cashTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/walletName" />
 
             <TextView
                 android:id="@+id/balance_amount"

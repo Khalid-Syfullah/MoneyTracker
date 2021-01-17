@@ -86,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/wallet_mygoals_recycler" />
 
     <ImageView
-        android:id="@+id/wallets_categories_add"
+        android:id="@+id/wallets_add_categories_btn"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/add_icon"
@@ -104,7 +104,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/wallets_categories_add" />
+            app:layout_constraintTop_toBottomOf="@+id/wallets_add_categories_btn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

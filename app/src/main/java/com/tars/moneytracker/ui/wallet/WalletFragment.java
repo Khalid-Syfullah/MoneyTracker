@@ -22,13 +22,14 @@ import androidx.transition.TransitionInflater;
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.CategoryIconsAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 
 public class WalletFragment extends Fragment {
 
     private WalletViewModel walletViewModel;
     private RecyclerView myWalletsRecyclerView, myGoalsRecyclerView,categoryRecyclerView;
-    private ImageView addWalletBtn,addGoalsBtn;
+    private ImageView addWalletBtn,addGoalsBtn,addCategoriesBtn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class WalletFragment extends Fragment {
         });
         addWalletBtn=root.findViewById(R.id.wallet_add_wallet_btn);
         addGoalsBtn=root.findViewById(R.id.wallet_add_goals_btn);
+        addCategoriesBtn=root.findViewById(R.id.wallets_add_categories_btn);
 
 
         myWalletsRecyclerView = root.findViewById(R.id.wallet_mywallets_recycler);
@@ -60,6 +62,13 @@ public class WalletFragment extends Fragment {
         myWalletsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
         myGoalsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
         categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+
+        addCategoriesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCategoriesAlertDialog();
+            }
+        });
 
         addGoalsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +88,23 @@ public class WalletFragment extends Fragment {
 
 
         return root;
+    }
+
+    private void showCategoriesAlertDialog() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
+        View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_category_alert,null);
+
+        RecyclerView icons=dialog.findViewById(R.id.new_category_choose_icon_recycler);
+
+        icons.setAdapter(new CategoryIconsAdapter());
+        icons.setLayoutManager(new GridLayoutManager(getActivity(),3));
+
+
+
+
+        builder.setView(dialog);
+
+        builder.show();
     }
 
     private void showGoalsAlertDialog() {
