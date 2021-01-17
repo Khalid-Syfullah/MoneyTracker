@@ -41,9 +41,12 @@
 
         <ImageView
             android:id="@+id/actionbar_notifications"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="16dp"
+            android:padding="8dp"
+
+            android:scaleType="centerCrop"
             android:src="@drawable/notification"
 
             app:layout_constraintBottom_toBottomOf="@+id/actionbar_menu"
@@ -77,6 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultNavHost="true"
+        android:animateLayoutChanges="true"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -89,6 +93,7 @@
         android:id="@+id/income_expense_card_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:animateLayoutChanges="true"
         android:visibility="gone"
 
         app:layout_constraintBottom_toBottomOf="@+id/nav_view"
@@ -112,6 +117,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             app:cardCornerRadius="18dp"
+            android:animateLayoutChanges="true"
 
 
             app:cardElevation="16dp"
@@ -286,6 +292,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:animateLayoutChanges="true"
         android:visibility="visible"
         app:headerLayout="@layout/nav_header_dashboard"
         app:menu="@menu/drawer_menu" />

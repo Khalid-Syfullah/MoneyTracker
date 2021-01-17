@@ -9,24 +9,164 @@
         android:id="@+id/navigation_home"
         android:name="com.tars.moneytracker.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+
+
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_graphs"
+            app:destination="@id/navigation_graphs"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/mobile_navigation"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_transactions"
+            app:destination="@id/navigation_transactions"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+
+            app:popUpTo="@id/navigation_transactions"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_wallet"
+            app:destination="@id/navigation_wallet"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+
+            app:popUpTo="@id/navigation_wallet"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_transactions"
         android:name="com.tars.moneytracker.ui.transaction.TransactionFragment"
         android:label="@string/title_transactions"
-        tools:layout="@layout/fragment_transaction" />
+        tools:layout="@layout/fragment_transaction" >
+
+
+        <action
+            android:id="@+id/action_navigation_transactions_to_navigation_graphs"
+            app:destination="@id/navigation_graphs"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+
+            app:popUpTo="@id/navigation_graphs"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_transactions_to_navigation_wallet"
+            app:destination="@id/navigation_wallet"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+
+            app:popUpTo="@id/navigation_wallet"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_transactions_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_wallet"
         android:name="com.tars.moneytracker.ui.wallet.WalletFragment"
         android:label="@string/title_wallet"
-        tools:layout="@layout/fragment_wallet" />
+        tools:layout="@layout/fragment_wallet" >
+
+
+        <action
+            android:id="@+id/action_navigation_wallet_to_navigation_graphs"
+            app:destination="@id/navigation_graphs"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/navigation_graphs"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_wallet_to_navigation_transactions"
+            app:destination="@id/navigation_transactions"
+
+
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+
+            app:popUpTo="@id/navigation_transactions"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_wallet_to_navigation_home"
+            app:destination="@id/navigation_home"
+
+
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+
+
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_graphs"
         android:name="com.tars.moneytracker.ui.graphs.GraphsFragment"
         android:label="@string/title_graphs"
-        tools:layout="@layout/fragment_graphs" />
+        tools:layout="@layout/fragment_graphs" >
+
+
+        <action
+            android:id="@+id/action_navigation_graphs_to_navigation_wallet"
+            app:destination="@id/navigation_wallet"
+
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+
+            app:popUpTo="@id/navigation_wallet"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_graphs_to_navigation_transactions"
+            app:destination="@id/navigation_transactions"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+
+            app:popUpTo="@id/navigation_transactions"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_graphs_to_navigation_home"
+            app:destination="@id/navigation_home"
+
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+
+
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 
 

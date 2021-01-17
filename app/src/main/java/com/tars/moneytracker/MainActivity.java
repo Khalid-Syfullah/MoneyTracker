@@ -8,12 +8,14 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,9 +26,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private BottomNavigationView bottomNavigationView;
     private NavigationView drawerNavigationView;
+
 
     SharedPreferences langPrefs;
     String lang="not set";
@@ -98,7 +103,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerNavigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setItemIconTintList(null);
 
+
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.setGraph(R.navigation.mobile_navigation);
+
+        NavigationUI.setupWithNavController(bottomNavigationView,navController);
+
+
         bottomNavigationView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem item) {
@@ -106,7 +118,88 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id=item.getItemId();
+
+                int nv = navController.getCurrentDestination().getId();
+
+
+
+                if(nv==R.id.navigation_home) {
+                    if (id == R.id.navigation_graphs) {
+
+                        navController.navigate(R.id.action_navigation_home_to_navigation_graphs);
+
+
+                    }
+                    else if(id==R.id.navigation_transactions){
+                        navController.navigate(R.id.action_navigation_home_to_navigation_transactions);
+
+
+                    }
+                    else if(id==R.id.navigation_wallet){
+                        navController.navigate(R.id.action_navigation_home_to_navigation_wallet);
+
+                    }
+                }
+                else if(nv==R.id.navigation_graphs) {
+                    if (id == R.id.navigation_home) {
+
+                        navController.navigate(R.id.action_navigation_graphs_to_navigation_home);
+
+
+
+                    }
+                    else if(id==R.id.navigation_transactions){
+                        navController.navigate(R.id.action_navigation_graphs_to_navigation_transactions);
+
+                    }
+                    else if(id==R.id.navigation_wallet){
+                        navController.navigate(R.id.action_navigation_graphs_to_navigation_wallet);
+
+                    }
+                }
+               else if(nv==R.id.navigation_transactions) {
+                    if (id == R.id.navigation_graphs) {
+
+                        navController.navigate(R.id.action_navigation_transactions_to_navigation_graphs);
+
+                    }
+                    else if(id==R.id.navigation_home){
+                        navController.navigate(R.id.action_navigation_transactions_to_navigation_home);
+
+                    }
+                    else if(id==R.id.navigation_wallet){
+                        navController.navigate(R.id.action_navigation_transactions_to_navigation_wallet);
+
+                    }
+                }
+                else if(nv==R.id.navigation_wallet) {
+                    if (id == R.id.navigation_graphs) {
+
+                        navController.navigate(R.id.action_navigation_wallet_to_navigation_graphs);
+
+                    }
+                    else if(id==R.id.navigation_transactions){
+                        navController.navigate(R.id.action_navigation_wallet_to_navigation_transactions);
+
+                    }
+                    else if(id==R.id.navigation_home){
+                        navController.navigate(R.id.action_navigation_wallet_to_navigation_home);
+
+                    }
+                }
+                return false;
+            }
+        });
+
+
+
+//        NavigationUI.setupWithNavController(bottomNavigationView,navController);
     }
 
 
@@ -264,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 view.setVisibility(View.GONE);
             }
         });
+
         anim.start();
     }
 
