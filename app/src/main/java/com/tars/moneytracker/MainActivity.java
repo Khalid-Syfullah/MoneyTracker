@@ -8,14 +8,13 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,40 +22,46 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.tars.moneytracker.ui.notification.NotificationFragment;
 import com.tars.moneytracker.ui.profile.ProfileFragment;
+import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.CategoryIconsAdapter;
 
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
     public static boolean isPopupExpense=false;
-    public static boolean isCardOn=false;
+    public static boolean isCardOn=false,isTypeCardOn=false,isPopupWalletOn=false;
     public static boolean isNavOn=false;
     private View addBtn ;
     private View outsideCard;
+    private CardView wallet_typeContainer;
     private Button incomeBtn,expenseBtn;
     private TextView navHeaderProfileBtn, navHeaderTitle;
-    private ImageView menuBtn, notificationBtn, navHeaderProfileIcon;
+    private ImageView menuBtn, notificationBtn, navHeaderProfileIcon, popupTypeIcon,popupWalletIcon;
+    private EditText popupTypeEditText;
 
     private DrawerLayout drawerLayout;
     private ConstraintLayout container;
 
     private BottomNavigationView bottomNavigationView;
     private NavigationView drawerNavigationView;
+    private RecyclerView popupTypeRecyclerView;
 
 
     SharedPreferences langPrefs;
@@ -79,6 +84,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View headerView = drawerNavigationView.getHeaderView(0);
 
         drawerLayout = findViewById(R.id.drawer_layout);
+        popupTypeIcon =findViewById(R.id.transPopupTypeIcon);
+        popupTypeEditText=findViewById(R.id.transPopupIncomeExpeseType);
+        popupTypeRecyclerView=findViewById(R.id.transPopupTypeRecycler);
+        popupWalletIcon=findViewById(R.id.popup_wallet_icon);
 
         addBtn = findViewById(R.id.income_expense_btn);
         menuBtn = findViewById(R.id.actionbar_menu);
@@ -88,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navHeaderTitle=headerView.findViewById(R.id.nav_header_title);
         navHeaderProfileIcon=headerView.findViewById(R.id.nav_header_image);
         navHeaderProfileBtn = headerView.findViewById(R.id.view_profile_button);
+        wallet_typeContainer=findViewById(R.id.transaction_popup_type_card);
+
 
 
         incomeBtn.setOnClickListener(this);
@@ -99,6 +110,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         notificationBtn.setOnClickListener(this);
         navHeaderTitle.setOnClickListener(this);
         navHeaderProfileIcon.setOnClickListener(this);
+        container.setOnClickListener(this);
+        popupWalletIcon.setOnClickListener(this);
+        popupTypeIcon.setOnClickListener(this);
 
         drawerNavigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setItemIconTintList(null);
@@ -109,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navController.setGraph(R.navigation.mobile_navigation);
 
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
+
 
 
         bottomNavigationView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
@@ -197,6 +212,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        popupTypeIcon.setOnClickListener(this);
+        popupWalletIcon.setOnClickListener(this);
+
+
+
 
 
 //        NavigationUI.setupWithNavController(bottomNavigationView,navController);
@@ -266,6 +286,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     getSupportFragmentManager().beginTransaction().add(R.id.drawer_layout, new NotificationFragment()).addToBackStack("nt").commit();
 
                 break;
+            case R.id.popup_wallet_icon:
+                if(!isPopupWalletOn){
+                    revealFAB(wallet_typeContainer);
+                    popupTypeRecyclerView.setAdapter(new CategoryIconsAdapter());
+                    popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+                    isPopupWalletOn=true;
+                }
+                else {
+                    hideFAB(wallet_typeContainer);
+                    isPopupWalletOn=false;
+                }
+                break;
+            case R.id.transPopupTypeIcon:
+                if(!isPopupWalletOn){
+                   wallet_typeContainer.setVisibility(View.VISIBLE);
+                    popupTypeRecyclerView.setAdapter(new CategoriesAdapter());
+                    popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+                    isPopupWalletOn=true;
+
+                }
+                else {
+                    hideFAB(wallet_typeContainer);
+                    isPopupWalletOn=false;
+                }
+
+
+
+                break;
+            case R.id.income_expense_card_container:
+
             default:
                 break;
         }

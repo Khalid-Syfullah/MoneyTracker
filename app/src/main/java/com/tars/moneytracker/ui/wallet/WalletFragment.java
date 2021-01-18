@@ -122,7 +122,6 @@ public class WalletFragment extends Fragment {
         currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
 
         builder.setView(dialog);
-
         builder.show();
     }
 
@@ -148,11 +147,6 @@ public class WalletFragment extends Fragment {
         builder.show();
 
 
-//                Dialog dialog=new Dialog(getContext());
-//        dialog.setContentView(R.layout.new_wallet_alert);
-
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.show();
 
     }
 }

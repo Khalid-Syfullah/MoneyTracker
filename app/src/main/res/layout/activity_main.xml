@@ -96,6 +96,7 @@
         android:animateLayoutChanges="true"
         android:visibility="gone"
 
+
         app:layout_constraintBottom_toBottomOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,13 +112,47 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/transaction_popup_type_card"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="16dp"
+
+            android:visibility="gone"
+
+            android:layout_marginTop="?attr/actionBarSize"
+            app:layout_constraintBottom_toTopOf="@+id/transaction_popup_card"
+            app:layout_constraintEnd_toEndOf="@+id/transaction_popup_card"
+            app:layout_constraintStart_toStartOf="@+id/transaction_popup_card"
+            app:layout_constraintTop_toTopOf="@+id/outside_card"
+            app:layout_constraintVertical_bias="1.0">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/income_expense_btn_not_selected"
+                android:padding="16dp"
+
+                >
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/transPopupTypeRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </ScrollView>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/transaction_popup_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            app:cardCornerRadius="18dp"
             android:animateLayoutChanges="true"
+            app:cardCornerRadius="18dp"
 
 
             app:cardElevation="16dp"
@@ -150,13 +185,13 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="16sp"
+                    app:cornerRadius="15dp"
                     app:layout_constraintEnd_toStartOf="@+id/home_trans_popup_expense"
-                    app:layout_constraintHorizontal_bias="0.0"
 
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:strokeColor="@color/white"
-                    app:cornerRadius="15dp"
                     app:strokeWidth="2dp" />
 
                 <Button
@@ -176,23 +211,23 @@
                     android:textSize="16sp"
 
 
+                    app:cornerRadius="15dp"
                     app:layout_constraintBottom_toBottomOf="@+id/home_trans_popup_income_btn"
-                    app:layout_constraintEnd_toEndOf="parent"
 
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/home_trans_popup_income_btn"
                     app:layout_constraintTop_toTopOf="@+id/home_trans_popup_income_btn"
                     app:strokeColor="@color/white"
-                    app:cornerRadius="15dp"
                     app:strokeWidth="2dp" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/popup_wallet_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/wallet"
                     app:layout_constraintStart_toStartOf="@+id/home_trans_popup_income_btn"
-                    app:layout_constraintTop_toBottomOf="@+id/editText" />
+                    app:layout_constraintTop_toBottomOf="@+id/transPopupIncomeExpeseType" />
 
                 <TextView
                     android:id="@+id/transaction_popup_card_walletName"
@@ -202,10 +237,10 @@
                     android:text="Bkash"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                    app:layout_constraintBottom_toBottomOf="@+id/popup_wallet_icon"
                     app:layout_constraintEnd_toStartOf="@+id/transaction_popup_card_amount"
-                    app:layout_constraintStart_toEndOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="@+id/imageView" />
+                    app:layout_constraintStart_toEndOf="@+id/popup_wallet_icon"
+                    app:layout_constraintTop_toTopOf="@+id/popup_wallet_icon" />
 
                 <EditText
                     android:id="@+id/transaction_popup_card_amount"
@@ -223,17 +258,29 @@
                     app:layout_constraintStart_toEndOf="@+id/transaction_popup_card_walletName"
                     app:layout_constraintTop_toTopOf="@+id/transaction_popup_card_walletName" />
 
+                <ImageView
+                    android:id="@+id/transPopupTypeIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="16dp"
+                    android:padding="8dp"
+                    android:src="@drawable/income_expense_types"
+                    app:layout_constraintBottom_toBottomOf="@+id/transPopupIncomeExpeseType"
+                    app:layout_constraintEnd_toStartOf="@+id/transPopupIncomeExpeseType"
+                    app:layout_constraintStart_toStartOf="@+id/home_trans_popup_income_btn"
+                    app:layout_constraintTop_toTopOf="@+id/transPopupIncomeExpeseType" />
+
                 <EditText
-                    android:id="@+id/editText"
-                    android:layout_width="match_parent"
+                    android:id="@+id/transPopupIncomeExpeseType"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+
                     android:backgroundTint="@color/white"
-                    android:drawableStart="@drawable/income_expense_types"
                     android:drawablePadding="16dp"
                     android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@+id/transaction_popup_card_amount"
-                    app:layout_constraintStart_toStartOf="@+id/transaction_popup_card_amount"
+                    app:layout_constraintEnd_toEndOf="@+id/home_trans_popup_expense"
+                    app:layout_constraintStart_toEndOf="@+id/transPopupTypeIcon"
                     app:layout_constraintTop_toBottomOf="@+id/home_trans_popup_income_btn" />
 
                 <TextView
@@ -249,7 +296,7 @@
                     android:textColor="@color/white"
                     app:drawableStartCompat="@drawable/calendar"
                     app:layout_constraintEnd_toEndOf="@+id/transaction_popup_card_amount"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
+                    app:layout_constraintStart_toStartOf="@+id/popup_wallet_icon"
                     app:layout_constraintTop_toBottomOf="@+id/transaction_popup_card_amount" />
 
                 <Button
@@ -259,7 +306,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="?attr/actionBarSize"
-                   android:backgroundTint="@color/pink"
+                    android:backgroundTint="@color/pink"
                     android:fontFamily="@font/montserrat_bold"
                     android:gravity="center"
                     android:padding="8dp"
@@ -269,14 +316,14 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:strokeColor="@color/white"
-                    app:strokeWidth="2dp"
                     app:cornerRadius="15dp"
-
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/transaction_popup_card_amount"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toBottomOf="@+id/dateText" />
+
+                    app:layout_constraintStart_toStartOf="@+id/popup_wallet_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/dateText"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="2dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
@@ -293,7 +340,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:animateLayoutChanges="true"
-        android:visibility="visible"
+        android:visibility="gone"
         app:headerLayout="@layout/nav_header_dashboard"
         app:menu="@menu/drawer_menu" />
 
