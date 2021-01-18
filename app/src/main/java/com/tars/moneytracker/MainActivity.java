@@ -36,10 +36,19 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.api.RetroInstance;
+import com.tars.moneytracker.api.RetroInterface;
+import com.tars.moneytracker.datamodel.HomeDataModel;
+import com.tars.moneytracker.ui.notes.NotesFragment;
 import com.tars.moneytracker.ui.notification.NotificationFragment;
 import com.tars.moneytracker.ui.profile.ProfileFragment;
 
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
@@ -48,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static boolean isNavOn=false;
     private View addBtn ;
     private View outsideCard;
-    private Button incomeBtn,expenseBtn;
+    private Button incomeBtn,expenseBtn, submitBtn;
     private TextView navHeaderProfileBtn, navHeaderTitle;
     private ImageView menuBtn, notificationBtn, navHeaderProfileIcon;
 
@@ -82,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         addBtn = findViewById(R.id.income_expense_btn);
         menuBtn = findViewById(R.id.actionbar_menu);
+        submitBtn=findViewById(R.id.home_trans_popup_submit_btn);
         notificationBtn = findViewById(R.id.actionbar_notifications);
         incomeBtn=findViewById(R.id.home_trans_popup_income_btn);
         expenseBtn=findViewById(R.id.home_trans_popup_expense);
@@ -92,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         incomeBtn.setOnClickListener(this);
         expenseBtn.setOnClickListener(this);
+        submitBtn.setOnClickListener(this);
         addBtn.setOnClickListener(this);
         outsideCard.setOnClickListener(this);
         navHeaderProfileBtn.setOnClickListener(this);
@@ -203,10 +214,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    @Override
+    public void onBackPressed() {
+
+        if (isCardOn) {
+            hideFAB(container);
+            isCardOn=false;
+        } else {
+            FragmentManager fm = getSupportFragmentManager();
+            if (fm.getBackStackEntryCount() > 0) {
+                if (fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName().equals("nt")) {
+
+                    fm.popBackStack("nt", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fm.beginTransaction().remove(new NotificationFragment()).commit();
+                }
+
+                else if (fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName().equals("notes")) {
+                    fm.popBackStack("notes", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fm.beginTransaction().remove(new NotesFragment()).commit();
+                }
+
+            } else {
+
+                super.onBackPressed();
+            }
+        }
+    }
+
+
 
     @Override
     public void onClick(View v){
         switch(v.getId()){
+
+            case R.id.home_trans_popup_submit_btn:
+                HomeDataModel homeDataModel = new HomeDataModel("Food","bKash","14.01.2021","500 Tk","income");
+                RestClient.insertTransactionData(getApplicationContext(),homeDataModel);
+                break;
 
             case R.id.home_trans_popup_income_btn:
                 if(isPopupExpense){
@@ -271,12 +315,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
 
-        if(id == R.id.export){
+        if(id == R.id.notes){
+            getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout, new NotesFragment()).addToBackStack("notes").commit();
+        }
+
+        else if(id == R.id.export){
             Toast.makeText(getApplicationContext(),"Export Listening",Toast.LENGTH_SHORT).show();
 
         }
@@ -332,6 +383,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void revealFAB(View view) {
 
@@ -396,26 +459,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(refresh);
         finish();
     }
-    @Override
-    public void onBackPressed() {
 
-        if (isCardOn) {
-            hideFAB(container);
-            isCardOn=false;
-        } else {
-            FragmentManager fm = getSupportFragmentManager();
-            if (fm.getBackStackEntryCount() > 0) {
-                if (fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName().equals("nt")) {
-
-                    fm.popBackStack("nt", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fm.beginTransaction().remove(new NotificationFragment()).commit();
-                }
-
-            } else {
-
-                super.onBackPressed();
-            }
-        }
-    }
 
 }
