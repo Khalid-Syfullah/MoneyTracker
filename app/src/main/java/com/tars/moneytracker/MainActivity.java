@@ -334,29 +334,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.popup_wallet_icon:
                 if(!isPopupWalletOn){
                     revealFAB(wallet_typeContainer);
-                    popupTypeRecyclerView.setAdapter(new CategoryIconsAdapter());
+                    wallet_typeContainer.setVisibility(View.VISIBLE);
+                    popupTypeRecyclerView.setAdapter(new CategoriesAdapter());
                     popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
                     isPopupWalletOn=true;
                 }
                 else {
-                    hideFAB(wallet_typeContainer);
+                    hideFABSmall(wallet_typeContainer);
                     isPopupWalletOn=false;
                 }
                 break;
             case R.id.transPopupTypeIcon:
                 if(!isPopupWalletOn){
-                   wallet_typeContainer.setVisibility(View.VISIBLE);
-                    popupTypeRecyclerView.setAdapter(new CategoriesAdapter());
+                    revealFAB(wallet_typeContainer);
+                    wallet_typeContainer.setVisibility(View.VISIBLE);
+                    popupTypeRecyclerView.setAdapter(new CategoryIconsAdapter());
                     popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
                     isPopupWalletOn=true;
-
                 }
                 else {
-                    hideFAB(wallet_typeContainer);
+                    hideFABSmall(wallet_typeContainer);
                     isPopupWalletOn=false;
                 }
-
-
 
                 break;
             case R.id.income_expense_card_container:
@@ -455,6 +454,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
         anim.setDuration(500);
         view.setVisibility(View.VISIBLE);
+
+
         anim.start();
     }
     private void hideFAB(View view) {
@@ -463,7 +464,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int cy = view.getHeight() ;
         float initialRadius = (float) Math.hypot(cx, cy);
         Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0);
-        anim.setDuration(500);
+        anim.setDuration(250);
+
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -471,6 +473,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 view.setVisibility(View.GONE);
             }
         });
+
+
+
+        anim.start();
+    }
+    private void hideFABSmall(View view) {
+
+        int cx = view.getWidth();
+        int cy = view.getHeight() ;
+        float initialRadius = (float) Math.hypot(cx, cy);
+        Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 0);
+        anim.setDuration(250);
+
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                view.setVisibility(View.GONE);
+            }
+        });
+
+
 
         anim.start();
     }
