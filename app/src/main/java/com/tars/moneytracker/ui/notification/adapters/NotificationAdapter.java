@@ -9,9 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.ui.notification.viewHolders.NotificationsViewHolder;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationsViewHolder> {
+
+    Context ctx;
+
+    public NotificationAdapter(Context ctx) {
+        this.ctx = ctx;
+
+    }
+
+
     @NonNull
     @Override
     public NotificationsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

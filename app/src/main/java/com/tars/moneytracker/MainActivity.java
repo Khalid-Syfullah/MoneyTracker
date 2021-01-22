@@ -52,7 +52,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, RecyclerItemClickInterface{
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,RecyclerItemClickInterface{
 
     public static boolean isPopupExpense=false;
     public static boolean isCardOn=false,isTypeCardOn=false,isPopupWalletOn=false;
@@ -445,18 +446,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     private void revealFAB(View view) {
 
         int cx = view.getWidth() ;
@@ -484,6 +473,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 view.setVisibility(View.GONE);
             }
         });
+        wallet_typeContainer.setVisibility(View.GONE);
 
 
 

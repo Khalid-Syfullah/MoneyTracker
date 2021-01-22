@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -20,10 +21,11 @@ import androidx.transition.TransitionInflater;
 
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements RecyclerItemClickInterface {
 
     private HomeViewModel homeViewModel;
     private RecyclerView walletRecyclerView,goalsRecyclerView;
@@ -43,9 +45,9 @@ public class HomeFragment extends Fragment {
 
 
 
-        goalsRecyclerView.setAdapter(new GoalsAdapter());
+        goalsRecyclerView.setAdapter(new GoalsAdapter(getActivity()));
         goalsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL,false));
-        walletRecyclerView.setAdapter(new WalletAdapter());
+        walletRecyclerView.setAdapter(new WalletAdapter(getActivity()));
         walletRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL,false));
 
 
@@ -59,4 +61,9 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @Override
+    public void onItemClick(int position) {
+        Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_SHORT).show();
+
+    }
 }

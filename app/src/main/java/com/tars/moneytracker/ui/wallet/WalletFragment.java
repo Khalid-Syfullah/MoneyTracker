@@ -65,8 +65,8 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         myGoalsRecyclerView = root.findViewById(R.id.wallet_mygoals_recycler);
         categoryRecyclerView=root.findViewById(R.id.wallets_categories_recycler);
 
-        myWalletsRecyclerView.setAdapter(new WalletAdapter());
-        myGoalsRecyclerView.setAdapter(new GoalsAdapter());
+        myWalletsRecyclerView.setAdapter(new WalletAdapter(getActivity()));
+        myGoalsRecyclerView.setAdapter(new GoalsAdapter(getActivity()));
         categoryRecyclerView.setAdapter(new CategoriesAdapter(getActivity(),this));
 
 

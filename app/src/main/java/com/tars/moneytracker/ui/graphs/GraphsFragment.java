@@ -140,6 +140,7 @@ public class GraphsFragment extends Fragment {
 
 
         mBarChart.startAnimation();
+
       //  mPieChart.startAnimation();
         mStackedBarChart.startAnimation();
 
@@ -178,7 +179,7 @@ public class GraphsFragment extends Fragment {
         legend.setFormSize(20);
         legend.setFormToTextSpace(2);
 
-        pieChart.animateXY(3000,3000);
+        pieChart.animateXY(1000,1000);
 
     }
 
