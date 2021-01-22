@@ -6,6 +6,9 @@
     <group>
 
 
+        <item
+            android:id="@+id/notes"
+            android:title="Notes" />
 
         <item android:title="Change language">
             <menu>
