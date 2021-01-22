@@ -2,6 +2,8 @@ package com.tars.moneytracker;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,8 +40,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.tars.moneytracker.api.RestClient;
-import com.tars.moneytracker.api.RetroInstance;
-import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.HomeDataModel;
 import com.tars.moneytracker.ui.notes.NotesFragment;
 import com.tars.moneytracker.ui.notification.NotificationFragment;
@@ -46,25 +47,24 @@ import com.tars.moneytracker.ui.profile.ProfileFragment;
 import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.CategoryIconsAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
     public static boolean isPopupExpense=false;
     public static boolean isCardOn=false,isTypeCardOn=false,isPopupWalletOn=false;
     public static boolean isNavOn=false;
+
     private View addBtn ;
     private View outsideCard;
 
     private CardView wallet_typeContainer;
-    private Button incomeBtn,expenseBtn;
-    private TextView navHeaderProfileBtn, navHeaderTitle;
+    private Button incomeBtn,expenseBtn,submitBtn;
+    private TextView navHeaderProfileBtn, navHeaderTitle, popupDate;
     private ImageView menuBtn, notificationBtn, navHeaderProfileIcon, popupTypeIcon,popupWalletIcon;
-    private EditText popupTypeEditText;
+    private EditText popupTitleEditText,popupAmountEditText;
 
     private DrawerLayout drawerLayout;
     private ConstraintLayout container;
@@ -73,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private NavigationView drawerNavigationView;
     private RecyclerView popupTypeRecyclerView;
 
-
     SharedPreferences langPrefs;
+    String date="not_selected";
     String lang="not set";
     public static final String Language_pref="Language";
     public static final String Selected_language="Selected Language";
@@ -95,7 +95,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         drawerLayout = findViewById(R.id.drawer_layout);
         popupTypeIcon =findViewById(R.id.transPopupTypeIcon);
-        popupTypeEditText=findViewById(R.id.transPopupIncomeExpeseType);
+        popupTitleEditText=findViewById(R.id.transPopupIncomeExpeseType);
+        popupAmountEditText=findViewById(R.id.transaction_popup_card_amount);
+        popupDate=findViewById(R.id.dateText);
         popupTypeRecyclerView=findViewById(R.id.transPopupTypeRecycler);
         popupWalletIcon=findViewById(R.id.popup_wallet_icon);
 
@@ -125,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         container.setOnClickListener(this);
         popupWalletIcon.setOnClickListener(this);
         popupTypeIcon.setOnClickListener(this);
+        popupTitleEditText.setOnClickListener(this);
+        popupAmountEditText.setOnClickListener(this);
+        popupDate.setOnClickListener(this);
 
         drawerNavigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setItemIconTintList(null);
@@ -268,9 +273,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v){
         switch(v.getId()){
 
+
             case R.id.home_trans_popup_submit_btn:
-                HomeDataModel homeDataModel = new HomeDataModel("Food","bKash","14.01.2021","500 Tk","income");
-                RestClient.insertTransactionData(getApplicationContext(),homeDataModel);
+
+                verificationForUpload();
                 break;
 
             case R.id.home_trans_popup_income_btn:
@@ -298,6 +304,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     hideFAB(container);
                     isCardOn=false;
                 }
+                break;
+
+            case R.id.dateText:
+                chooseDate();
                 break;
 
             case R.id.outside_card:
@@ -534,6 +544,112 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(refresh);
         finish();
     }
+
+
+    private void chooseDate() {
+        final Calendar calendar = Calendar.getInstance();
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePicker =
+                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(final DatePicker view, final int year, final int month,
+                                          final int dayOfMonth) {
+
+                        @SuppressLint("SimpleDateFormat")
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        calendar.set(year, month, dayOfMonth);
+                        date = sdf.format(calendar.getTime());
+                        popupDate.setText(date);
+                    }
+                }, year, month, day); // set date picker to current date
+        datePicker.getDatePicker().setMinDate(calendar.getTime().getTime());
+        calendar.add(Calendar.DATE, 30);
+        datePicker.getDatePicker().setMaxDate(calendar.getTime().getTime());
+        datePicker.show();
+
+        datePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(final DialogInterface dialog) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+
+    private void verificationForUpload() {
+
+        String title="", amount="", type="", category="Food", wallet="bKash", date="";
+
+        if(isPopupExpense){
+            type="Expense";
+        }
+        else{
+            type="Income";
+        }
+
+        if(popupTitleEditText.getText().toString().isEmpty()){
+            popupTitleEditText.setError("Enter Title");
+            popupTitleEditText.requestFocus();
+        }
+        else{
+            title = popupTitleEditText.getText().toString();
+        }
+
+        if(popupAmountEditText.getText().toString().isEmpty()){
+            popupAmountEditText.setError("Amount Invalid");
+            popupAmountEditText.requestFocus();
+        }
+
+        else{
+            amount = popupAmountEditText.getText().toString();
+
+        }
+
+
+        if(popupDate.getText().toString().isEmpty()){
+            popupDate.setError("Date Invalid");
+            popupDate.requestFocus();
+        }
+
+        else{
+            date = popupDate.getText().toString();
+
+        }
+
+        if(!title.isEmpty() && !amount.isEmpty() && !type.isEmpty() && !category.isEmpty() && !wallet.isEmpty() && !date.isEmpty()){
+            submitAlertDialog(title,amount,type,category,wallet,date);
+        }
+
+
+
+    }
+
+    private void submitAlertDialog(String title, String amount,String type, String category, String wallet, String date) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage(getResources().getString(R.string.are_you_sure));
+        builder.setCancelable(false);
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                HomeDataModel homeDataModel = new HomeDataModel(title,amount,type,category,wallet,date);
+                RestClient.insertTransactionData(MainActivity.this,homeDataModel);
+            }
+        })
+                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog alertDialog=builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+
+
 
 
 }

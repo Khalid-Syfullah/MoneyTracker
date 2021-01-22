@@ -5,6 +5,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class HomeDataModel {
 
+
+    @SerializedName("title")
+    @Expose
+    private String title;
+
     @SerializedName("category")
     @Expose
     private String category;
@@ -25,12 +30,14 @@ public class HomeDataModel {
     @Expose
     private String transaction;
 
-    public HomeDataModel(String category, String wallet, String date, String amount, String transaction) {
+    public HomeDataModel(String title, String amount, String transaction, String category, String wallet, String date)  {
+        this.title = title;
+        this.amount = amount;
+        this.transaction = transaction;
         this.category = category;
         this.wallet = wallet;
         this.date = date;
-        this.amount = amount;
-        this.transaction = transaction;
+
     }
 
     public String getCategory() {

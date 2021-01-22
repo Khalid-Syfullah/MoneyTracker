@@ -1,6 +1,7 @@
 package com.tars.moneytracker.api;
 
 import com.tars.moneytracker.datamodel.HomeDataModel;
+import com.tars.moneytracker.datamodel.UserDataModel;
 
 import java.util.List;
 
@@ -14,6 +15,12 @@ public interface RetroInterface {
 
     @POST("/api/insert")
     Call<HomeDataModel> insertTransaction(@Body HomeDataModel homeDataModel);
+
+    @POST("/api/login")
+    Call<UserDataModel> loginUser(@Body UserDataModel userDataModel);
+
+    @POST("/api/signup")
+    Call<UserDataModel> signupUser(@Body UserDataModel userDataModel);
 
     @POST("/api/insertTransactionData")
     Call<HomeDataModel> insertTransactionData(@Body HomeDataModel homeDataModel);
@@ -29,5 +36,7 @@ public interface RetroInterface {
 
     @GET("/api/user")
     Call<List<HomeDataModel>> getTransaction();
+
+
 
 }

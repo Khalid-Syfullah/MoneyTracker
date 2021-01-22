@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.datamodel.UserDataModel;
+
 public class SignUpActivity extends AppCompatActivity {
 
     TextView loginBtn,signUpBtn;
@@ -37,11 +40,16 @@ public class SignUpActivity extends AppCompatActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                verifySignup();
+                /*
                 Intent intent=new Intent(SignUpActivity.this,LoginActivity.class);
 
 
 
                 startActivity(intent,options.toBundle());
+
+                 */
             }
         });
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +61,53 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+
+    private void verifySignup() {
+
+        String username="", mail="", pass="";
+
+
+        if(name.getText().toString().isEmpty()){
+            name.setError("Name Required");
+            name.requestFocus();
+        }
+        else{
+            username = name.getText().toString();
+        }
+
+
+        if(email.getText().toString().isEmpty()){
+            email.setError("Email Required");
+            email.requestFocus();
+        }
+        else{
+            mail = email.getText().toString();
+        }
+
+        if(password.getText().toString().isEmpty()){
+            password.setError("Password Required");
+            password.requestFocus();
+        }
+        else if(!password.getText().toString().equals(retypePassword.getText().toString())){
+            password.setError("Password does not match!");
+            retypePassword.requestFocus();
+        }
+
+        else{
+            pass = password.getText().toString();
+
+        }
+
+        if(!username.isEmpty() && !mail.isEmpty() && !pass.isEmpty()){
+            UserDataModel userDataModel = new UserDataModel(username,mail,pass);
+            RestClient.signupUser(getApplicationContext(),userDataModel);
+
+        }
+
 
 
     }

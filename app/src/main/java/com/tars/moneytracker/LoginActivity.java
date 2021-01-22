@@ -11,6 +11,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.datamodel.UserDataModel;
+
+import retrofit2.Call;
+
 public class LoginActivity extends AppCompatActivity {
 
     TextView loginBtn,signUpBtn;
@@ -35,8 +40,12 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                verifyLogin();
+                /*
                 Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
+
+                 */
             }
         });
         signUpBtn.setOnClickListener(new View.OnClickListener() {
@@ -48,5 +57,37 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent,options.toBundle());
             }
         });
+    }
+
+
+    private void verifyLogin() {
+
+        String mail="", pass="";
+
+        if(email.getText().toString().isEmpty()){
+            email.setError("Email Required");
+            email.requestFocus();
+        }
+        else{
+            mail = email.getText().toString();
+        }
+
+        if(password.getText().toString().isEmpty()){
+            password.setError("Invalid Password");
+        }
+
+        else{
+            pass = password.getText().toString();
+
+        }
+
+        if(!mail.isEmpty() && !pass.isEmpty()){
+            UserDataModel userDataModel = new UserDataModel(mail,pass);
+            RestClient.loginUser(getApplicationContext(),userDataModel);
+
+        }
+
+
+
     }
 }

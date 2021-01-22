@@ -293,7 +293,7 @@
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
 
-                    android:text="03 December 2021"
+                    android:text="04-Dec-2020"
                     android:textColor="@color/white"
                     app:drawableStartCompat="@drawable/calendar"
                     app:layout_constraintEnd_toEndOf="@+id/transaction_popup_card_amount"
@@ -341,7 +341,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:animateLayoutChanges="true"
-        android:visibility="gone"
+        android:visibility="visible"
         app:headerLayout="@layout/nav_header_dashboard"
         app:menu="@menu/drawer_menu" />
 
