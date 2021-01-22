@@ -41,6 +41,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.tars.moneytracker.api.RestClient;
 import com.tars.moneytracker.datamodel.HomeDataModel;
+import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.ui.notes.NotesFragment;
 import com.tars.moneytracker.ui.notification.NotificationFragment;
 import com.tars.moneytracker.ui.profile.ProfileFragment;
@@ -51,7 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, RecyclerItemClickInterface{
 
     public static boolean isPopupExpense=false;
     public static boolean isCardOn=false,isTypeCardOn=false,isPopupWalletOn=false;
@@ -633,8 +634,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setCancelable(false);
         builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                HomeDataModel homeDataModel = new HomeDataModel(title,amount,type,category,wallet,date);
-                RestClient.insertTransactionData(MainActivity.this,homeDataModel);
+                TransactionDataModel transactionDataModel = new TransactionDataModel(title,amount,type,category,wallet,date);
+                RestClient.insertTransaction(MainActivity.this,transactionDataModel);
             }
         })
                 .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {

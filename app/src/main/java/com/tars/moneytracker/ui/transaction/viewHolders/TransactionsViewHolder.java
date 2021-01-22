@@ -8,5 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class TransactionsViewHolder extends RecyclerView.ViewHolder {
     public TransactionsViewHolder(@NonNull View itemView) {
         super(itemView);
+
+
     }
 }

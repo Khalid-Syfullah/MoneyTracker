@@ -1,7 +1,11 @@
 package com.tars.moneytracker.api;
 
+import com.tars.moneytracker.datamodel.CategoryDataModel;
+import com.tars.moneytracker.datamodel.GoalDataModel;
 import com.tars.moneytracker.datamodel.HomeDataModel;
+import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.datamodel.UserDataModel;
+import com.tars.moneytracker.datamodel.WalletDataModel;
 
 import java.util.List;
 
@@ -13,8 +17,6 @@ import retrofit2.http.POST;
 
 public interface RetroInterface {
 
-    @POST("/api/insert")
-    Call<HomeDataModel> insertTransaction(@Body HomeDataModel homeDataModel);
 
     @POST("/api/login")
     Call<UserDataModel> loginUser(@Body UserDataModel userDataModel);
@@ -22,20 +24,54 @@ public interface RetroInterface {
     @POST("/api/signup")
     Call<UserDataModel> signupUser(@Body UserDataModel userDataModel);
 
+
+
     @POST("/api/insertTransactionData")
-    Call<HomeDataModel> insertTransactionData(@Body HomeDataModel homeDataModel);
+    Call<TransactionDataModel> insertTransactionData(@Body TransactionDataModel transactionDataModel);
+
+    @POST("/api/setTransactionData")
+    Call<TransactionDataModel> setTransactionData();
+
+
+
+
 
     @POST("/api/insertWalletData")
-    Call<HomeDataModel> insertWalletData(@Body HomeDataModel homeDataModel);
+    Call<WalletDataModel> insertWalletData(@Body WalletDataModel walletDataModel);
 
     @POST("/api/insertGoalData")
-    Call<HomeDataModel> insertGoalData(@Body HomeDataModel homeDataModel);
+    Call<GoalDataModel> insertGoalData(@Body GoalDataModel goalDataModel);
 
     @POST("/api/insertCategoryData")
-    Call<HomeDataModel> insertCategoryData(@Body HomeDataModel homeDataModel);
+    Call<CategoryDataModel> insertCategoryData(@Body CategoryDataModel categoryDataModel);
 
-    @GET("/api/user")
-    Call<List<HomeDataModel>> getTransaction();
+
+
+    @POST("/api/updateWalletData")
+    Call<WalletDataModel> updateWalletData(@Body WalletDataModel walletDataModel);
+
+    @POST("/api/updateGoalData")
+    Call<GoalDataModel> updateGoalData(@Body GoalDataModel goalDataModel);
+
+    @POST("/api/updateCategoryData")
+    Call<CategoryDataModel> updateCategoryData(@Body CategoryDataModel categoryDataModel);
+
+
+
+
+    @POST("/api/deleteTransactionData")
+    Call<TransactionDataModel> deleteTransactionData(@Body TransactionDataModel transactionDataModel);
+
+    @POST("/api/deleteWalletData")
+    Call<WalletDataModel> deleteWalletData(@Body WalletDataModel walletDataModel);
+
+    @POST("/api/deleteGoalData")
+    Call<GoalDataModel> deleteGoalData(@Body GoalDataModel goalDataModel);
+
+    @POST("/api/deleteCategoryData")
+    Call<CategoryDataModel> deleteCategoryData(@Body CategoryDataModel categoryDataModel);
+
+
 
 
 

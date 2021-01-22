@@ -1,13 +1,18 @@
 package com.tars.moneytracker.ui.wallet;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +27,10 @@ import androidx.transition.TransitionInflater;
 
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.RecyclerItemClickInterface;
+import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.datamodel.CategoryDataModel;
+import com.tars.moneytracker.datamodel.GoalDataModel;
+import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.CategoryIconsAdapter;
@@ -68,21 +77,21 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         addCategoriesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCategoriesAlertDialog();
+                showCategoriesAlertDialog(getContext());
             }
         });
 
         addGoalsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showGoalsAlertDialog();
+                showGoalsAlertDialog(getContext());
             }
         });
 
         addWalletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddWalletAlertDialog();
+                showAddWalletAlertDialog(getContext());
 
             }
         });
@@ -92,24 +101,50 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         return root;
     }
 
-    private void showCategoriesAlertDialog() {
+    private void showCategoriesAlertDialog(Context context) {
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
         View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_category_alert,null);
 
         RecyclerView icons=dialog.findViewById(R.id.new_category_choose_icon_recycler);
 
+        EditText categoryName = dialog.findViewById(R.id.category_alert_category_name);
+        Button saveBtn = dialog.findViewById(R.id.category_alert_save_button);
+        Button deleteBtn = dialog.findViewById(R.id.category_alert_delete_button);
+
         icons.setAdapter(new CategoryIconsAdapter());
         icons.setLayoutManager(new GridLayoutManager(getActivity(),3));
 
 
-
-
         builder.setView(dialog);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
-        builder.show();
+        saveBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                String name = categoryName.getText().toString();
+
+                CategoryDataModel categoryDataModel = new CategoryDataModel(name);
+                RestClient.insertCategory(context,categoryDataModel);
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+/*
+                String name = categoryName.getText().toString();
+
+                CategoryDataModel categoryDataModel = new CategoryDataModel(name);
+                RestClient.deleteCategory(context,categoryDataModel);
+*/
+                alertDialog.dismiss();
+            }
+        });
     }
 
-    private void showGoalsAlertDialog() {
+    private void showGoalsAlertDialog(Context context) {
 
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
         View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_goal_alert,null);
@@ -118,23 +153,60 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
 
         String[] currencyItems=getResources().getStringArray(R.array.currencies);
 
+        EditText titleText = dialog.findViewById(R.id.goal_alert_title_editText);
+        EditText amountText = dialog.findViewById(R.id.goal_alert_amount_editText);
+        TextView dateText = dialog.findViewById(R.id.goal_alert_dateTextView);
+        Button saveBtn = dialog.findViewById(R.id.goal_alert_save_button);
+        Button deleteBtn = dialog.findViewById(R.id.goal_alert_delete_button);
+
+
         ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, currencyItems);
 
         currencies.setAdapter(currencyAdapter);
         currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
 
+
         builder.setView(dialog);
-        builder.show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        saveBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                String title = titleText.getText().toString();
+                String amount = amountText.getText().toString();
+                String currency = currencies.getSelectedItem().toString();
+                String date = dateText.getText().toString();
+
+
+                GoalDataModel goalDataModel = new GoalDataModel(title, amount, currency, date);
+                RestClient.insertGoal(context,goalDataModel);
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                alertDialog.dismiss();
+            }
+        });
     }
 
-    private void showAddWalletAlertDialog() {
+    private void showAddWalletAlertDialog(Context context) {
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
         View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_wallet_alert,null);
+
         Spinner walletTypes=dialog.findViewById(R.id.wallet_alert_type_spinner);
         Spinner currencies=dialog.findViewById(R.id.wallet_alert_currency_spinner);
 
         String[] walletItems=getResources().getStringArray(R.array.wallet_types);
         String[] currencyItems=getResources().getStringArray(R.array.currencies);
+
+
+        EditText titleText = dialog.findViewById(R.id.wallet_alert_title_editText);
+        Button saveBtn = dialog.findViewById(R.id.wallet_alert_save_button);
+        Button deleteBtn = dialog.findViewById(R.id.wallet_alert_delete_button);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, walletItems);
         ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, currencyItems);
@@ -144,9 +216,31 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
         currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
 
-        builder.setView(dialog);
 
-        builder.show();
+        builder.setView(dialog);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        saveBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                String title = titleText.getText().toString();
+                String type = walletTypes.getSelectedItem().toString();
+                String currency = currencies.getSelectedItem().toString();
+
+                WalletDataModel walletDataModel = new WalletDataModel(title,type,currency);
+                RestClient.insertWallet(context,walletDataModel);
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                alertDialog.dismiss();
+            }
+        });
+
 
 
 

@@ -3,24 +3,29 @@ package com.tars.moneytracker.datamodel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class WalletDataModel {
+public class GoalDataModel {
 
     @SerializedName("title")
     @Expose
     private String title;
 
-    @SerializedName("type")
+    @SerializedName("amount")
     @Expose
-    private String type;
+    private String amount;
 
     @SerializedName("currency")
     @Expose
     private String currency;
 
-    public WalletDataModel(String title, String type, String currency) {
+    @SerializedName("date")
+    @Expose
+    private String date;
+
+    public GoalDataModel(String title, String amount, String currency, String date) {
         this.title = title;
-        this.type = type;
+        this.amount = amount;
         this.currency = currency;
+        this.date = date;
     }
 
     public String getTitle() {
@@ -31,12 +36,12 @@ public class WalletDataModel {
         this.title = title;
     }
 
-    public String getType() {
-        return type;
+    public String getAmount() {
+        return amount;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     public String getCurrency() {
@@ -45,5 +50,13 @@ public class WalletDataModel {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
