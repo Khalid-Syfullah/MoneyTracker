@@ -345,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(!isPopupWalletOn){
                     revealFAB(wallet_typeContainer);
                     wallet_typeContainer.setVisibility(View.VISIBLE);
-                    popupTypeRecyclerView.setAdapter(new CategoriesAdapter());
+                    popupTypeRecyclerView.setAdapter(new CategoriesAdapter(this,this));
                     popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
                     isPopupWalletOn=true;
                 }
@@ -652,4 +652,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+    @Override
+    public void onItemClick(int position) {
+        Toast.makeText(this, Integer.toString(position), Toast.LENGTH_SHORT).show();
+    }
 }

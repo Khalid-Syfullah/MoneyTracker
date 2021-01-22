@@ -9,9 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.ui.wallet.viewHolders.CategoriesViewHolder;
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesViewHolder> {
+
+    Context ctx;
+    RecyclerItemClickInterface recyclerItemClickInterface;
+
+    public CategoriesAdapter(Context ctx, RecyclerItemClickInterface recyclerItemClickInterface) {
+        this.ctx = ctx;
+        this.recyclerItemClickInterface = recyclerItemClickInterface;
+    }
+
     @NonNull
     @Override
     public CategoriesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -29,6 +39,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesViewHolder
     @Override
     public void onBindViewHolder(@NonNull CategoriesViewHolder holder, int position) {
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerItemClickInterface.onItemClick(position);
+            }
+        });
     }
 
     @Override
