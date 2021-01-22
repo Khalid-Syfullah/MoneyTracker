@@ -34,7 +34,7 @@ public class TransactionFragment extends Fragment {
         });
 
         recyclerView = root.findViewById(R.id.transaction_recycler);
-        recyclerView.setAdapter(new TransactionAdapter());
+        recyclerView.setAdapter(new TransactionAdapter(getActivity()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
 

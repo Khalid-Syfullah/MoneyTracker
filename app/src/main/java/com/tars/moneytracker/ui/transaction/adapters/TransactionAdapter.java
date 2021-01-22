@@ -11,14 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.ui.transaction.viewHolders.TransactionsViewHolder;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionsViewHolder>{
 
     Context ctx;
-    public TransactionAdapter() {
-        super();
+
+
+    public TransactionAdapter(Context ctx) {
+        this.ctx = ctx;
+
     }
+
+
 
     @NonNull
     @Override
@@ -39,6 +45,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionsViewHol
     public void onBindViewHolder(@NonNull TransactionsViewHolder holder, int position) {
         Animation animation = AnimationUtils.loadAnimation(ctx, R.anim.zoom_in);
         holder.itemView.startAnimation(animation);
+
     }
 
     @Override

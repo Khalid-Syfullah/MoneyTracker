@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -17,9 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionInflater;
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.ui.notification.adapters.NotificationAdapter;
 
-public class NotificationFragment extends Fragment {
+public class NotificationFragment extends Fragment  {
 
 
     View view;
@@ -37,7 +39,7 @@ public class NotificationFragment extends Fragment {
         recyclerView = view.findViewById(R.id.notification_recyclerview);
         closeBtn = view.findViewById(R.id.notification_close);
 
-        recyclerView.setAdapter(new NotificationAdapter());
+        recyclerView.setAdapter(new NotificationAdapter(getActivity()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         closeBtn.setOnClickListener(new View.OnClickListener(){
@@ -102,6 +104,7 @@ public class NotificationFragment extends Fragment {
         });
         anim.start();
     }
+
 
 
 }

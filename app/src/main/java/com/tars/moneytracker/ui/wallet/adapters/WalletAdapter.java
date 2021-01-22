@@ -11,18 +11,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.ui.wallet.viewHolders.WalletViewHolder;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletViewHolder>{
 
-    int lastPosition=-1;
+
 
     Context ctx;
+
+
+
+    public WalletAdapter(Context ctx) {
+        this.ctx = ctx;
+        }
+
     @NonNull
     @Override
     public WalletViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        ctx=parent.getContext();
 
         View view=LayoutInflater.from(ctx).inflate(R.layout.child_wallet,parent,false);
         WalletViewHolder mvh=new WalletViewHolder(view,ctx) {
@@ -38,6 +45,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletViewHolder>{
     public void onBindViewHolder(@NonNull WalletViewHolder holder, int position) {
         Animation animation= AnimationUtils.loadAnimation(ctx, R.anim.zoom_in);
         holder.itemView.startAnimation(animation);
+
 
     }
 

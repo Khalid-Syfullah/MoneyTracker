@@ -13,12 +13,17 @@ import com.tars.moneytracker.ui.home.viewHolders.GoalsViewHolder;
 public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
 
     public Context context;
+
+    public GoalsAdapter(Context context) {
+        this.context = context;
+    }
+
     @NonNull
     @Override
     public GoalsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-        context=parent.getContext();
+
         View view= LayoutInflater.from(context).inflate(R.layout.child_goals,parent,false);
         GoalsViewHolder mvh=new GoalsViewHolder(view, context) {
             @Override
