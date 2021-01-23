@@ -1,6 +1,7 @@
 package com.tars.moneytracker.ui.home;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.TransitionInflater;
 
 
 import com.tars.moneytracker.R;
@@ -64,6 +64,16 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
     @Override
     public void onItemClick(int position) {
         Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onItemClick(Drawable position, String name) {
+
+    }
+
+    @Override
+    public void onItemClick(String name) {
 
     }
 }

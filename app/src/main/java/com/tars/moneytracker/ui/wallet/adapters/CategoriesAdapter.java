@@ -42,7 +42,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerItemClickInterface.onItemClick(position);
+                recyclerItemClickInterface.onItemClick(holder.categoryIcon.getDrawable(),holder.categoryName.getText().toString());
             }
         });
     }

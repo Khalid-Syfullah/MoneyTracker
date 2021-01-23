@@ -39,7 +39,9 @@ public class WalletNamesAdapter extends RecyclerView.Adapter<WalletNamesViewHold
             public void onClick(View v) {
                 selectedPosition=position;
                holder.walletName.setBackgroundColor(context.getColor(R.color.lightTeal));
+               holder.walletName.setText("clicked");
                 notifyDataSetChanged();
+                recyclerItemClickInterface.onItemClick(holder.walletName.getText().toString());
             }
         });
         if(selectedPosition==position){
@@ -58,4 +60,6 @@ public class WalletNamesAdapter extends RecyclerView.Adapter<WalletNamesViewHold
     public int getItemCount() {
         return 5;
     }
+
+
 }

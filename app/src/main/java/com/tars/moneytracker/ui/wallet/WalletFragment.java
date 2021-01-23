@@ -250,4 +250,14 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
     public void onItemClick(int position) {
         Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onItemClick(Drawable position, String name) {
+
+    }
+
+    @Override
+    public void onItemClick(String name) {
+
+    }
 }
