@@ -42,6 +42,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.tars.moneytracker.api.RestClient;
 import com.tars.moneytracker.datamodel.HomeDataModel;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
+import com.tars.moneytracker.ui.home.adapters.WalletNamesAdapter;
 import com.tars.moneytracker.ui.notes.NotesFragment;
 import com.tars.moneytracker.ui.notification.NotificationFragment;
 import com.tars.moneytracker.ui.profile.ProfileFragment;
@@ -347,7 +348,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(!isPopupWalletOn){
                     revealFAB(wallet_typeContainer);
                     wallet_typeContainer.setVisibility(View.VISIBLE);
-                    popupTypeRecyclerView.setAdapter(new CategoriesAdapter(this,this));
+                    WalletNamesAdapter walletNamesAdapter=new WalletNamesAdapter(this,this);
+
+
+                    popupTypeRecyclerView.setAdapter(walletNamesAdapter);
                     popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
                     isPopupWalletOn=true;
                 }
