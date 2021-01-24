@@ -20,13 +20,16 @@ import com.tars.moneytracker.datamodel.WalletDataModel;
 public class WalletViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     Context context;
     String titleText;
+    public TextView walletName, walletBalance;
+
     public WalletViewHolder(@NonNull View itemView,Context context) {
         super(itemView);
 
         itemView.setOnClickListener(this);
         this.context=context;
-        TextView titleTextView=itemView.findViewById(R.id.walletName);
-        titleText=titleTextView.getText().toString();
+        walletName = itemView.findViewById(R.id.walletName);
+        walletBalance = itemView.findViewById(R.id.balance_amount);
+        titleText=walletName.getText().toString();
     }
 
     @Override

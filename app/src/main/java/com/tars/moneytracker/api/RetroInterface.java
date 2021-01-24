@@ -7,6 +7,7 @@ import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.datamodel.UserDataModel;
 import com.tars.moneytracker.datamodel.WalletDataModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -32,6 +33,16 @@ public interface RetroInterface {
     @POST("/api/setTransactionData")
     Call<TransactionDataModel> setTransactionData();
 
+
+
+    @POST("/api/getWalletData")
+    Call<ArrayList<WalletDataModel>> getWalletData();
+
+    @POST("/api/getGoalData")
+    Call<ArrayList<GoalDataModel>> getGoalData();
+
+    @POST("/api/getCategoryData")
+    Call<ArrayList<CategoryDataModel>> getCategoryData();
 
 
 
@@ -70,6 +81,9 @@ public interface RetroInterface {
 
     @POST("/api/deleteCategoryData")
     Call<CategoryDataModel> deleteCategoryData(@Body CategoryDataModel categoryDataModel);
+
+
+
 
 
 

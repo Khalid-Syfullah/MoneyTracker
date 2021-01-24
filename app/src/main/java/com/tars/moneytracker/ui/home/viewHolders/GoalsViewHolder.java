@@ -29,19 +29,20 @@ public class GoalsViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
         Context context;
 
-        EditText goalTitleEditText,amountEditText;
-        TextView dateText;
+        public EditText goalTitleEditText, goalAlertTitleEditText, goalAlertAmountEditText;
+        public TextView goalTitleText, goalAmountText, goalDateText, goalAlertDateText;
         String goalTitle,amount,date;
         public GoalsViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
             this.context = context;
 
-            TextView title=itemView.findViewById(R.id.goal_child_title);
-            TextView amountText=itemView.findViewById(R.id.goal_child_required_money);
-            TextView dateText=itemView.findViewById(R.id.goal_child_due_date);
-            amount=amountText.getText().toString();
-            goalTitle= title.getText().toString();
-            date=dateText.getText().toString();
+            goalTitleText=itemView.findViewById(R.id.goal_child_title);
+            goalAmountText=itemView.findViewById(R.id.goal_child_required_money);
+            goalDateText=itemView.findViewById(R.id.goal_child_due_date);
+
+            amount=goalAmountText.getText().toString();
+            goalTitle= goalTitleText.getText().toString();
+            date=goalDateText.getText().toString();
 
 
             itemView.setOnClickListener(this);
@@ -58,12 +59,13 @@ public class GoalsViewHolder extends RecyclerView.ViewHolder implements View.OnC
             AlertDialog.Builder builder=new AlertDialog.Builder(context, R.style.CustomAlertDialog);
             View dialog= LayoutInflater.from(context).inflate(R.layout.new_goal_alert,null);
 
-            goalTitleEditText=dialog.findViewById(R.id.goal_alert_title_editText);
-            amountEditText=dialog.findViewById(R.id.goal_alert_amount_editText);
-            dateText=dialog.findViewById(R.id.goal_alert_dateTextView);
-            amountEditText.setText(amount);
-            goalTitleEditText.setText(goalTitle);
-            dateText.setText(date);
+            goalAlertTitleEditText=dialog.findViewById(R.id.goal_alert_title_editText);
+            goalAlertAmountEditText=dialog.findViewById(R.id.goal_alert_amount_editText);
+            goalAlertDateText=dialog.findViewById(R.id.goal_alert_dateTextView);
+
+            goalAlertAmountEditText.setText(amount);
+            goalAlertTitleEditText.setText(goalTitle);
+            goalAlertDateText.setText(date);
 
 
             Spinner currencies=dialog.findViewById(R.id.goal_alert_currency_spinner);
@@ -83,7 +85,7 @@ public class GoalsViewHolder extends RecyclerView.ViewHolder implements View.OnC
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
 
-            dateText.setOnClickListener(new View.OnClickListener(){
+            goalAlertDateText.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
                     chooseDate(context);
@@ -93,10 +95,10 @@ public class GoalsViewHolder extends RecyclerView.ViewHolder implements View.OnC
             saveBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    String title = goalTitleEditText.getText().toString();
-                    String amount = amountEditText.getText().toString();
+                    String title = goalAlertTitleEditText.getText().toString();
+                    String amount = goalAlertAmountEditText.getText().toString();
                     String currency = currencies.getSelectedItem().toString();
-                    String date = dateText.getText().toString();
+                    String date = goalAlertDateText.getText().toString();
 
                     GoalDataModel goalDataModel = new GoalDataModel(title, amount, currency, date);
                     RestClient.updateGoal(context,goalDataModel);
@@ -107,10 +109,10 @@ public class GoalsViewHolder extends RecyclerView.ViewHolder implements View.OnC
                 @Override
                 public void onClick(View v){
 
-                    String title = goalTitleEditText.getText().toString();
-                    String amount = amountEditText.getText().toString();
+                    String title = goalAlertTitleEditText.getText().toString();
+                    String amount = goalAlertAmountEditText.getText().toString();
                     String currency = currencies.getSelectedItem().toString();
-                    String date = dateText.getText().toString();
+                    String date = goalAlertDateText.getText().toString();
 
                     GoalDataModel goalDataModel = new GoalDataModel(title, amount, currency, date);
                     RestClient.deleteGoal(context,goalDataModel);
@@ -137,7 +139,7 @@ public class GoalsViewHolder extends RecyclerView.ViewHolder implements View.OnC
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         calendar.set(year, month, dayOfMonth);
                         date = sdf.format(calendar.getTime());
-                        dateText.setText(date);
+                        goalAlertDateText.setText(date);
                     }
                 }, year, month, day); // set date picker to current date
         datePicker.getDatePicker().setMinDate(calendar.getTime().getTime());

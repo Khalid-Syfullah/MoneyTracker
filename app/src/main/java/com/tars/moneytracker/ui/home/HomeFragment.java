@@ -22,6 +22,7 @@ import androidx.transition.TransitionInflater;
 
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.RecyclerItemClickInterface;
+import com.tars.moneytracker.api.RestClient;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 
@@ -44,12 +45,8 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
         goalsRecyclerView=root.findViewById(R.id.home_goals_recyclerView);
 
 
-
-        goalsRecyclerView.setAdapter(new GoalsAdapter(getActivity()));
-        goalsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL,false));
-        walletRecyclerView.setAdapter(new WalletAdapter(getActivity()));
-        walletRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL,false));
-
+        RestClient.getWallets(getContext(),walletRecyclerView);
+        RestClient.getGoals(getContext(),goalsRecyclerView);
 
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
