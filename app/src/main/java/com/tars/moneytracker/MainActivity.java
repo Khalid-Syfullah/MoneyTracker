@@ -367,9 +367,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(!isPopupWalletOn){
                     revealFAB(wallet_typeContainer);
                     wallet_typeContainer.setVisibility(View.VISIBLE);
-                    CategoriesAdapter categoriesAdapter=new CategoriesAdapter(this,this);
-                    popupTypeRecyclerView.setAdapter(categoriesAdapter);
-                    popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
                     isPopupWalletOn=true;
                 }
                 else {
