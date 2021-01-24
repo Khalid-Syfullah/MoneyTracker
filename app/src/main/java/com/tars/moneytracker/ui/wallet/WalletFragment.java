@@ -304,4 +304,13 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
     }
 
 
+    @Override
+    public void onItemClick(Drawable position, String name) {
+
+    }
+
+    @Override
+    public void onItemClick(String name) {
+
+    }
 }

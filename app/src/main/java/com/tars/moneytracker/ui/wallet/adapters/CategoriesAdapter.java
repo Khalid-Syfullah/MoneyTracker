@@ -44,7 +44,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesViewHolder
     public void onBindViewHolder(@NonNull CategoriesViewHolder holder, int position) {
 
         categoryDataModel = categoryDataModels.get(position);
-        holder.categoryTitle.setText(categoryDataModel.getTitle());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerItemClickInterface.onItemClick(holder.categoryIcon.getDrawable(),holder.categoryName.getText().toString());
+            }
+        });
     }
 
     @Override

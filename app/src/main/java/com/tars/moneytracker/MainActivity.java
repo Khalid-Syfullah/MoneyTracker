@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -40,14 +41,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.tars.moneytracker.api.RestClient;
-import com.tars.moneytracker.datamodel.HomeDataModel;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.ui.home.adapters.WalletNamesAdapter;
 import com.tars.moneytracker.ui.notes.NotesFragment;
 import com.tars.moneytracker.ui.notification.NotificationFragment;
 import com.tars.moneytracker.ui.profile.ProfileFragment;
 import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
-import com.tars.moneytracker.ui.wallet.adapters.CategoryIconsAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private CardView wallet_typeContainer;
     private Button incomeBtn,expenseBtn,submitBtn;
-    private TextView navHeaderProfileBtn, navHeaderTitle, popupDate;
-    private ImageView menuBtn, notificationBtn, navHeaderProfileIcon, popupTypeIcon,popupWalletIcon;
+    private TextView navHeaderProfileBtn, navHeaderTitle, popupDate,popupWalletNameTextView;
+    private ImageView menuBtn, notificationBtn, navHeaderProfileIcon, popupTypeIcon,popupWalletIcon,okBtn;
     private EditText popupTitleEditText,popupAmountEditText;
 
     private DrawerLayout drawerLayout;
@@ -79,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences langPrefs;
     String date="not_selected";
     String lang="not set";
+    String popUpWalletName,popupExpenseType;
     public static final String Language_pref="Language";
     public static final String Selected_language="Selected Language";
 
@@ -114,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navHeaderProfileIcon=headerView.findViewById(R.id.nav_header_image);
         navHeaderProfileBtn = headerView.findViewById(R.id.view_profile_button);
         wallet_typeContainer=findViewById(R.id.transaction_popup_type_card);
+        okBtn=findViewById(R.id.okImageBtn);
+        popupWalletNameTextView=findViewById(R.id.transaction_popup_card_walletName);
 
 
 
@@ -133,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popupTitleEditText.setOnClickListener(this);
         popupAmountEditText.setOnClickListener(this);
         popupDate.setOnClickListener(this);
+        okBtn.setOnClickListener(this);
 
         drawerNavigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setItemIconTintList(null);
@@ -364,7 +367,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(!isPopupWalletOn){
                     revealFAB(wallet_typeContainer);
                     wallet_typeContainer.setVisibility(View.VISIBLE);
-                    popupTypeRecyclerView.setAdapter(new CategoryIconsAdapter());
+                    CategoriesAdapter categoriesAdapter=new CategoriesAdapter(this,this);
+                    popupTypeRecyclerView.setAdapter(categoriesAdapter);
                     popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
                     isPopupWalletOn=true;
                 }
@@ -374,6 +378,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 break;
+            case R.id.okImageBtn:
+
             case R.id.income_expense_card_container:
 
             default:
@@ -649,6 +655,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemClick(int position) {
+
         Toast.makeText(this, Integer.toString(position), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemClick(Drawable position, String name) {
+        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+        popupTypeIcon.setImageDrawable(position);
+    }
+
+    @Override
+    public void onItemClick(String name) {
+        popupWalletNameTextView.setText(name);
     }
 }

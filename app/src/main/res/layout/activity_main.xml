@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:animateLayoutChanges="true"
-        android:visibility="visible"
+        android:visibility="gone"
 
 
         app:layout_constraintBottom_toBottomOf="@+id/nav_view"
@@ -118,7 +118,7 @@
             android:layout_marginBottom="8dp"
 
 
-            android:visibility="visible"
+            android:visibility="gone"
             app:cardCornerRadius="16dp"
 
             android:layout_marginTop="?attr/actionBarSize"
@@ -127,22 +127,45 @@
             app:layout_constraintStart_toStartOf="@+id/transaction_popup_card"
             app:layout_constraintTop_toTopOf="@+id/outside_card"
             app:layout_constraintVertical_bias="1.0">
-
-            <ScrollView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="match_parent">
 
-                android:padding="16dp"
-
-                >
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/transPopupTypeRecycler"
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </ScrollView>
+                    android:layout_height="0dp"
 
+                    android:layout_marginBottom="8dp"
+
+                    android:padding="16dp"
+                    app:layout_constraintBottom_toTopOf="@+id/okImageBtn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/transPopupTypeRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </ScrollView>
+
+                <ImageView
+                    android:id="@+id/okImageBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/ok_btn"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
 
@@ -340,7 +363,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:animateLayoutChanges="true"
-        android:visibility="gone"
+        android:visibility="visible"
         app:headerLayout="@layout/nav_header_dashboard"
         app:menu="@menu/drawer_menu" />
 
