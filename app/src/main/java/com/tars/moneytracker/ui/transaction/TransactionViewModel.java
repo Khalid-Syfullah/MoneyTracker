@@ -4,16 +4,25 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.tars.moneytracker.datamodel.TransactionDataModel;
+
+import java.util.ArrayList;
+
 public class TransactionViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+
+    private MutableLiveData<ArrayList<TransactionDataModel>> transactionLiveData;
 
     public TransactionViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        transactionLiveData = new MutableLiveData<>();
+
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void setTransactionLiveData(ArrayList<TransactionDataModel> transactionsData) {
+      transactionLiveData.setValue(transactionsData);
+    }
+
+    public LiveData<ArrayList<TransactionDataModel>> getTransactions() {
+        return transactionLiveData;
     }
 }
