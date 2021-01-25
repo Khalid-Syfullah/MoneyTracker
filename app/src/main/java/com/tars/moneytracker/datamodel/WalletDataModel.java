@@ -17,10 +17,20 @@ public class WalletDataModel {
     @Expose
     private String currency;
 
+
+    @SerializedName("balance")
+    @Expose
+    private String balance;
+
     public WalletDataModel(String title, String type, String currency) {
         this.title = title;
         this.type = type;
         this.currency = currency;
+    }
+
+    public WalletDataModel(String type, String balance) {
+        this.type = type;
+        this.balance = balance;
     }
 
     public String getTitle() {
@@ -45,5 +55,13 @@ public class WalletDataModel {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getBalance() {
+        return balance;
+    }
+
+    public void setBalance(String balance) {
+        this.balance = balance;
     }
 }

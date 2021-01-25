@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tars.moneytracker.R;
 
 public class CategoriesViewHolder extends RecyclerView.ViewHolder {
-    public TextView categoryName;
+
+    public TextView categoryTitle;
     public ImageView categoryIcon;
+
     public CategoriesViewHolder(@NonNull View itemView) {
         super(itemView);
-       categoryName= itemView.findViewById(R.id.child_categories_text);
+       categoryTitle= itemView.findViewById(R.id.child_categories_text);
        categoryIcon=itemView.findViewById(R.id.child_categories_icon);
 
 

@@ -10,16 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.RecyclerItemClickInterface;
+import com.tars.moneytracker.datamodel.CategoryDataModel;
 import com.tars.moneytracker.ui.wallet.viewHolders.CategoriesViewHolder;
+
+import java.util.ArrayList;
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesViewHolder> {
 
     Context ctx;
-    RecyclerItemClickInterface recyclerItemClickInterface;
+    CategoryDataModel categoryDataModel;
+    ArrayList<CategoryDataModel> categoryDataModels;
 
-    public CategoriesAdapter(Context ctx, RecyclerItemClickInterface recyclerItemClickInterface) {
+    public CategoriesAdapter(Context ctx, ArrayList<CategoryDataModel> categoryDataModels) {
         this.ctx = ctx;
-        this.recyclerItemClickInterface = recyclerItemClickInterface;
+        this.categoryDataModels = categoryDataModels;
     }
 
     @NonNull
@@ -39,16 +43,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesViewHolder
     @Override
     public void onBindViewHolder(@NonNull CategoriesViewHolder holder, int position) {
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recyclerItemClickInterface.onItemClick(holder.categoryIcon.getDrawable(),holder.categoryName.getText().toString());
-            }
-        });
-    }
+        categoryDataModel = categoryDataModels.get(position);
+
+        holder.categoryTitle.setText(categoryDataModel.getTitle());
+
+   }
 
     @Override
     public int getItemCount() {
-        return 7;
+        return categoryDataModels.size();
     }
 }

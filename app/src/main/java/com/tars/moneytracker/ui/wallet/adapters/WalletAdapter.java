@@ -12,19 +12,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.RecyclerItemClickInterface;
+import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.wallet.viewHolders.WalletViewHolder;
+
+import java.util.ArrayList;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletViewHolder>{
 
 
 
     Context ctx;
+    WalletDataModel walletDataModel;
+    ArrayList<WalletDataModel> walletDataModels;
 
 
 
-    public WalletAdapter(Context ctx) {
+    public WalletAdapter(Context ctx, ArrayList<WalletDataModel> walletDataModels) {
         this.ctx = ctx;
-        }
+        this.walletDataModels = walletDataModels;
+    }
 
     @NonNull
     @Override
@@ -46,11 +52,18 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletViewHolder>{
         Animation animation= AnimationUtils.loadAnimation(ctx, R.anim.zoom_in);
         holder.itemView.startAnimation(animation);
 
+        walletDataModel = walletDataModels.get(position);
+
+        holder.walletName.setText(walletDataModel.getTitle());
+        holder.walletBalance.setText(walletDataModel.getBalance());
+
+
+
 
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return walletDataModels.size();
     }
 }

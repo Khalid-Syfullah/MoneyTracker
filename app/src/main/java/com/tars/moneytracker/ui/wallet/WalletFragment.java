@@ -1,7 +1,10 @@
 package com.tars.moneytracker.ui.wallet;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -36,11 +40,16 @@ import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.CategoryIconsAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class WalletFragment extends Fragment implements RecyclerItemClickInterface {
 
     private WalletViewModel walletViewModel;
     private RecyclerView myWalletsRecyclerView, myGoalsRecyclerView,categoryRecyclerView;
     private ImageView addWalletBtn,addGoalsBtn,addCategoriesBtn;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -65,14 +74,12 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         myGoalsRecyclerView = root.findViewById(R.id.wallet_mygoals_recycler);
         categoryRecyclerView=root.findViewById(R.id.wallets_categories_recycler);
 
-        myWalletsRecyclerView.setAdapter(new WalletAdapter(getActivity()));
-        myGoalsRecyclerView.setAdapter(new GoalsAdapter(getActivity()));
-        categoryRecyclerView.setAdapter(new CategoriesAdapter(getActivity(),this));
 
 
-        myWalletsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
-        myGoalsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
-        categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        RestClient.getWallets(getContext(), myWalletsRecyclerView);
+        RestClient.getGoals(getContext(), myGoalsRecyclerView);
+        RestClient.getCategories(getContext(), categoryRecyclerView);
+
 
         addCategoriesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +107,8 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
 
         return root;
     }
+
+
 
     private void showCategoriesAlertDialog(Context context) {
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
@@ -169,6 +178,13 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         builder.setView(dialog);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+
+        dateText.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                chooseDate(context,dateText);
+            }
+        });
 
         saveBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -250,6 +266,43 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
     public void onItemClick(int position) {
         Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_SHORT).show();
     }
+
+
+
+    private void chooseDate(Context context, TextView dateText) {
+        final Calendar calendar = Calendar.getInstance();
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+
+
+        DatePickerDialog datePicker =
+                new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(final DatePicker view, final int year, final int month,
+                                          final int dayOfMonth) {
+
+                        @SuppressLint("SimpleDateFormat")
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        calendar.set(year, month, dayOfMonth);
+                        String date = sdf.format(calendar.getTime());
+                        dateText.setText(date);
+                    }
+                }, year, month, day); // set date picker to current date
+        datePicker.getDatePicker().setMinDate(calendar.getTime().getTime());
+        calendar.add(Calendar.DATE, 30);
+        datePicker.getDatePicker().setMaxDate(calendar.getTime().getTime());
+        datePicker.show();
+
+        datePicker.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(final DialogInterface dialog) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 
     @Override
     public void onItemClick(Drawable position, String name) {

@@ -8,14 +8,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.datamodel.GoalDataModel;
+import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.viewHolders.GoalsViewHolder;
+
+import java.util.ArrayList;
 
 public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
 
     public Context context;
 
-    public GoalsAdapter(Context context) {
+    GoalDataModel goalDataModel;
+    ArrayList<GoalDataModel> goalDataModels;
+
+    public GoalsAdapter(Context context, ArrayList<GoalDataModel> goalDataModels) {
         this.context = context;
+        this.goalDataModels = goalDataModels;
+
     }
 
     @NonNull
@@ -37,11 +46,16 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull GoalsViewHolder holder, int position) {
 
+        goalDataModel = goalDataModels.get(position);
+
+        holder.goalTitleText.setText(goalDataModel.getTitle());
+        holder.goalAmountText.setText(goalDataModel.getAmount());
+        holder.goalDateText.setText(goalDataModel.getDate());
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return goalDataModels.size();
     }
 }
 

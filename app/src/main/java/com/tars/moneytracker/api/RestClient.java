@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.tars.moneytracker.LoginActivity;
 import com.tars.moneytracker.MainActivity;
 import com.tars.moneytracker.SignUpActivity;
@@ -13,6 +16,11 @@ import com.tars.moneytracker.datamodel.HomeDataModel;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.datamodel.UserDataModel;
 import com.tars.moneytracker.datamodel.WalletDataModel;
+import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,7 +33,7 @@ public class RestClient {
 
     private static Retrofit retrofit=null;
 
-    private static String baseUrl="http://192.168.0.102:8800";
+    private static String baseUrl="http://192.168.1.7:8800";
 
     public static RetroInterface createRestClient(){
         if(retrofit==null){
@@ -395,6 +403,151 @@ public class RestClient {
             }
         });
 
+
+    }
+
+
+    public static void getWallets(Context context, RecyclerView recyclerView){
+
+        RetroInterface retroInterface = createRestClient();
+        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData();
+
+        call.enqueue(new Callback<ArrayList<WalletDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<WalletDataModel>> call, Response<ArrayList<WalletDataModel>> response) {
+
+
+                ArrayList<WalletDataModel> walletDataModels;
+                walletDataModels = new ArrayList<>();
+                WalletAdapter walletAdapter;
+
+
+                if(response.isSuccessful()) {
+
+                    walletDataModels = response.body();
+
+
+                    if(walletDataModels.size() > 0){
+                        walletAdapter = new WalletAdapter(context, walletDataModels);
+                        recyclerView.setAdapter(walletAdapter);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                    }
+                    else{
+                        Toast.makeText(context,"No wallets found!",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                else{
+                    Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<WalletDataModel>> call, Throwable t) {
+                Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+
+    public static void getGoals(Context context, RecyclerView recyclerView){
+
+        RetroInterface retroInterface = createRestClient();
+        Call<ArrayList<GoalDataModel>> call = retroInterface.getGoalData();
+
+        call.enqueue(new Callback<ArrayList<GoalDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<GoalDataModel>> call, Response<ArrayList<GoalDataModel>> response) {
+
+
+                ArrayList<GoalDataModel> goalDataModels;
+                goalDataModels = new ArrayList<>();
+                GoalsAdapter goalsAdapter;
+
+
+                if(response.isSuccessful()) {
+
+                    goalDataModels = response.body();
+
+
+                    if(goalDataModels.size() > 0){
+                        goalsAdapter = new GoalsAdapter(context, goalDataModels);
+                        recyclerView.setAdapter(goalsAdapter);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                    }
+                    else{
+                        Toast.makeText(context,"No goals found!",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                else{
+                    Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<GoalDataModel>> call, Throwable t) {
+                Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+
+
+    public static void getCategories(Context context, RecyclerView recyclerView){
+
+        RetroInterface retroInterface = createRestClient();
+        Call<ArrayList<CategoryDataModel>> call = retroInterface.getCategoryData();
+
+        call.enqueue(new Callback<ArrayList<CategoryDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<CategoryDataModel>> call, Response<ArrayList<CategoryDataModel>> response) {
+
+
+                ArrayList<CategoryDataModel> categoryDataModels;
+                categoryDataModels = new ArrayList<>();
+                CategoriesAdapter categoriesAdapter;
+
+
+                if(response.isSuccessful()) {
+
+                    categoryDataModels = response.body();
+
+
+                    if(categoryDataModels.size() > 0){
+                        categoriesAdapter = new CategoriesAdapter(context, categoryDataModels);
+                        recyclerView.setAdapter(categoriesAdapter);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                    }
+                    else{
+                        Toast.makeText(context,"No categories found!",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                else{
+                    Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<CategoryDataModel>> call, Throwable t) {
+                Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
     }
 
