@@ -8,5 +8,4 @@ module.exports = (app) => {
     app.post('/insertWalletData', wallet.insertWalletData)
     app.post('/getWalletData', wallet.getWalletData)
 
-    
 }

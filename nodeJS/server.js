@@ -29,5 +29,8 @@ var goalRoute = require("./routes/routes.goal.js")
 var categoryRoute = require("./routes/routes.category.js")
 
 
-app.use('/api',userRoute)
-app.use('/api',transactionRoute)
+app.use('/api/user',userRoute)
+app.use('/api/transaction',transactionRoute)
+app.use('/api/wallet',walletRoute)
+app.use('/api/goal',goalRoute)
+app.use('/api/category',categoryRoute)
