@@ -1,0 +1,13 @@
+POST http://localhost:8080/api/getter HTTP/1.1
+Content-Type: application/json
+{
+    "email":"khalid@abc.com",
+    "pass":"1234"
+}
+
+POST http://localhost:8080/api/insert HTTP/1.1
+Content-Type: application/json
+{
+    "category":"khalid@abc.com",
+    "wallet":"bKash"
+}
