@@ -20,9 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +30,7 @@ import androidx.transition.TransitionInflater;
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.CategoryDataModel;
 import com.tars.moneytracker.datamodel.GoalDataModel;
 import com.tars.moneytracker.datamodel.WalletDataModel;
@@ -43,6 +42,10 @@ import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WalletFragment extends Fragment implements RecyclerItemClickInterface {
 
@@ -59,12 +62,7 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         walletViewModel =
                 new ViewModelProvider(this).get(WalletViewModel.class);
         View root = inflater.inflate(R.layout.fragment_wallet, container, false);
-        walletViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
 
-            }
-        });
         addWalletBtn=root.findViewById(R.id.wallet_add_wallet_btn);
         addGoalsBtn=root.findViewById(R.id.wallet_add_goals_btn);
         addCategoriesBtn=root.findViewById(R.id.wallets_add_categories_btn);
@@ -74,12 +72,28 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         myGoalsRecyclerView = root.findViewById(R.id.wallet_mygoals_recycler);
         categoryRecyclerView=root.findViewById(R.id.wallets_categories_recycler);
 
+        myWalletsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
+        myGoalsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
+        categoryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+
+        fetchWalletData();
+        fetchGoalData();
+        fetchCategoryData();
 
 
-        RestClient.getWallets(getContext(), myWalletsRecyclerView);
-        RestClient.getGoals(getContext(), myGoalsRecyclerView);
-        RestClient.getCategories(getContext(), categoryRecyclerView);
 
+        walletViewModel.getWallets().observe(getViewLifecycleOwner(), walletDataModels -> {
+            myWalletsRecyclerView.setAdapter(new WalletAdapter(getActivity(),walletDataModels));
+
+        });
+
+        walletViewModel.getGoalLiveData().observe(getViewLifecycleOwner(),goalDataModels -> {
+            myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels));
+        });
+
+        walletViewModel.getCategoryLiveData().observe(getViewLifecycleOwner(),categoryDataModels -> {
+            categoryRecyclerView.setAdapter(new CategoriesAdapter(getContext(),categoryDataModels));
+        });
 
         addCategoriesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +120,68 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
 
 
         return root;
+    }
+
+
+
+    public void fetchWalletData(){
+        RetroInterface retroInterface = RestClient.createRestClient();
+        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData();
+
+        call.enqueue(new Callback<ArrayList<WalletDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<WalletDataModel>> call, Response<ArrayList<WalletDataModel>> response) {
+                walletViewModel.setWalletLiveData(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<WalletDataModel>> call, Throwable t) {
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    public void fetchGoalData(){
+
+        RetroInterface retroInterface = RestClient.createRestClient();
+        Call<ArrayList<GoalDataModel>> call = retroInterface.getGoalData();
+        call.enqueue(new Callback<ArrayList<GoalDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<GoalDataModel>> call, Response<ArrayList<GoalDataModel>> response) {
+                walletViewModel.setGoalLiveData(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<GoalDataModel>> call, Throwable t) {
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+    }
+    public void fetchCategoryData(){
+
+        RetroInterface retroInterface = RestClient.createRestClient();
+        Call<ArrayList<CategoryDataModel>> call = retroInterface.getCategoryData();
+        call.enqueue(new Callback<ArrayList<CategoryDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<CategoryDataModel>> call, Response<ArrayList<CategoryDataModel>> response) {
+                walletViewModel.setCategoryLiveData(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<CategoryDataModel>> call, Throwable t) {
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
     }
 
 

@@ -34,11 +34,11 @@ public class TransactionFragment extends Fragment {
         transactionViewModel =
                 new ViewModelProvider(this).get(TransactionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_transaction, container, false);
-        transactionViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-            }
-        });
+//        transactionViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//            }
+//        });
 
         getTransactions(getContext());
 
