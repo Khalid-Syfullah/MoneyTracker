@@ -85,16 +85,36 @@ app.post('/api/login', function(req,res){
     
 
 
-    User.find({email:user.email, pass:user.pass})
-    .then(function(user){
-        console.log(user)
-        res.send({message: "Login successful"})
+    User.find({email:user.email, pass:user.pass},(err,results)=>{
 
+        if(err){
+            console.log(err)
+            return
+        }
+        else{
+            if(results.length==0){
+                res.send({serverMsg: "not found"})
+                return
+            }
+            else{
+                var response={'name' : results[0].name,'email':results[0].email,'pass':results[0].pass,'serverMsg':"successful"}
+                res.send(response)
+                
+                console.log(results[0])
+                return
+            }
+        }
 
     })
-    .catch(function(err){
-        console.log(err)
-    })
+    // .then(function(user){
+    //     console.log(user)
+    //     res.send({serverMsg: "successful"})
+
+
+    // })
+    // .catch(function(err){
+    //     console.log(err)
+    // })
 })
 
 
@@ -104,16 +124,38 @@ app.post('/api/signup', function(req,res){
     user.email = req.body.email;
     user.pass = req.body.pass;
 
+    User.find({email:user.email},(err,results)=>{
+        if(err){
+            console.log(err)
+        }
+        else{
+            if(results.length>0){
+                res.send({ serverMsg: "exists" });
+                return
+            }
+            else{
+                user.save().then(data=>{
+                    console.log(data)
+                    res.send({serverMsg: "Registration successful"})
+                }).catch((err)=>{
+                    console.log(err)
+                    res.send({serverMsg: "Failed"})
+                })
 
-    user.save()
-    .then(function(user){
-        console.log(user)
-        res.send({message: "Signup successful"})
+            }
+        }
+    })
 
-    })
-    .catch(function(err){
-        console.log(err)
-    })
+
+    // user.save()
+    // .then(function(user){
+    //     console.log(user)
+    //     res.send({message: "Signup successful"})
+
+    // })
+    // .catch(function(err){
+    //     console.log(err)
+    // })
 })
 
 

@@ -41,12 +41,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.ui.home.adapters.WalletNamesAdapter;
 import com.tars.moneytracker.ui.notes.NotesFragment;
 import com.tars.moneytracker.ui.notification.NotificationFragment;
 import com.tars.moneytracker.ui.profile.ProfileFragment;
-import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private CardView wallet_typeContainer;
     private Button incomeBtn,expenseBtn,submitBtn;
-    private TextView navHeaderProfileBtn, navHeaderTitle, popupDate,popupWalletNameTextView;
+    private TextView navHeaderProfileBtn, navHeaderUserName, popupDate,popupWalletNameTextView;
     private ImageView menuBtn, notificationBtn, navHeaderProfileIcon, popupTypeIcon,popupWalletIcon,okBtn;
     private EditText popupTitleEditText,popupAmountEditText;
 
@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popupDate=findViewById(R.id.dateText);
         popupTypeRecyclerView=findViewById(R.id.transPopupTypeRecycler);
         popupWalletIcon=findViewById(R.id.popup_wallet_icon);
+      
 
         addBtn = findViewById(R.id.income_expense_btn);
         menuBtn = findViewById(R.id.actionbar_menu);
@@ -110,12 +111,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         notificationBtn = findViewById(R.id.actionbar_notifications);
         incomeBtn=findViewById(R.id.home_trans_popup_income_btn);
         expenseBtn=findViewById(R.id.home_trans_popup_expense);
-        navHeaderTitle=headerView.findViewById(R.id.nav_header_title);
+        navHeaderUserName =headerView.findViewById(R.id.nav_header_user_name);
         navHeaderProfileIcon=headerView.findViewById(R.id.nav_header_image);
         navHeaderProfileBtn = headerView.findViewById(R.id.view_profile_button);
         wallet_typeContainer=findViewById(R.id.transaction_popup_type_card);
         okBtn=findViewById(R.id.okImageBtn);
         popupWalletNameTextView=findViewById(R.id.transaction_popup_card_walletName);
+
+        navHeaderUserName.setText(StaticData.LoggedInUserName.toUpperCase());
 
 
 
@@ -127,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navHeaderProfileBtn.setOnClickListener(this);
         menuBtn.setOnClickListener(this);
         notificationBtn.setOnClickListener(this);
-        navHeaderTitle.setOnClickListener(this);
+        navHeaderUserName.setOnClickListener(this);
         navHeaderProfileIcon.setOnClickListener(this);
         container.setOnClickListener(this);
         popupWalletIcon.setOnClickListener(this);
@@ -242,6 +245,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+
+
 //        NavigationUI.setupWithNavController(bottomNavigationView,navController);
     }
 
@@ -264,6 +269,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else if (fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName().equals("notes")) {
                     fm.popBackStack("notes", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     fm.beginTransaction().remove(new NotesFragment()).commit();
+                }
+                else if (fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName().equals("profile")) {
+                    fm.popBackStack("profile", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fm.beginTransaction().remove(new ProfileFragment()).commit();
                 }
 
             } else {
@@ -325,9 +334,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.nav_header_image:
-            case R.id.nav_header_title:
+            case R.id.nav_header_user_name:
             case R.id.view_profile_button:
-                getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new ProfileFragment()).addToBackStack("tars").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new ProfileFragment()).addToBackStack("profile").commit();
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 } else{

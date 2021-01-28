@@ -110,14 +110,14 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
                     walletViewModel.setWalletLiveData(response.body());
                 }
                 else {
-                    Toast.makeText(getContext(), "response failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "response failed", Toast.LENGTH_SHORT).show();
                 }
 
             }
 
             @Override
             public void onFailure(Call<ArrayList<WalletDataModel>> call, Throwable t) {
-                Toast.makeText(getContext(), "Connection failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Connection failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -135,13 +135,13 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
                     walletViewModel.setGoalLiveData(response.body());
                 }
                 else {
-                    Toast.makeText(getContext(), "response failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "response failed", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<GoalDataModel>> call, Throwable t) {
-                Toast.makeText(getContext(), "Connection failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Connection failed", Toast.LENGTH_SHORT).show();
             }
         });
 

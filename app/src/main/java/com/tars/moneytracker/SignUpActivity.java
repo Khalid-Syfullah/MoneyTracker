@@ -10,9 +10,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.UserDataModel;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -96,7 +102,38 @@ public class SignUpActivity extends AppCompatActivity {
 
         if(!username.isEmpty() && !mail.isEmpty() && !pass.isEmpty()){
             UserDataModel userDataModel = new UserDataModel(username,mail,pass);
-            RestClient.signupUser(getApplicationContext(),userDataModel);
+            RetroInterface retroInterface = RestClient.createRestClient();
+            Call<UserDataModel> call = retroInterface.signupUser(userDataModel);
+
+            call.enqueue(new Callback<UserDataModel>() {
+                @Override
+                public void onResponse(Call<UserDataModel> call, Response<UserDataModel> response) {
+                    if(response.isSuccessful()){
+
+                        if(response.body().getServerMsg().equals("exists")) {
+                            Toast.makeText(getApplicationContext(), "Email already exists", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(SignUpActivity.this, response.body().getServerMsg(), Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(SignUpActivity.this, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finishAffinity();
+
+                        }
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"No response from server!",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserDataModel> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(),"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+                }
+            });
 
         }
 

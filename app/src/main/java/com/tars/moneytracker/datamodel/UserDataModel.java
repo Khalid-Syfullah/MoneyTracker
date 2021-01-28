@@ -17,6 +17,9 @@ public class UserDataModel {
     @Expose
     private String pass;
 
+    @SerializedName("serverMsg")
+    private String serverMsg;
+
     public UserDataModel(String email, String pass) {
         this.email = email;
         this.pass = pass;
@@ -50,5 +53,18 @@ public class UserDataModel {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public String getServerMsg(){
+        return serverMsg;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDataModel{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", pass='" + pass + '\'' +
+                '}';
     }
 }

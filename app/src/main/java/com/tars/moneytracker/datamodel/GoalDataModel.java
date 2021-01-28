@@ -20,6 +20,9 @@ public class GoalDataModel {
     @SerializedName("date")
     @Expose
     private String date;
+    @SerializedName("serverMsg")
+    @Expose
+    private String serverMsg;
 
     public GoalDataModel(String title, String amount, String currency, String date) {
         this.title = title;
@@ -58,5 +61,18 @@ public class GoalDataModel {
 
     public void setDate(String date) {
         this.date = date;
+    }
+    public String getServerMsg() {
+        return serverMsg;
+    }
+
+    @Override
+    public String toString() {
+        return "GoalDataModel{" +
+                "title='" + title + '\'' +
+                ", amount='" + amount + '\'' +
+                ", currency='" + currency + '\'' +
+                ", date='" + date + '\'' +
+                '}';
     }
 }

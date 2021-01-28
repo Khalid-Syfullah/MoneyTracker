@@ -22,6 +22,11 @@ public class WalletDataModel {
     @Expose
     private String balance;
 
+    @SerializedName("serverMsg")
+    @Expose
+    private String serverMsg;
+
+
     public WalletDataModel(String title, String type, String currency) {
         this.title = title;
         this.type = type;
@@ -63,5 +68,19 @@ public class WalletDataModel {
 
     public void setBalance(String balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "WalletDataModel{" +
+                "title='" + title + '\'' +
+                ", type='" + type + '\'' +
+                ", currency='" + currency + '\'' +
+                ", balance='" + balance + '\'' +
+                '}';
+    }
+
+    public String getServerMsg() {
+        return serverMsg;
     }
 }

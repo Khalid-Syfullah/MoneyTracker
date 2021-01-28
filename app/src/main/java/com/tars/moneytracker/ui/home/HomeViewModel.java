@@ -10,6 +10,7 @@ public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<HomeDataModel> homeLiveData;
 
+
     public HomeViewModel() {
         homeLiveData = new MutableLiveData<>();
 

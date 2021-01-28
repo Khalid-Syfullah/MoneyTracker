@@ -30,6 +30,10 @@ public class TransactionDataModel {
     @Expose
     private String transaction;
 
+    @SerializedName("serverMsg")
+    @Expose
+    private String serverMsg;
+
     public TransactionDataModel(String title, String amount, String transaction, String category, String wallet, String date)  {
         this.title = title;
         this.amount = amount;
@@ -58,5 +62,9 @@ public class TransactionDataModel {
 
     public String getTransaction() {
         return transaction;
+    }
+
+    public String getServerMsg() {
+        return serverMsg;
     }
 }

@@ -9,6 +9,11 @@ public class CategoryDataModel {
     @Expose
     private String title;
 
+    @SerializedName("serverMsg")
+    @Expose
+    private String serverMsg;
+
+
     public CategoryDataModel(String title) {
         this.title = title;
     }
@@ -19,5 +24,16 @@ public class CategoryDataModel {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getServerMsg() {
+        return serverMsg;
+    }
+
+    @Override
+    public String toString() {
+        return "CategoryDataModel{" +
+                "title='" + title + '\'' +
+                '}';
     }
 }

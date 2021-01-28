@@ -30,6 +30,10 @@ public class HomeDataModel {
     @Expose
     private String transaction;
 
+    @SerializedName("serverMsg")
+    @Expose
+    private String serverMsg;
+
     public HomeDataModel(String title, String amount, String transaction, String category, String wallet, String date)  {
         this.title = title;
         this.amount = amount;
@@ -58,5 +62,21 @@ public class HomeDataModel {
 
     public String getTransaction() {
         return transaction;
+    }
+
+    public String getServerMsg() {
+        return serverMsg;
+    }
+
+    @Override
+    public String toString() {
+        return "HomeDataModel{" +
+                "title='" + title + '\'' +
+                ", category='" + category + '\'' +
+                ", wallet='" + wallet + '\'' +
+                ", date='" + date + '\'' +
+                ", amount='" + amount + '\'' +
+                ", transaction='" + transaction + '\'' +
+                '}';
     }
 }
