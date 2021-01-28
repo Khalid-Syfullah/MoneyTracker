@@ -57,8 +57,8 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
         walletRecyclerView = root.findViewById(R.id.overViewRecycler);
         goalsRecyclerView=root.findViewById(R.id.home_goals_recyclerView);
 
-        walletRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
-        goalsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
+        walletRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
+        goalsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
 
         fetchGoalData();
         fetchWalletData();
@@ -106,13 +106,18 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
         call.enqueue(new Callback<ArrayList<WalletDataModel>>() {
             @Override
             public void onResponse(Call<ArrayList<WalletDataModel>> call, Response<ArrayList<WalletDataModel>> response) {
-                walletViewModel.setWalletLiveData(response.body());
+                if(response.isSuccessful()) {
+                    walletViewModel.setWalletLiveData(response.body());
+                }
+                else {
+                    Toast.makeText(getContext(), "response failed", Toast.LENGTH_SHORT).show();
+                }
 
             }
 
             @Override
             public void onFailure(Call<ArrayList<WalletDataModel>> call, Throwable t) {
-                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Connection failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -125,13 +130,18 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
         call.enqueue(new Callback<ArrayList<GoalDataModel>>() {
             @Override
             public void onResponse(Call<ArrayList<GoalDataModel>> call, Response<ArrayList<GoalDataModel>> response) {
-                walletViewModel.setGoalLiveData(response.body());
 
+                if(response.isSuccessful()) {
+                    walletViewModel.setGoalLiveData(response.body());
+                }
+                else {
+                    Toast.makeText(getContext(), "response failed", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<ArrayList<GoalDataModel>> call, Throwable t) {
-                Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Connection failed", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -8,6 +8,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/login_top_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/app_icon"
+            android:elevation="20dp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/login_topEmptyView"
+            app:layout_constraintEnd_toEndOf="@+id/login_topEmptyView"
+            app:layout_constraintStart_toStartOf="@+id/login_topEmptyView"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/login_topEmptyView"
