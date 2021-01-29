@@ -376,7 +376,7 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
 
                 String name = categoryName.getText().toString();
 
-                CategoryDataModel categoryDataModel = new CategoryDataModel(name);
+                CategoryDataModel categoryDataModel = new CategoryDataModel(name, StaticData.LoggedInUserEmail);
                 RestClient.insertCategory(context,categoryDataModel);
             }
         });

@@ -9,13 +9,18 @@ public class CategoryDataModel {
     @Expose
     private String title;
 
+    @SerializedName("email")
+    @Expose
+    private String email;
+
     @SerializedName("serverMsg")
     @Expose
     private String serverMsg;
 
 
-    public CategoryDataModel(String title) {
+    public CategoryDataModel(String title, String email) {
         this.title = title;
+        this.email = email;
     }
 
     public String getTitle() {
