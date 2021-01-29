@@ -9,17 +9,20 @@ var userSchema = new mongoose.Schema({
     email: {type: String, required: true},
     pass: {type: String, required: true}
 })
-var locationSchema = new mongoose.Schema({
-    latitude: {type: String, required: true},
-    longitude: {type: String, required: true}
+
+var overviewSchema = new mongoose.Schema({
+    spent: {type: Number, required: true},
+    remaining: {type: Number, required: true},
+    limit: {type: Number, required: true}
 })
 
 var transactionSchema = new mongoose.Schema({
+    email: {type: String, required: true},
     title: {type: String, required: true},
     category: {type: String, required: true},
     wallet: {type: String, required: true},
     date: {type: String, required: true},
-    amount: {type: String, required: true},
+    amount: {type: Number, required: true},
     transaction: {type: String, required: true}
 
 })
@@ -46,7 +49,7 @@ var categorySchema = new mongoose.Schema({
 })
 
 var User = mongoose.model("user",userSchema)
-var Location = mongoose.model("location",locationSchema)
+var Overview = mongoose.model("overview",overviewSchema)
 var Transaction = mongoose.model("transaction",transactionSchema)
 var Wallet = mongoose.model("wallet",walletSchema)
 var Goal = mongoose.model("goal",goalSchema)
@@ -62,21 +65,13 @@ mongoose.connect(url, function(err){
 		console.log("Connected to database!")
     }
 })
+
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
 app.listen(8800, function(){
     console.log("Listening to port 8800")
 })
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
 
-app.get('/api/getter', function(req,res){
-    User.find({'email':'khalid'},'email pass')
-    .then(function(user){
-        console.log(user)
-    })
-    .catch(function(err){
-        console.log(err)
-    })
-})
 
 
 app.post('/api/login', function(req,res){
@@ -159,16 +154,15 @@ app.post('/api/signup', function(req,res){
     // })
 })
 
-
 app.post('/api/insertTransactionData', function(req,res){
     var transaction = new Transaction();
+    transaction.email = req.body.email;
     transaction.title = req.body.title;
     transaction.amount = req.body.amount;
     transaction.transaction = req.body.transaction;
     transaction.category = req.body.category;
     transaction.wallet = req.body.wallet;
     transaction.date = req.body.date;
-    
 
     transaction.save()
     .then(function(data){
@@ -280,6 +274,64 @@ app.post('/api/insertCategoryData', function(req,res){
 })
 
 
+
+
+app.post('/api/getOverviewData', function(req,res){
+
+    var overview = new Overview();
+    overview.spent = 0;
+    overview.remaining = 0;
+    overview.limit = 0;
+
+    Transaction.find({email:req.body.email})
+    .then(function(results){
+
+        if(results.length>0){
+           
+
+            console.log("Overview found")
+            console.log(overview)
+
+            for(result of results){
+
+                overview.spent += result.amount
+                overview.remaining += result.amount
+                overview.limit += result.amount
+
+                console.log("Transactions :")
+                console.log(result)
+            }
+
+
+
+        }
+
+        res.send(overview)
+
+    })
+    .catch(function(err){
+        res.send({serverMsg: "Response error"})
+
+    })
+    
+    
+})
+
+
+app.post('/api/getTransactionData', function(req,res){
+
+    Transaction.find({email: req.body.email})
+    .then(function(data){
+        console.log("Transaction found")
+        console.log(data)
+        res.send(data)
+    })
+    .catch(function(err){
+        console.log("Error found")
+        res.send({message: "Error found"})
+    })
+})
+
 app.post('/api/getWalletData', function(req,res){
 
 
@@ -294,6 +346,7 @@ app.post('/api/getWalletData', function(req,res){
         res.send({message: "Error found"})
     })
 })
+
 
 
 app.post('/api/getGoalData', function(req,res){
@@ -346,18 +399,3 @@ app.post('/api/user', function(req,res){
 })
 
 
-app.post('/api/location',function(req,res){
-    var location = new Location();
-    location.latitude = req.body.latitude;
-    location.longitude = req.body.longitude;
-
-    location.save(function(user, err){
-        if(err){
-            console.log(err)
-        }
-        else{
-            console.log("User created")
-            res.json({message: "User created"})
-        }
-    })
-})

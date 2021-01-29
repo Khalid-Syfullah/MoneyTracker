@@ -2,7 +2,7 @@ var express = require("express")
 var app = express()
 var mongoose = require("mongoose")
 var bodyParser = require("body-parser")
-
+var router = require('express').Router();
 
 var url = "mongodb://localhost/moneytracker"
 
@@ -28,9 +28,8 @@ var walletRoute = require("./routes/routes.wallet.js")
 var goalRoute = require("./routes/routes.goal.js")
 var categoryRoute = require("./routes/routes.category.js")
 
-
-app.use('/api/user',userRoute)
-app.use('/api/transaction',transactionRoute)
-app.use('/api/wallet',walletRoute)
-app.use('/api/goal',goalRoute)
-app.use('/api/category',categoryRoute)
+app.use('/api',userRoute)
+app.use('/api',transactionRoute)
+app.use('/api',walletRoute)
+app.use('/api',goalRoute)
+app.use('/api',categoryRoute)
