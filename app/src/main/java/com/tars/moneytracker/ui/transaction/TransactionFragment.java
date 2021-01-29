@@ -40,12 +40,8 @@ public class TransactionFragment extends Fragment {
 //            }
 //        });
 
-        getTransactions(getContext());
-
         recyclerView = root.findViewById(R.id.transaction_recycler);
-        recyclerView.setAdapter(new TransactionAdapter(getActivity()));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
+        RestClient.getTransactions(getContext(),recyclerView);
 
         return root;
     }

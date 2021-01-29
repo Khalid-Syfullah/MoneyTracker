@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -26,6 +27,7 @@ import com.tars.moneytracker.api.RestClient;
 import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.GoalDataModel;
 import com.tars.moneytracker.datamodel.HomeDataModel;
+import com.tars.moneytracker.datamodel.OverviewDataModel;
 import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
@@ -42,8 +44,9 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
 
     private HomeViewModel homeViewModel;
     private WalletViewModel walletViewModel;
+    private OverviewDataModel overviewDataModel;
     private RecyclerView walletRecyclerView,goalsRecyclerView;
-
+    private TextView spentText, remainingText, limitText;
 
 
 
@@ -58,10 +61,15 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
 
         walletRecyclerView = root.findViewById(R.id.overViewRecycler);
         goalsRecyclerView=root.findViewById(R.id.home_goals_recyclerView);
+        spentText = root.findViewById(R.id.home_overview_spent_amount);
+        remainingText = root.findViewById(R.id.home_overview_remaining_amount);
+        limitText = root.findViewById(R.id.home_overview_limit_amount);
+
 
         walletRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
         goalsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
 
+        fetchOverviewData();
         fetchGoalData();
         fetchWalletData();
 
@@ -73,6 +81,12 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
             public void onChanged(HomeDataModel homeDataModel) {
 
             }
+        });
+
+        homeViewModel.getOverviewLiveData().observe(getViewLifecycleOwner(),overviewDataModel -> {
+            spentText.setText(overviewDataModel.getSpent()+" BDT");
+            remainingText.setText(overviewDataModel.getRemaining()+" BDT");
+            limitText.setText(overviewDataModel.getLimit()+" BDT");
         });
         
         walletViewModel.getWallets().observe(getViewLifecycleOwner(), new Observer<ArrayList<WalletDataModel>>() {
@@ -121,6 +135,31 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
         if(name.equals("updated")){
             fetchWalletData();
         }
+    }
+
+    public void fetchOverviewData(){
+        RetroInterface retroInterface = RestClient.createRestClient();
+        OverviewDataModel overviewDataModel = new OverviewDataModel(StaticData.LoggedInUserEmail);
+        Call<OverviewDataModel> call = retroInterface.getOverviewData(overviewDataModel);
+
+        call.enqueue(new Callback<OverviewDataModel>() {
+            @Override
+            public void onResponse(Call<OverviewDataModel> call, Response<OverviewDataModel> response) {
+                if(response.isSuccessful()){
+                    homeViewModel.setOverviewLiveData(response.body());
+                }
+                else{
+                    Toast.makeText(getActivity(), "response failed", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OverviewDataModel> call, Throwable t) {
+                Toast.makeText(getActivity(), "Connection failed", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
 

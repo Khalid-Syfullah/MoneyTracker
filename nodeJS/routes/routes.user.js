@@ -1,7 +1,10 @@
+const express = require('express');
+const router = express.Router();
+
 module.exports = (app) => {
     var user = require("../controller/controller.user.js")
 
-    app.get('/',user.create)
-    app.get('/api/getter',user.find)
-    app.get('/api/delete',user.delete)
+    router.post('/login', user.login)
+    router.post('/signup', user.signup)
+
 }
