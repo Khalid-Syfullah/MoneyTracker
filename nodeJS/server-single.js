@@ -48,7 +48,8 @@ var goalSchema = new mongoose.Schema({
 })
 
 var categorySchema = new mongoose.Schema({
-    title: {type: String, required: true}
+    title: {type: String, required: true},
+    email: {type: String, required: true}
 })
 
 var User = mongoose.model("user",userSchema)
@@ -246,7 +247,8 @@ app.post('/api/insertGoalData', function(req,res){
 app.post('/api/insertCategoryData', function(req,res){
     var category = new Category();
     
-    category.title = req.body.title;
+    category.title = req.body.title
+    category.email = req.body.email
 
     category.save()
     .then(function(data){
@@ -446,7 +448,6 @@ app.post('/api/updateWalletData', function(req,res){
 
 
 app.post('/api/updateGoalData', function(req,res){
-    var goal = new Goal();
     
     var oldGoal = {
     title: req.body.oldTitle,
@@ -486,19 +487,31 @@ app.post('/api/updateGoalData', function(req,res){
 
 
 app.post('/api/updateCategoryData', function(req,res){
-    var category = new Category();
     
-    category.title = req.body.title;
+    var oldCategory = {
+        title: req.body.oldTitle,
+        email: req.body.email
+    }
 
-    category.save()
+    var newCategory = {
+        title: req.body.newTitle,
+        email: req.body.email
+    }
+
+    console.log("Old Category:")
+    console.log(oldCategory)
+    console.log("New Category:")
+    console.log(newCategory)
+
+    Category.updateOne()
     .then(function(data){
-        console.log("Category inserted")
+        console.log("Category updated")
         console.log(data)
-        res.send({message: "Category inserted"})
+        res.send({message: "Category updated"})
     })
     .catch(function(err){
-        console.log("Category insertion failed")
-        res.send({message: "Category insertion failed"})
+        console.log("Category update failed")
+        res.send({message: "Category update failed"})
     })
 })
 
@@ -566,25 +579,23 @@ app.post('/api/deleteGoalData', function(req,res){
 app.post('/api/deleteCategoryData', function(req,res){
     
 
-    var wallet = {
+    var category = {
         email: req.body.email,
-        title: req.body.title,
-        type: req.body.type,
-        currency: req.body.currency
+        title: req.body.title
   
     }
-    console.log("Wallet to be deleted:")
-    console.log(wallet)
+    console.log("Category to be deleted:")
+    console.log(category)
     
-    Wallet.deleteOne(wallet)
+    Category.deleteOne(category)
     .then(function(results){
-        console.log("Wallet Deleted")
+        console.log("Category Deleted")
         console.log(results)
-        res.send(wallet)
+        res.send(category)
     })
     .catch(function(err){
-        console.log("Wallet Delete Failed")
-        res.send({message: "Wallet Delete Failed"})
+        console.log("Category Delete Failed")
+        res.send({message: "Category Delete Failed"})
     })
     
    
