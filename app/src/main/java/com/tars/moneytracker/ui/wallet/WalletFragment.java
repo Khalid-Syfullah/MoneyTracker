@@ -324,6 +324,7 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         EditText titleText = dialog.findViewById(R.id.wallet_alert_title_editText);
         Button saveBtn = dialog.findViewById(R.id.wallet_alert_save_button);
         Button deleteBtn = dialog.findViewById(R.id.wallet_alert_delete_button);
+        deleteBtn.setText("Cancel");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, walletItems);
         ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, currencyItems);
@@ -356,14 +357,18 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
                     public void onResponse(Call<WalletDataModel> call, Response<WalletDataModel> response) {
                         Toast.makeText(context,response.body().getServerMsg(),Toast.LENGTH_SHORT).show();
                         fetchWalletData();
+
                     }
 
                     @Override
                     public void onFailure(Call<WalletDataModel> call, Throwable t) {
                         Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
 
+
                     }
+
                 });
+                alertDialog.dismiss();
             }
         });
 

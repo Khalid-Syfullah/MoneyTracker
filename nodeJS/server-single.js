@@ -420,6 +420,28 @@ app.post('/api/updateWalletData', function(req,res){
    
 })
 
+app.post('/api/deleteWalletData', function(req,res){
+    var wallet = new Wallet();
+    
+    // wallet.title = req.body.title;
+    // wallet.type = req.body.type;
+    // wallet.currency = req.body.currency;
+    // wallet.email=req.body.email
+
+    Wallet.remove({email:req.body.email,title:req.body.title},(err,data)=>{
+        if(err){
+            res.send({serverMsg:'failed'})
+        }
+        else{
+            res.send({serverMsg:'deleted'})
+        }
+    })
+
+    
+
+  
+})
+
 app.post('/api/user', function(req,res){
     var user = new User();
     user.email = req.body.name;
