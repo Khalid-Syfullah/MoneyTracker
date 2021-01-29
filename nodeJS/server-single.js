@@ -29,7 +29,8 @@ var walletSchema = new mongoose.Schema({
     title: {type: String},
     type: {type: String},
     currency: {type: String},
-    balance: {type: String}
+    balance: {type: String},
+    email:{type:String}
 })
 
 
@@ -97,10 +98,10 @@ app.post('/api/login', function(req,res){
                 return
             }
             else{
-                var response={'name' : results[0].name,'email':results[0].email,'pass':results[0].pass,'serverMsg':"successful"}
+                var response={'name' : results[0].name,'email':results[0].email,'pass':results[0].pass,'serverMsg':'successful'}
                 res.send(response)
                 
-                console.log(results[0])
+                console.log(response)
                 return
             }
         }
@@ -188,18 +189,36 @@ app.post('/api/insertWalletData', function(req,res){
     wallet.title = req.body.title;
     wallet.type = req.body.type;
     wallet.currency = req.body.currency;
-    wallet.balance = "20";
+    wallet.email=req.body.email
+    wallet.balance = "0";
 
-    wallet.save()
-    .then(function(data){
-        console.log("Wallet inserted")
-        console.log(data)
-        res.send({message: "Wallet inserted"})
+    Wallet.find({email:wallet.email,title:wallet.title},(err,results)=>{
+        if(err){
+            console.log(err)
+            res.send({serverMsg:'error occured'})
+            return
+        }
+        else{
+            if(results.length>0){
+                res.send({serverMsg: 'wallet exists'})
+                return
+            }
+            else{
+                wallet.save()
+                .then(function(data){
+                    console.log("Wallet inserted")
+                    console.log(data)
+                    res.send({serverMsg: "Wallet inserted"})
+                })
+                .catch(function(err){
+                    console.log("Wallet insertion failed")
+                    res.send({serverMsg: "Wallet insertion failed"})
+                })
+            }
+        }
     })
-    .catch(function(err){
-        console.log("Wallet insertion failed")
-        res.send({message: "Wallet insertion failed"})
-    })
+
+  
 })
 
 app.post('/api/insertGoalData', function(req,res){

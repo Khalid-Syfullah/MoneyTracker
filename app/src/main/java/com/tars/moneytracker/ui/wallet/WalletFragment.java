@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ import com.tars.moneytracker.api.RestClient;
 import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.CategoryDataModel;
 import com.tars.moneytracker.datamodel.GoalDataModel;
+import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
@@ -82,18 +84,26 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
 
 
 
-        walletViewModel.getWallets().observe(getViewLifecycleOwner(), walletDataModels -> {
-            myWalletsRecyclerView.setAdapter(new WalletAdapter(getActivity(),walletDataModels));
-
+        walletViewModel.getWallets().observe(getViewLifecycleOwner(), new Observer<ArrayList<WalletDataModel>>() {
+            @Override
+            public void onChanged(ArrayList<WalletDataModel> walletDataModels) {
+                myWalletsRecyclerView.setAdapter(new WalletAdapter(getActivity(),walletDataModels));
+            }
         });
 
-        walletViewModel.getGoalLiveData().observe(getViewLifecycleOwner(),goalDataModels -> {
-            myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels));
-        });
+        walletViewModel.getGoalLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<GoalDataModel>>() {
+            @Override
+            public void onChanged(ArrayList<GoalDataModel> goalDataModels) {
+                myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels));
+            }
+        } );
 
-        walletViewModel.getCategoryLiveData().observe(getViewLifecycleOwner(),categoryDataModels -> {
-            categoryRecyclerView.setAdapter(new CategoriesAdapter(getContext(),categoryDataModels));
-        });
+        walletViewModel.getCategoryLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<CategoryDataModel>>() {
+            @Override
+            public void onChanged(ArrayList<CategoryDataModel> categoryDataModels) {
+                categoryRecyclerView.setAdapter(new CategoriesAdapter(getContext(),categoryDataModels));
+            }
+        } );
 
         addCategoriesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -321,8 +331,24 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
                 String type = walletTypes.getSelectedItem().toString();
                 String currency = currencies.getSelectedItem().toString();
 
-                WalletDataModel walletDataModel = new WalletDataModel(title,type,currency);
-                RestClient.insertWallet(context,walletDataModel);
+                WalletDataModel walletDataModel = new WalletDataModel(title,type,currency, StaticData.LoggedInUserEmail);
+//                RestClient.insertWallet(context,walletDataModel);
+                RetroInterface retroInterface = RestClient.createRestClient();
+                Call<WalletDataModel> call = retroInterface.insertWalletData(walletDataModel);
+
+                call.enqueue(new Callback<WalletDataModel>() {
+                    @Override
+                    public void onResponse(Call<WalletDataModel> call, Response<WalletDataModel> response) {
+                        Toast.makeText(context,response.body().getServerMsg(),Toast.LENGTH_SHORT).show();
+                        fetchWalletData();
+                    }
+
+                    @Override
+                    public void onFailure(Call<WalletDataModel> call, Throwable t) {
+                        Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
         });
 

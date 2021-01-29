@@ -22,20 +22,25 @@ public class WalletDataModel {
     @Expose
     private String balance;
 
+    @SerializedName("email")
+    @Expose
+    private String email;
+
     @SerializedName("serverMsg")
     @Expose
     private String serverMsg;
 
 
-    public WalletDataModel(String title, String type, String currency) {
+    public WalletDataModel(String title, String type, String currency,String email) {
         this.title = title;
         this.type = type;
         this.currency = currency;
+        this.email = email;
     }
 
-    public WalletDataModel(String type, String balance) {
-        this.type = type;
-        this.balance = balance;
+    public WalletDataModel(String email) {
+        this.email = email;
+
     }
 
     public String getTitle() {

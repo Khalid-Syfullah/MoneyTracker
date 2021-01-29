@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.WalletDataModel;
 
 public class WalletViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -76,7 +77,7 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
                 String type = walletTypes.getSelectedItem().toString();
                 String currency = currencies.getSelectedItem().toString();
 
-                WalletDataModel walletDataModel = new WalletDataModel(title,type,currency);
+                WalletDataModel walletDataModel = new WalletDataModel(title,type,currency, StaticData.LoggedInUserEmail);
                 RestClient.updateWallet(context,walletDataModel);
             }
         });
@@ -88,7 +89,7 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
                 String type = walletTypes.getSelectedItem().toString();
                 String currency = currencies.getSelectedItem().toString();
 
-                WalletDataModel walletDataModel = new WalletDataModel(title,type,currency);
+                WalletDataModel walletDataModel = new WalletDataModel(title,type,currency,StaticData.LoggedInUserEmail);
                 RestClient.deleteWallet(context,walletDataModel);
 
                 alertDialog.dismiss();
