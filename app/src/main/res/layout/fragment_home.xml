@@ -83,12 +83,12 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/home_overview_label_spent_ammount"
+                        android:id="@+id/home_overview_spent_amount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:gravity="center"
-                        android:text="200 BDT."
+                        android:text="0 BDT"
 
 
                         android:textColor="#EC6194"
@@ -115,20 +115,20 @@
                         app:layout_constraintTop_toTopOf="@+id/home_overview_label_spent" />
 
                     <TextView
-                        android:id="@+id/home_overview_label_limit_amount"
+                        android:id="@+id/home_overview_limit_amount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="1000 BDT."
+                        android:text="0 BDT"
 
                         android:textColor="#EC6194"
 
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/home_overview_label_spent_ammount"
+                        app:layout_constraintBottom_toBottomOf="@+id/home_overview_spent_amount"
                         app:layout_constraintEnd_toEndOf="@+id/home_overview_label_limit"
                         app:layout_constraintStart_toStartOf="@+id/home_overview_label_limit"
-                        app:layout_constraintTop_toTopOf="@+id/home_overview_label_spent_ammount" />
+                        app:layout_constraintTop_toTopOf="@+id/home_overview_spent_amount" />
 
                     <TextView
                         android:id="@+id/home_overview_label_Remaining"
@@ -148,20 +148,20 @@
 
                     <TextView
 
-                        android:id="@+id/home_overview_label_remaining_amount"
+                        android:id="@+id/home_overview_remaining_amount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="1000 BDT."
+                        android:text="0 BDT"
 
 
                         android:textColor="#EC6194"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/home_overview_label_limit_amount"
+                        app:layout_constraintBottom_toBottomOf="@+id/home_overview_limit_amount"
                         app:layout_constraintEnd_toEndOf="@+id/home_overview_label_Remaining"
                         app:layout_constraintStart_toStartOf="@+id/home_overview_label_Remaining"
-                        app:layout_constraintTop_toTopOf="@+id/home_overview_label_limit_amount" />
+                        app:layout_constraintTop_toTopOf="@+id/home_overview_limit_amount" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

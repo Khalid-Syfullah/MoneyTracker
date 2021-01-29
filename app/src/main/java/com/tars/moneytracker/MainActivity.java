@@ -627,20 +627,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(!title.isEmpty() && !amount.isEmpty() && !type.isEmpty() && !category.isEmpty() && !wallet.isEmpty() && !date.isEmpty()){
-            submitAlertDialog(title,amount,type,category,wallet,date);
+            submitAlertDialog(StaticData.LoggedInUserEmail,title,amount,type,category,wallet,date);
         }
 
 
 
     }
 
-    private void submitAlertDialog(String title, String amount,String type, String category, String wallet, String date) {
+    private void submitAlertDialog(String email,String title, String amount,String type, String category, String wallet, String date) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage(getResources().getString(R.string.are_you_sure));
         builder.setCancelable(false);
         builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                TransactionDataModel transactionDataModel = new TransactionDataModel(title,amount,type,category,wallet,date);
+                TransactionDataModel transactionDataModel = new TransactionDataModel(email,title,amount,type,category,wallet,date);
                 RestClient.insertTransaction(MainActivity.this,transactionDataModel);
             }
         })

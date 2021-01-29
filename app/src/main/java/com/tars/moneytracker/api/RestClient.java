@@ -13,10 +13,12 @@ import com.tars.moneytracker.SignUpActivity;
 import com.tars.moneytracker.datamodel.CategoryDataModel;
 import com.tars.moneytracker.datamodel.GoalDataModel;
 import com.tars.moneytracker.datamodel.HomeDataModel;
+import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.datamodel.UserDataModel;
 import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
+import com.tars.moneytracker.ui.transaction.adapters.TransactionAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 
@@ -148,6 +150,8 @@ public class RestClient {
             }
         });
     }
+
+
 
 
     public static void deleteTransaction(Context context, @Body TransactionDataModel transactionDataModel){
@@ -405,6 +409,54 @@ public class RestClient {
 
 
     }
+
+
+    public static void getTransactions(Context context, RecyclerView recyclerView){
+        RetroInterface retroInterface = createRestClient();
+        TransactionDataModel transactionDataModel = new TransactionDataModel(StaticData.LoggedInUserEmail);
+        Call<ArrayList<TransactionDataModel>> call = retroInterface.getTransactionData(transactionDataModel);
+
+        call.enqueue(new Callback<ArrayList<TransactionDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<TransactionDataModel>> call, Response<ArrayList<TransactionDataModel>> response) {
+
+                ArrayList<TransactionDataModel> transactionDataModels;
+                transactionDataModels = new ArrayList<>();
+                TransactionAdapter transactionAdapter;
+
+
+                if(response.isSuccessful()) {
+
+                    transactionDataModels = response.body();
+
+
+                    if(transactionDataModels.size() > 0){
+                        transactionAdapter = new TransactionAdapter(context, transactionDataModels);
+                        recyclerView.setAdapter(transactionAdapter);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                    }
+                    else{
+                        Toast.makeText(context,"No transactions found!",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                else{
+                    Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<TransactionDataModel>> call, Throwable t) {
+                Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
 
 
     public static void getWallets(Context context, RecyclerView recyclerView){

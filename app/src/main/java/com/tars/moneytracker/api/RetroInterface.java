@@ -3,6 +3,7 @@ package com.tars.moneytracker.api;
 import com.tars.moneytracker.datamodel.CategoryDataModel;
 import com.tars.moneytracker.datamodel.GoalDataModel;
 import com.tars.moneytracker.datamodel.HomeDataModel;
+import com.tars.moneytracker.datamodel.OverviewDataModel;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.datamodel.UserDataModel;
 import com.tars.moneytracker.datamodel.WalletDataModel;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -34,6 +36,12 @@ public interface RetroInterface {
     Call<TransactionDataModel> setTransactionData();
 
 
+
+    @POST("/api/getOverviewData")
+    Call<OverviewDataModel> getOverviewData(@Body OverviewDataModel overviewDataModel);
+
+    @POST("/api/getTransactionData")
+    Call<ArrayList<TransactionDataModel>> getTransactionData(@Body TransactionDataModel transactionDataModel);
 
     @POST("/api/getWalletData")
     Call<ArrayList<WalletDataModel>> getWalletData();

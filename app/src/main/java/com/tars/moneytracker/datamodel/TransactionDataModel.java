@@ -6,6 +6,10 @@ import com.google.gson.annotations.SerializedName;
 public class TransactionDataModel {
 
 
+    @SerializedName("email")
+    @Expose
+    private String email;
+
     @SerializedName("title")
     @Expose
     private String title;
@@ -34,7 +38,8 @@ public class TransactionDataModel {
     @Expose
     private String serverMsg;
 
-    public TransactionDataModel(String title, String amount, String transaction, String category, String wallet, String date)  {
+    public TransactionDataModel(String email, String title, String amount, String transaction, String category, String wallet, String date)  {
+        this.email = email;
         this.title = title;
         this.amount = amount;
         this.transaction = transaction;
@@ -42,6 +47,18 @@ public class TransactionDataModel {
         this.wallet = wallet;
         this.date = date;
 
+    }
+
+    public TransactionDataModel(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getCategory() {
