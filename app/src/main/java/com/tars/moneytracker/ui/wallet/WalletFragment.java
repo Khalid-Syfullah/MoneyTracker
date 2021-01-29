@@ -137,7 +137,7 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         addWalletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddWalletAlertDialog(getContext());
+                showWalletsAlertDialog(getContext());
 
             }
         });
@@ -210,107 +210,7 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
     }
 
 
-
-    private void showCategoriesAlertDialog(Context context) {
-        AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
-        View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_category_alert,null);
-
-        RecyclerView icons=dialog.findViewById(R.id.new_category_choose_icon_recycler);
-
-        EditText categoryName = dialog.findViewById(R.id.category_alert_category_name);
-        Button saveBtn = dialog.findViewById(R.id.category_alert_save_button);
-        Button deleteBtn = dialog.findViewById(R.id.category_alert_delete_button);
-
-        icons.setAdapter(new CategoryIconsAdapter());
-        icons.setLayoutManager(new GridLayoutManager(getActivity(),3));
-
-
-        builder.setView(dialog);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        saveBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-
-                String name = categoryName.getText().toString();
-
-                CategoryDataModel categoryDataModel = new CategoryDataModel(name);
-                RestClient.insertCategory(context,categoryDataModel);
-            }
-        });
-
-        deleteBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-/*
-                String name = categoryName.getText().toString();
-
-                CategoryDataModel categoryDataModel = new CategoryDataModel(name);
-                RestClient.deleteCategory(context,categoryDataModel);
-*/
-                alertDialog.dismiss();
-            }
-        });
-    }
-
-    private void showGoalsAlertDialog(Context context) {
-
-        AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
-        View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_goal_alert,null);
-
-        Spinner currencies=dialog.findViewById(R.id.goal_alert_currency_spinner);
-
-        String[] currencyItems=getResources().getStringArray(R.array.currencies);
-
-        EditText titleText = dialog.findViewById(R.id.goal_alert_title_editText);
-        EditText amountText = dialog.findViewById(R.id.goal_alert_amount_editText);
-        TextView dateText = dialog.findViewById(R.id.goal_alert_dateTextView);
-        Button saveBtn = dialog.findViewById(R.id.goal_alert_save_button);
-        Button deleteBtn = dialog.findViewById(R.id.goal_alert_delete_button);
-
-
-        ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, currencyItems);
-
-        currencies.setAdapter(currencyAdapter);
-        currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
-
-
-        builder.setView(dialog);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        dateText.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                chooseDate(context,dateText);
-            }
-        });
-
-        saveBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-
-                String title = titleText.getText().toString();
-                String amount = amountText.getText().toString();
-                String currency = currencies.getSelectedItem().toString();
-                String date = dateText.getText().toString();
-
-
-                GoalDataModel goalDataModel = new GoalDataModel(title, amount, currency, date);
-                RestClient.insertGoal(context,goalDataModel);
-            }
-        });
-
-        deleteBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                alertDialog.dismiss();
-            }
-        });
-    }
-
-    private void showAddWalletAlertDialog(Context context) {
+    private void showWalletsAlertDialog(Context context) {
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
         View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_wallet_alert,null);
 
@@ -374,10 +274,127 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
             }
         });
 
-
-
-
     }
+
+    private void showGoalsAlertDialog(Context context) {
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
+        View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_goal_alert,null);
+
+
+        EditText titleText = dialog.findViewById(R.id.goal_alert_title_editText);
+        EditText targetAmountText = dialog.findViewById(R.id.goal_alert_target_amount_editText);
+        EditText acquiredAmountText = dialog.findViewById(R.id.goal_alert_acquired_amount_editText);
+        TextView dateText = dialog.findViewById(R.id.goal_alert_dateTextView);
+        Spinner currencies=dialog.findViewById(R.id.goal_alert_currency_spinner);
+        Button saveBtn = dialog.findViewById(R.id.goal_alert_save_button);
+        Button deleteBtn = dialog.findViewById(R.id.goal_alert_delete_button);
+
+        String[] currencyItems=getResources().getStringArray(R.array.currencies);
+        ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, currencyItems);
+
+        currencies.setAdapter(currencyAdapter);
+        currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+
+
+        builder.setView(dialog);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        dateText.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                chooseDate(context,dateText);
+            }
+        });
+
+        saveBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                String title = titleText.getText().toString();
+                String targetAmount = targetAmountText.getText().toString();
+                String acquiredAmount = acquiredAmountText.getText().toString();
+                String currency = currencies.getSelectedItem().toString();
+                String date = dateText.getText().toString();
+
+
+                GoalDataModel goalDataModel = new GoalDataModel(StaticData.LoggedInUserEmail,title, targetAmount,acquiredAmount, currency, date);
+                RetroInterface retroInterface = RestClient.createRestClient();
+                Call<GoalDataModel> call = retroInterface.insertGoalData(goalDataModel);
+
+                call.enqueue(new Callback<GoalDataModel>() {
+                    @Override
+                    public void onResponse(Call<GoalDataModel> call, Response<GoalDataModel> response) {
+                        if(response.isSuccessful()){
+                            Toast.makeText(context,"Response received!",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<GoalDataModel> call, Throwable t) {
+                        Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    private void showCategoriesAlertDialog(Context context) {
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
+        View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_category_alert,null);
+
+        RecyclerView icons=dialog.findViewById(R.id.new_category_choose_icon_recycler);
+
+        EditText categoryName = dialog.findViewById(R.id.category_alert_category_name);
+        Button saveBtn = dialog.findViewById(R.id.category_alert_save_button);
+        Button deleteBtn = dialog.findViewById(R.id.category_alert_delete_button);
+
+        icons.setAdapter(new CategoryIconsAdapter());
+        icons.setLayoutManager(new GridLayoutManager(getActivity(),3));
+
+
+        builder.setView(dialog);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        saveBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                String name = categoryName.getText().toString();
+
+                CategoryDataModel categoryDataModel = new CategoryDataModel(name);
+                RestClient.insertCategory(context,categoryDataModel);
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+/*
+                String name = categoryName.getText().toString();
+
+                CategoryDataModel categoryDataModel = new CategoryDataModel(name);
+                RestClient.deleteCategory(context,categoryDataModel);
+*/
+                alertDialog.dismiss();
+            }
+        });
+    }
+
 
     @Override
     public void onItemClick(int position) {

@@ -35,7 +35,7 @@ public class RestClient {
 
     private static Retrofit retrofit=null;
 
-    private static String baseUrl="http://192.168.1.7:8800";
+    private static String baseUrl="http://192.168.1.8:8800";
 
     public static RetroInterface createRestClient(){
         if(retrofit==null){
@@ -462,7 +462,7 @@ public class RestClient {
     public static void getWallets(Context context, RecyclerView recyclerView){
 
         RetroInterface retroInterface = createRestClient();
-        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData();
+        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData(new WalletDataModel(StaticData.LoggedInUserEmail));
 
         call.enqueue(new Callback<ArrayList<WalletDataModel>>() {
             @Override

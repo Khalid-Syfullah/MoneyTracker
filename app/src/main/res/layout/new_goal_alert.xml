@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
 
-
+    xmlns:tools="http://schemas.android.com/tools"
     android:backgroundTint="@color/transparent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -44,20 +44,33 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/goal_alert_type_text"
+                android:id="@+id/goal_alert_acquired_amount_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/montserrat"
-                android:text="Goal Amount"
+                android:text="Acquired Amount"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/goal_alert_target_amount_text" />
+
+            <TextView
+                android:id="@+id/goal_alert_target_amount_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/montserrat"
+                android:text="Target Amount"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/goal_alert_title_editText" />
 
             <EditText
-                android:id="@+id/goal_alert_amount_editText"
+                android:id="@+id/goal_alert_target_amount_editText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -69,9 +82,26 @@
                 android:paddingEnd="16dp"
                 android:textColor="@color/white"
                 android:textColorHint="#AAFFFFFF"
-                app:layout_constraintBottom_toBottomOf="@+id/goal_alert_type_text"
+                app:layout_constraintBottom_toBottomOf="@+id/goal_alert_target_amount_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/goal_alert_type_text" />
+                app:layout_constraintTop_toTopOf="@+id/goal_alert_target_amount_text" />
+
+            <EditText
+                android:id="@+id/goal_alert_acquired_amount_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/white"
+                android:entries="@array/wallet_types"
+                android:fontFamily="@font/montserrat"
+                android:hint="12000"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/white"
+                android:textColorHint="#AAFFFFFF"
+                app:layout_constraintBottom_toBottomOf="@+id/goal_alert_acquired_amount_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/goal_alert_acquired_amount_text" />
 
             <TextView
                 android:id="@+id/goal_alert_currency_text"
@@ -82,8 +112,8 @@
                 android:text="Currency"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/goal_alert_type_text"
-                app:layout_constraintTop_toBottomOf="@+id/goal_alert_type_text" />
+                app:layout_constraintStart_toStartOf="@+id/goal_alert_acquired_amount_text"
+                app:layout_constraintTop_toBottomOf="@+id/goal_alert_acquired_amount_text" />
 
             <Spinner
                 android:id="@+id/goal_alert_currency_spinner"

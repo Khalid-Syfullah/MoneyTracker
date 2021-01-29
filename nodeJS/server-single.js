@@ -29,23 +29,26 @@ var transactionSchema = new mongoose.Schema({
 
 
 var walletSchema = new mongoose.Schema({
-    title: {type: String},
-    type: {type: String},
-    currency: {type: String},
-    balance: {type: String},
-    email:{type:String}
+    title: {type: String, required: true},
+    type: {type: String, required: true},
+    currency: {type: String, required: true},
+    balance: {type: String, required: true},
+    email:{type:String, required: true}
 })
 
 
 var goalSchema = new mongoose.Schema({
-    title: {type: String},
-    amount: {type: String},
-    currency: {type: String},
-    date: {type: String}
+    title: {type: String, required: true},
+    targetAmount: {type: Number, required: true},
+    acquiredAmount: {type: Number, required: true},
+    currency: {type: String,required: true},
+    date: {type: String, required: true},
+    progress: {type: Number},
+    email: {type: String, required: true}
 })
 
 var categorySchema = new mongoose.Schema({
-    title: {type: String}
+    title: {type: String, required: true}
 })
 
 var User = mongoose.model("user",userSchema)
@@ -218,10 +221,13 @@ app.post('/api/insertWalletData', function(req,res){
 app.post('/api/insertGoalData', function(req,res){
     var goal = new Goal();
     
-    goal.title = req.body.title;
-    goal.amount = req.body.amount;
-    goal.currency = req.body.currency;
-    goal.date = req.body.date;
+    goal.title = req.body.title
+    goal.targetAmount = req.body.targetAmount
+    goal.acquiredAmount = req.body.acquiredAmount
+    goal.currency = req.body.currency
+    goal.date = req.body.date
+    goal.progress = req.body.acquiredAmount / req.body.targetAmount * 100
+    goal.email = req.body.email
 
     goal.save()
     .then(function(data){
@@ -234,7 +240,6 @@ app.post('/api/insertGoalData', function(req,res){
         res.send({message: "Goal insertion failed"})
     })
 })
-
 
 
 
@@ -317,7 +322,7 @@ app.post('/api/getTransactionData', function(req,res){
 app.post('/api/getWalletData', function(req,res){
 
 
-    Wallet.find({email: req.body.email})
+    Wallet.find()
     .then(function(data){
         console.log("Wallets found")
         console.log(data)
@@ -363,78 +368,228 @@ app.post('/api/getCategoryData', function(req,res){
     })
 })
 
-app.post('/api/updateGoalData', function(req,res){
-    var goal = new Goal();
-    
-    goal.title = req.body.title;
-    goal.amount = req.body.amount;
-    goal.currency = req.body.currency;
-    goal.date = req.body.date;
 
-    goal.save()
-    .then(function(data){
-        console.log("Goal inserted")
-        console.log(data)
-        res.send({message: "Goal inserted"})
+
+
+app.post('/api/updateTransactionData', function(req,res){
+
+    var oldTransaction = {
+        email: req.body.email,
+        title: req.body.title,
+        amount: req.body.amount,
+        transaction: req.body.transaction,
+        category: req.body.category,
+        wallet: req.body.wallet,
+        date: req.body.date
+    }
+
+    var newTransaction = {
+        email: req.body.email,
+        title: req.body.updateTitle,
+        amount: req.body.updateAmount,
+        transaction: req.body.updateTransaction,
+        category: req.body.updateCategory,
+        wallet: req.body.updateWallet,
+        date: req.body.updateDate
+    }
+    
+    Transaction.findOneAndUpdate(oldTransaction, newTransaction)
+    .then(function(results){
+        console.log("Transaction updated")
+        console.log(results)
+        res.send(results)
     })
     .catch(function(err){
-        console.log("Goal insertion failed")
-        res.send({message: "Goal insertion failed"})
+
     })
+    
+   
 })
 
 app.post('/api/updateWalletData', function(req,res){
-    var wallet = new Wallet();
-
-    var oldTitle=req.body.oldTitle;
     
-    wallet.title = req.body.title;
-    wallet.email = req.body.email;
-    wallet.currency = req.body.currency;
-    wallet.type = req.body.type;
-
-    
-    Wallet.find({title:wallet.title,email:wallet.email},(err,result)=>{
-        if(err){
-            console.log(err)
-
-        }
-        else{
-            if(result.length>0){
-                res.send({serverMsg:'wallet name exists'})
-            }
-            else{
-                 var updateQuery={$set: {title: req.body.title,currency:req.body.currency,type:req.body.type}}
-    Wallet.updateOne({title:oldTitle,email:wallet.email},updateQuery,(err,data)=>{
-        if(err)
-        console.log(err)
-        else {res.send({serverMsg:'updated'})
-    console.log(data)
+    var oldWallet = {
+        email: req.body.email,
+        title: req.body.oldTitle,
+        type: req.body.oldType,
+        currency: req.body.oldCurrency
     }
 
-    })
-            }
-        }
-    })
-   
-   
-})
 
-app.post('/api/user', function(req,res){
-    var user = new User();
-    user.email = req.body.name;
-    user.pass = req.body.pass;
+    var newWallet = {
+        email: req.body.email,
+        title: req.body.title,
+        type: req.body.type,
+        currency: req.body.currency
+  
+    }
+    console.log("Old Wallet:")
+    console.log(oldWallet)
+    console.log("New Wallet:")
+    console.log(newWallet)
 
-
-    user.save()
-    .then(function(data){
-        console.log("User created")
-        res.send({message: "User created"})
+    Wallet.updateOne(oldWallet, newWallet)
+    .then(function(results){
+        console.log("Wallet updated")
+        console.log(results)
+        res.send(newWallet)
     })
     .catch(function(err){
-        console.log("User cannot be created")
-        res.send({message: "User cannot be created"})
+        console.log("Wallet update failed")
+        res.send({message: "Wallet update failed"})
+    })
+    
+   
+})
+
+
+
+
+app.post('/api/updateGoalData', function(req,res){
+    var goal = new Goal();
+    
+    var oldGoal = {
+    title: req.body.oldTitle,
+    targetAmount: req.body.oldTargetAmount,
+    acquiredAmount: req.body.oldAcquiredAmount,
+    currency: req.body.oldCurrency,
+    date: req.body.oldDate,
+    progress: req.body.oldAcquiredAmount / req.body.oldTargetAmount * 100
+    }
+
+    var newGoal = {
+        title: req.body.title,
+        targetAmount: req.body.targetAmount,
+        acquiredAmount: req.body.acquiredAmount,
+        currency: req.body.currency,
+        date: req.body.date,
+        progress: req.body.acquiredAmount / req.body.targetAmount * 100
+        }
+
+    console.log("Old Goal:")
+    console.log(oldGoal)
+    console.log("New Goal:")
+    console.log(newGoal)
+
+    Goal.updateOne(oldGoal,newGoal)
+    .then(function(data){
+        console.log("Goal updated")
+        console.log(data)
+        res.send({message: "Goal updated"})
+    })
+    .catch(function(err){
+        console.log("Goal update failed")
+        res.send({message: "Goal update failed"})
     })
 })
 
 
+
+app.post('/api/updateCategoryData', function(req,res){
+    var category = new Category();
+    
+    category.title = req.body.title;
+
+    category.save()
+    .then(function(data){
+        console.log("Category inserted")
+        console.log(data)
+        res.send({message: "Category inserted"})
+    })
+    .catch(function(err){
+        console.log("Category insertion failed")
+        res.send({message: "Category insertion failed"})
+    })
+})
+
+
+
+app.post('/api/deleteWalletData', function(req,res){
+    
+
+    var wallet = {
+        email: req.body.email,
+        title: req.body.title,
+        type: req.body.type,
+        currency: req.body.currency
+  
+    }
+    console.log("Wallet to be deleted:")
+    console.log(wallet)
+    
+    Wallet.deleteOne(wallet)
+    .then(function(results){
+        console.log("Wallet Deleted")
+        console.log(results)
+        res.send(wallet)
+    })
+    .catch(function(err){
+        console.log("Wallet Delete Failed")
+        res.send({message: "Wallet Delete Failed"})
+    })
+    
+   
+})
+
+
+
+app.post('/api/deleteGoalData', function(req,res){
+    
+
+    var goal = {
+        email: req.body.email,
+        title: req.body.title,
+        targetAmount: req.body.targetAmount,
+        acquiredAmount: req.body.acquiredAmount,
+        currency: req.body.currency,
+        date: req.body.date,
+        progress: req.body.acquiredAmount / req.body.targetAmount * 100
+
+  
+    }
+    console.log("Goal to be deleted:")
+    console.log(goal)
+    
+    Goal.deleteOne(goal)
+    .then(function(results){
+        console.log("Goal Deleted")
+        console.log(results)
+        res.send(goal)
+    })
+    .catch(function(err){
+        console.log("Goal Delete Failed")
+        res.send({message: "Goal Delete Failed"})
+    })
+
+
+
+app.post('/api/deleteCategoryData', function(req,res){
+    
+
+    var wallet = {
+        email: req.body.email,
+        title: req.body.title,
+        type: req.body.type,
+        currency: req.body.currency
+  
+    }
+    console.log("Wallet to be deleted:")
+    console.log(wallet)
+    
+    Wallet.deleteOne(wallet)
+    .then(function(results){
+        console.log("Wallet Deleted")
+        console.log(results)
+        res.send(wallet)
+    })
+    .catch(function(err){
+        console.log("Wallet Delete Failed")
+        res.send({message: "Wallet Delete Failed"})
+    })
+    
+   
+})
+
+    
+   
+})

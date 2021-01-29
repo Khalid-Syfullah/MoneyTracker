@@ -27,7 +27,7 @@ import retrofit2.Response;
 
 public class WalletViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     Context context;
-    String titleText,oldTitle;
+    String titleText,oldTitle,oldType,oldCurrency;
 
     public TextView walletName, walletBalance,walletCurrency,walletType;
 
@@ -56,11 +56,10 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
 
         EditText titleEditText=dialog.findViewById(R.id.wallet_alert_title_editText);
         titleEditText.setText(titleText);
-        oldTitle=titleText;
+
 
         Spinner currencies=dialog.findViewById(R.id.wallet_alert_currency_spinner);
         Spinner walletTypes=dialog.findViewById(R.id.wallet_alert_type_spinner);
-
 
 
         Button saveBtn = dialog.findViewById(R.id.wallet_alert_save_button);
@@ -83,6 +82,11 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
+        oldTitle=walletName.getText().toString();
+        oldType=walletTypes.getSelectedItem().toString();
+        oldCurrency=currencies.getSelectedItem().toString();
+
+
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -90,7 +94,7 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
                 String type = walletTypes.getSelectedItem().toString();
                 String currency = currencies.getSelectedItem().toString();
 
-                WalletDataModel walletDataModel = new WalletDataModel(oldTitle,title,type,currency, StaticData.LoggedInUserEmail);
+                WalletDataModel walletDataModel = new WalletDataModel(title,oldTitle,type,oldType,currency,oldCurrency, StaticData.LoggedInUserEmail);
 //                RestClient.updateWallet(context,walletDataModel);
                 RetroInterface retroInterface = RestClient.createRestClient();
                 Call<WalletDataModel> call = retroInterface.updateWalletData(walletDataModel);
@@ -99,11 +103,8 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
                     @Override
                     public void onResponse(Call<WalletDataModel> call, Response<WalletDataModel> response) {
                         if(response.isSuccessful()){
-                            Toast.makeText(context,response.body().getServerMsg(),Toast.LENGTH_SHORT).show();
                             StaticData.setUpdate("yes");
-
-
-
+                            alertDialog.dismiss();
                         }
                         else{
                             Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();

@@ -49,8 +49,22 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
         goalDataModel = goalDataModels.get(position);
 
         holder.goalTitleText.setText(goalDataModel.getTitle());
-        holder.goalAmountText.setText(goalDataModel.getAmount());
+        holder.currency = goalDataModel.getCurrency();
+
+        if(holder.currency.equals("USD")) {
+            holder.goalTargetAmountText.setText(goalDataModel.getTargetAmount() +" USD");
+            holder.goalAcquiredAmountText.setText(goalDataModel.getAcquiredAmount());
+        }
+        else if(holder.currency.equals("BDT")){
+            holder.goalTargetAmountText.setText(goalDataModel.getTargetAmount() + " BDT");
+            holder.goalAcquiredAmountText.setText(goalDataModel.getAcquiredAmount());
+        }
         holder.goalDateText.setText(goalDataModel.getDate());
+        holder.goalProgressText.setText(goalDataModel.getProgress()+"");
+        holder.goalProgressBar.setProgress(goalDataModel.getProgress());
+
+        holder.targetAmount = goalDataModel.getTargetAmount();
+        holder.acquiredAmount = goalDataModel.getAcquiredAmount();
     }
 
     @Override
