@@ -119,6 +119,7 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
                     }
 
                 });
+                alertDialog.dismiss();
             }
         });
 
@@ -130,7 +131,28 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
                 String currency = currencies.getSelectedItem().toString();
 
                 WalletDataModel walletDataModel = new WalletDataModel(title,type,currency,StaticData.LoggedInUserEmail);
-                RestClient.deleteWallet(context,walletDataModel);
+                RetroInterface retroInterface = RestClient.createRestClient();
+                Call<WalletDataModel> call = retroInterface.deleteWalletData(walletDataModel);
+
+                call.enqueue(new Callback<WalletDataModel>() {
+                    @Override
+                    public void onResponse(Call<WalletDataModel> call, Response<WalletDataModel> response) {
+                        if(response.isSuccessful()){
+                            Toast.makeText(context,response.body().getServerMsg(),Toast.LENGTH_SHORT).show();
+                            StaticData.setUpdate("yes");
+                        }
+                        else{
+                            Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<WalletDataModel> call, Throwable t) {
+                        Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
 
                 alertDialog.dismiss();
             }

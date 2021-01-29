@@ -357,10 +357,10 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_category_alert,null);
 
         RecyclerView icons=dialog.findViewById(R.id.new_category_choose_icon_recycler);
-
-        EditText categoryName = dialog.findViewById(R.id.category_alert_category_name);
-        Button saveBtn = dialog.findViewById(R.id.category_alert_save_button);
-        Button deleteBtn = dialog.findViewById(R.id.category_alert_delete_button);
+        EditText titleText = dialog.findViewById(R.id.wallet_alert_title_editText);
+        Button saveBtn = dialog.findViewById(R.id.wallet_alert_save_button);
+        Button deleteBtn = dialog.findViewById(R.id.wallet_alert_delete_button);
+        deleteBtn.setText("Cancel");
 
         icons.setAdapter(new CategoryIconsAdapter());
         icons.setLayoutManager(new GridLayoutManager(getActivity(),3));
@@ -374,10 +374,32 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
             @Override
             public void onClick(View v){
 
-                String name = categoryName.getText().toString();
+                String title = titleText.getText().toString();
+                String type = walletTypes.getSelectedItem().toString();
+                String currency = currencies.getSelectedItem().toString();
 
-                CategoryDataModel categoryDataModel = new CategoryDataModel(name);
-                RestClient.insertCategory(context,categoryDataModel);
+                WalletDataModel walletDataModel = new WalletDataModel(title,type,currency, StaticData.LoggedInUserEmail);
+//                RestClient.insertWallet(context,walletDataModel);
+                RetroInterface retroInterface = RestClient.createRestClient();
+                Call<WalletDataModel> call = retroInterface.insertWalletData(walletDataModel);
+
+                call.enqueue(new Callback<WalletDataModel>() {
+                    @Override
+                    public void onResponse(Call<WalletDataModel> call, Response<WalletDataModel> response) {
+                        Toast.makeText(context,response.body().getServerMsg(),Toast.LENGTH_SHORT).show();
+                        fetchWalletData();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<WalletDataModel> call, Throwable t) {
+                        Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+                });
+                alertDialog.dismiss();
             }
         });
 
