@@ -55,7 +55,9 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/edit_text_background"
             android:fontFamily="@font/montserrat"
-            android:hint="Email"        android:transitionName="editTexts"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:transitionName="editTexts"
 
             android:padding="16dp"
             android:textColor="@color/black"
@@ -73,8 +75,9 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/edit_text_background"
             android:fontFamily="@font/montserrat"
-            android:hint="Password"        android:transitionName="editTexts"
-
+            android:hint="Password"
+            android:transitionName="editTexts"
+            android:inputType="textPassword"
             android:padding="16dp"
             android:textColor="@color/black"
             android:textSize="14sp"

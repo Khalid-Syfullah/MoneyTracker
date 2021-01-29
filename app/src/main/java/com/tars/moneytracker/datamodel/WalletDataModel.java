@@ -8,6 +8,9 @@ public class WalletDataModel {
     @SerializedName("title")
     @Expose
     private String title;
+    @SerializedName("oldTitle")
+    @Expose
+    private String oldTitle;
 
     @SerializedName("type")
     @Expose
@@ -37,7 +40,13 @@ public class WalletDataModel {
         this.currency = currency;
         this.email = email;
     }
-
+    public WalletDataModel(String oldTitle,String title, String type, String currency,String email) {
+        this.title = title;
+        this.type = type;
+        this.currency = currency;
+        this.email = email;
+        this.oldTitle = oldTitle;
+    }
     public WalletDataModel(String email) {
         this.email = email;
 

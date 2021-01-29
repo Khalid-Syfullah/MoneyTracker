@@ -25,6 +25,8 @@ import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.api.RestClient;
 import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.GoalDataModel;
+import com.tars.moneytracker.datamodel.HomeDataModel;
+import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
 import com.tars.moneytracker.ui.wallet.WalletViewModel;
@@ -66,17 +68,37 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
 
 //        RestClient.getWallets(getContext(),walletRecyclerView);
 //        RestClient.getGoals(getContext(),goalsRecyclerView);
-        homeViewModel.getHomeData().observe(getViewLifecycleOwner(),homeDataModel -> {
+        homeViewModel.getHomeData().observe(getViewLifecycleOwner(), new Observer<HomeDataModel>() {
+            @Override
+            public void onChanged(HomeDataModel homeDataModel) {
 
+            }
         });
         
-        walletViewModel.getWallets().observe(getViewLifecycleOwner(),walletDataModels -> {
-            walletRecyclerView.setAdapter(new WalletAdapter(getContext(),walletDataModels));
+        walletViewModel.getWallets().observe(getViewLifecycleOwner(), new Observer<ArrayList<WalletDataModel>>() {
+            @Override
+            public void onChanged(ArrayList<WalletDataModel> walletDataModels) {
+                walletRecyclerView.setAdapter(new WalletAdapter(getContext(),walletDataModels));
+            }
         });
-        walletViewModel.getGoalLiveData().observe(getViewLifecycleOwner(),goalDataModels -> {
-            goalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels));
+        walletViewModel.getGoalLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<GoalDataModel>>() {
+            @Override
+            public void onChanged(ArrayList<GoalDataModel> goalDataModels) {
+                goalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels));
+            }
         });
+        StaticData.getUpdate().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if(s.equals("yes")) {
+                    fetchWalletData();
+                    fetchGoalData();
+                   
+                    StaticData.setUpdate("no");
+                }
 
+            }
+        });
 
         return root;
     }
@@ -96,12 +118,15 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
     @Override
     public void onItemClick(String name) {
 
+        if(name.equals("updated")){
+            fetchWalletData();
+        }
     }
 
 
     public void fetchWalletData(){
         RetroInterface retroInterface = RestClient.createRestClient();
-        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData();
+        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData(new WalletDataModel(StaticData.LoggedInUserEmail));
 
         call.enqueue(new Callback<ArrayList<WalletDataModel>>() {
             @Override

@@ -70,6 +70,7 @@
         android:background="@drawable/edit_text_background"
         android:fontFamily="@font/montserrat"
         android:hint="Email"        android:transitionName="editTexts"
+        android:inputType="textEmailAddress"
 
         android:padding="16dp"
         android:textColor="@color/black"
@@ -88,6 +89,7 @@
         android:background="@drawable/edit_text_background"
         android:fontFamily="@font/montserrat"
         android:hint="Password"        android:transitionName="editTexts"
+        android:inputType="textPassword"
 
         android:padding="16dp"
         android:textColor="@color/black"
@@ -107,6 +109,7 @@
         android:fontFamily="@font/montserrat"
         android:hint="Re-type Password"
         android:transitionName="editTexts"
+        android:inputType="textPassword"
 
         android:padding="16dp"
         android:textColor="@color/black"

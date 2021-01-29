@@ -9,19 +9,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.WalletDataModel;
+import com.tars.moneytracker.ui.wallet.WalletFragment;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WalletViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     Context context;
-    String titleText;
-    public TextView walletName, walletBalance;
+    String titleText,oldTitle;
+
+    public TextView walletName, walletBalance,walletCurrency,walletType;
 
     public WalletViewHolder(@NonNull View itemView,Context context) {
         super(itemView);
@@ -30,7 +38,8 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
         this.context=context;
         walletName = itemView.findViewById(R.id.walletName);
         walletBalance = itemView.findViewById(R.id.balance_amount);
-        titleText=walletName.getText().toString();
+        walletCurrency=itemView.findViewById(R.id.child_wallet_currency);
+        walletType=itemView.findViewById(R.id.wallet_child_Type);
     }
 
     @Override
@@ -43,14 +52,17 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
 
         AlertDialog.Builder builder=new AlertDialog.Builder(context, R.style.CustomAlertDialog);
         View dialog= LayoutInflater.from(context).inflate(R.layout.new_wallet_alert,null);
+        titleText=walletName.getText().toString();
 
-        EditText title=dialog.findViewById(R.id.wallet_alert_title_editText);
-        title.setText(titleText);
+        EditText titleEditText=dialog.findViewById(R.id.wallet_alert_title_editText);
+        titleEditText.setText(titleText);
+        oldTitle=titleText;
 
         Spinner currencies=dialog.findViewById(R.id.wallet_alert_currency_spinner);
         Spinner walletTypes=dialog.findViewById(R.id.wallet_alert_type_spinner);
 
-        EditText titleText = dialog.findViewById(R.id.wallet_alert_title_editText);
+
+
         Button saveBtn = dialog.findViewById(R.id.wallet_alert_save_button);
         Button deleteBtn = dialog.findViewById(R.id.wallet_alert_delete_button);
 
@@ -65,7 +77,8 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
         currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
         walletTypes.setAdapter(walletTypesAdapter);
         walletTypesAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
-
+        currencies.setSelection(currencyAdapter.getPosition(walletCurrency.getText().toString()));
+        walletTypes.setSelection(walletTypesAdapter.getPosition(walletType.getText().toString()));
         builder.setView(dialog);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -73,19 +86,45 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                String title = titleText.getText().toString();
+                String title = titleEditText.getText().toString();
                 String type = walletTypes.getSelectedItem().toString();
                 String currency = currencies.getSelectedItem().toString();
 
-                WalletDataModel walletDataModel = new WalletDataModel(title,type,currency, StaticData.LoggedInUserEmail);
-                RestClient.updateWallet(context,walletDataModel);
+                WalletDataModel walletDataModel = new WalletDataModel(oldTitle,title,type,currency, StaticData.LoggedInUserEmail);
+//                RestClient.updateWallet(context,walletDataModel);
+                RetroInterface retroInterface = RestClient.createRestClient();
+                Call<WalletDataModel> call = retroInterface.updateWalletData(walletDataModel);
+
+                call.enqueue(new Callback<WalletDataModel>() {
+                    @Override
+                    public void onResponse(Call<WalletDataModel> call, Response<WalletDataModel> response) {
+                        if(response.isSuccessful()){
+                            Toast.makeText(context,response.body().getServerMsg(),Toast.LENGTH_SHORT).show();
+                            StaticData.setUpdate("yes");
+
+
+
+                        }
+                        else{
+                            Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<WalletDataModel> call, Throwable t) {
+                        Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+                    }
+
+                });
             }
         });
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                String title = titleText.getText().toString();
+                String title = titleEditText.getText().toString();
                 String type = walletTypes.getSelectedItem().toString();
                 String currency = currencies.getSelectedItem().toString();
 

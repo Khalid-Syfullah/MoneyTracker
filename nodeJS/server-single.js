@@ -241,25 +241,7 @@ app.post('/api/insertGoalData', function(req,res){
     })
 })
 
-app.post('/api/updateGoalData', function(req,res){
-    var goal = new Goal();
-    
-    goal.title = req.body.title;
-    goal.amount = req.body.amount;
-    goal.currency = req.body.currency;
-    goal.date = req.body.date;
 
-    goal.save()
-    .then(function(data){
-        console.log("Goal inserted")
-        console.log(data)
-        res.send({message: "Goal inserted"})
-    })
-    .catch(function(err){
-        console.log("Goal insertion failed")
-        res.send({message: "Goal insertion failed"})
-    })
-})
 
 
 app.post('/api/insertCategoryData', function(req,res){
@@ -283,7 +265,7 @@ app.post('/api/insertCategoryData', function(req,res){
 app.post('/api/getWalletData', function(req,res){
 
 
-    Wallet.find()
+    Wallet.find({email: req.body.email})
     .then(function(data){
         console.log("Wallets found")
         console.log(data)
@@ -326,6 +308,63 @@ app.post('/api/getCategoryData', function(req,res){
         console.log("Error found")
         res.send({message: "Error found"})
     })
+})
+
+app.post('/api/updateGoalData', function(req,res){
+    var goal = new Goal();
+    
+    goal.title = req.body.title;
+    goal.amount = req.body.amount;
+    goal.currency = req.body.currency;
+    goal.date = req.body.date;
+
+    goal.save()
+    .then(function(data){
+        console.log("Goal inserted")
+        console.log(data)
+        res.send({message: "Goal inserted"})
+    })
+    .catch(function(err){
+        console.log("Goal insertion failed")
+        res.send({message: "Goal insertion failed"})
+    })
+})
+
+app.post('/api/updateWalletData', function(req,res){
+    var wallet = new Wallet();
+
+    var oldTitle=req.body.oldTitle;
+    
+    wallet.title = req.body.title;
+    wallet.email = req.body.email;
+    wallet.currency = req.body.currency;
+    wallet.type = req.body.type;
+
+    
+    Wallet.find({title:wallet.title,email:wallet.email},(err,result)=>{
+        if(err){
+            console.log(err)
+
+        }
+        else{
+            if(result.length>0){
+                res.send({serverMsg:'wallet name exists'})
+            }
+            else{
+                 var updateQuery={$set: {title: req.body.title,currency:req.body.currency,type:req.body.type}}
+    Wallet.updateOne({title:oldTitle,email:wallet.email},updateQuery,(err,data)=>{
+        if(err)
+        console.log(err)
+        else {res.send({serverMsg:'updated'})
+    console.log(data)
+    }
+
+    })
+            }
+        }
+    })
+   
+   
 })
 
 app.post('/api/user', function(req,res){

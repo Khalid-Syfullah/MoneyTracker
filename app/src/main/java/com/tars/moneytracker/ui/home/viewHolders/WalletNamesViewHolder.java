@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tars.moneytracker.R;
-import com.tars.moneytracker.RecyclerItemClickInterface;
+
 
 public class WalletNamesViewHolder extends RecyclerView.ViewHolder {
     Context context;

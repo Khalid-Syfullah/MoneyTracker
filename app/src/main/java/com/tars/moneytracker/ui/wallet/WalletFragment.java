@@ -61,6 +61,8 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
         setEnterTransition(transitionInflater.inflateTransition(R.transition.fade));
         setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
+
+
         walletViewModel =
                 new ViewModelProvider(this).get(WalletViewModel.class);
         View root = inflater.inflate(R.layout.fragment_wallet, container, false);
@@ -81,6 +83,19 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         fetchWalletData();
         fetchGoalData();
         fetchCategoryData();
+
+        StaticData.getUpdate().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if(s.equals("yes")) {
+                    fetchWalletData();
+                    fetchGoalData();
+                    fetchCategoryData();
+                    StaticData.setUpdate("no");
+                }
+
+            }
+        });
 
 
 
@@ -136,7 +151,7 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
 
     public void fetchWalletData(){
         RetroInterface retroInterface = RestClient.createRestClient();
-        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData();
+        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData(new WalletDataModel(StaticData.LoggedInUserEmail));
 
         call.enqueue(new Callback<ArrayList<WalletDataModel>>() {
             @Override
