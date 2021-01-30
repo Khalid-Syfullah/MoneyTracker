@@ -41,6 +41,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.ui.home.adapters.WalletNamesAdapter;
@@ -51,6 +52,10 @@ import com.tars.moneytracker.ui.profile.ProfileFragment;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,RecyclerItemClickInterface{
@@ -312,6 +317,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.income_expense_btn:
                 if(!isCardOn) {
+
+                    final Calendar calendar = Calendar.getInstance();
+                    final int year = calendar.get(Calendar.YEAR);
+                    final int month = calendar.get(Calendar.MONTH);
+                    final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    calendar.set(year, month, day);
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                    date = sdf.format(calendar.getTime());
+
+                    popupDate.setText(date);
+
                     revealFAB(container);
                     isCardOn=true;
                 }
@@ -572,8 +590,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         popupDate.setText(date);
                     }
                 }, year, month, day); // set date picker to current date
+        calendar.add(Calendar.DATE, -30);
         datePicker.getDatePicker().setMinDate(calendar.getTime().getTime());
-        calendar.add(Calendar.DATE, 30);
+        calendar.add(Calendar.DATE, 60);
         datePicker.getDatePicker().setMaxDate(calendar.getTime().getTime());
         datePicker.show();
 
@@ -641,7 +660,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 TransactionDataModel transactionDataModel = new TransactionDataModel(email,title,amount,type,category,wallet,date);
-                RestClient.insertTransaction(MainActivity.this,transactionDataModel);
+                RetroInterface retroInterface = RestClient.createRestClient();
+                Call<TransactionDataModel> call = retroInterface.insertTransactionData(transactionDataModel);
+
+                call.enqueue(new Callback<TransactionDataModel>() {
+                    @Override
+                    public void onResponse(Call<TransactionDataModel> call, Response<TransactionDataModel> response) {
+                        if(response.isSuccessful()){
+                            Toast.makeText(getApplicationContext(),"Response received!",Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            hideFAB(container);
+                            isCardOn=false;
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"No response from server!",Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<TransactionDataModel> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(),"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
         })
                 .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {

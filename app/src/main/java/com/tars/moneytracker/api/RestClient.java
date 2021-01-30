@@ -104,27 +104,7 @@ public class RestClient {
 
 
     public static void insertTransaction(Context context, @Body TransactionDataModel transactionDataModel) {
-        RetroInterface retroInterface = createRestClient();
-        Call<TransactionDataModel> call = retroInterface.insertTransactionData(transactionDataModel);
 
-        call.enqueue(new Callback<TransactionDataModel>() {
-            @Override
-            public void onResponse(Call<TransactionDataModel> call, Response<TransactionDataModel> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(context,"Response received!",Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransactionDataModel> call, Throwable t) {
-                Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
-
-            }
-        });
     }
 
     public static void setTransactions(Context context){

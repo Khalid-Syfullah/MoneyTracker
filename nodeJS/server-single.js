@@ -52,6 +52,7 @@ var categorySchema = new mongoose.Schema({
     email: {type: String, required: true}
 })
 
+
 var User = mongoose.model("user",userSchema)
 var Overview = mongoose.model("overview",overviewSchema)
 var Transaction = mongoose.model("transaction",transactionSchema)
@@ -369,6 +370,162 @@ app.post('/api/getCategoryData', function(req,res){
         res.send({message: "Error found"})
     })
 })
+
+
+
+app.post('/api/getGraphOverviewData', async function(req,res){
+
+    var dailySpendingAmount = []
+    var weeklySpendingAmount = []
+    var monthlySpendingAmount = []
+    var currentDate=0, sum=0
+    var i = 0
+    
+    if(req.body.timeline == "daily"){
+        console.log("START DAILY")
+
+        for(var date of req.body.dailyList){
+            await Transaction.find({email:req.body.email, date: date})
+            .then(function(results){
+    
+    
+                for(result of results){
+                    if(result.transaction=="Expense"){
+                        sum += result.amount
+    
+                    }
+                }
+    
+                if(sum != 0){
+                    dailySpendingAmount.push(sum)
+                    sum = 0
+                }
+                else{
+                    dailySpendingAmount.push(0)
+                }
+            })
+        }
+    
+            console.log("Daily Spending:")
+            console.log({
+                dailyOverviewSpendingAmount:dailySpendingAmount,
+                dailyOverviewSpendingDate:req.body.dailyList})
+                    
+            res.send({
+                dailyOverviewSpendingAmount:dailySpendingAmount,
+                dailyOverviewSpendingDate:req.body.dailyList})
+    
+    }
+
+    if(req.body.timeline == "weekly"){
+        console.log("START WEEKLY")
+        for(var date of req.body.weeklyList){
+            await Transaction.find({email:req.body.email, date: date})
+            .then(function(results){
+    
+    
+                for(result of results){
+                    if(result.transaction=="Expense"){
+                        sum += result.amount
+                    }
+                }
+                if(sum != 0){
+                    weeklySpendingAmount.push(sum)
+                    sum = 0
+                }
+                else{
+                    weeklySpendingAmount.push(0)
+                }
+            })
+        }
+            console.log("Weekly Spending:")
+            console.log({
+                weeklyOverviewSpendingAmount:weeklySpendingAmount,
+                weeklyOverviewSpendingDate:req.body.weeklyList})
+
+            res.send({
+                weeklyOverviewSpendingAmount:weeklySpendingAmount,
+                weeklyOverviewSpendingDate:req.body.weeklyList})
+       
+    }
+
+    if(req.body.timeline == "monthly"){
+        console.log("START MONTHLY")
+        for(var date of req.body.monthlyList){
+            await Transaction.find({email:req.body.email, date: date})
+            .then(function(results){
+    
+    
+                for(result of results){
+                    if(result.transaction=="Expense"){
+                        sum += result.amount
+                    }
+                }
+                if(sum != 0){
+                    monthlySpendingAmount.push(sum)
+                    sum = 0
+                }
+                else{
+                    monthlySpendingAmount.push(0)
+                }
+            })
+        }
+            console.log("Monthly Spending:")
+            console.log({
+                monthlyOverviewSpendingAmount:monthlySpendingAmount,
+                monthlyOverviewSpendingDate:req.body.monthlyList})
+
+            res.send({
+                monthlyOverviewSpendingAmount:monthlySpendingAmount,
+                monthlyOverviewSpendingDate:req.body.monthlyList})
+       
+    }
+    
+    
+        
+    
+})
+   
+
+
+app.post('/api/getGraphCategoricalData', async function(req,res){
+
+    var dailySpendingAmount = []
+    var weeklySpendingAmount = []
+    var monthlySpendingAmount = []
+
+
+    if(req.body.timeline == "daily"){
+
+        console.log("CATEGORICAL: START DAILY")
+
+        for(var date of req.body.dailyList){
+
+
+            await Transaction.find({email:req.body.email, date: date})
+            .then(function(results){
+                
+                for(result of results){
+                    if(result.category=="Food"){
+                        sum += result.amount
+    
+                    }
+                }
+    
+                if(sum != 0){
+                    dailySpendingAmount.push(sum)
+                    sum = 0
+                }
+                else{
+                    dailySpendingAmount.push(0)
+                }
+            })
+        }
+
+    }
+})
+
+
 
 
 

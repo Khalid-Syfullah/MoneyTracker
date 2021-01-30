@@ -2,6 +2,7 @@ package com.tars.moneytracker.api;
 
 import com.tars.moneytracker.datamodel.CategoryDataModel;
 import com.tars.moneytracker.datamodel.GoalDataModel;
+import com.tars.moneytracker.datamodel.GraphDataModel;
 import com.tars.moneytracker.datamodel.HomeDataModel;
 import com.tars.moneytracker.datamodel.OverviewDataModel;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
@@ -51,6 +52,12 @@ public interface RetroInterface {
 
     @POST("/api/getCategoryData")
     Call<ArrayList<CategoryDataModel>> getCategoryData();
+
+    @POST("/api/getGraphOverviewData")
+    Call<GraphDataModel> getGraphOverviewData(@Body GraphDataModel graphDataModel);
+
+    @POST("/api/getGraphCategoricalData")
+    Call<GraphDataModel> getGraphCategoricalData(@Body GraphDataModel graphDataModel);
 
 
 

@@ -22,8 +22,8 @@
     <string name="title_notes">Notes</string>
 
     <string-array name="time_range">
-        <item>Weekly</item>
         <item>Daily</item>
+        <item>Weekly</item>
         <item>Monthly</item>
     </string-array>
 
