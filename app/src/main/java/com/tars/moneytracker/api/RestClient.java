@@ -118,15 +118,6 @@ public class RestClient {
                 else{
                     Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
 
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransactionDataModel> call, Throwable t) {
-                Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
-
-            }
-        });
     }
 
     public static void setTransactions(Context context){

@@ -66,6 +66,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
     public static boolean isPopupExpense=false;
@@ -348,6 +349,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.income_expense_btn:
                 if(!isCardOn) {
+
+                    final Calendar calendar = Calendar.getInstance();
+                    final int year = calendar.get(Calendar.YEAR);
+                    final int month = calendar.get(Calendar.MONTH);
+                    final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    calendar.set(year, month, day);
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                    date = sdf.format(calendar.getTime());
+
+                    popupDate.setText(date);
+
                     revealFAB(container);
                     isCardOn=true;
                 }
@@ -636,8 +650,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         popupDate.setText(date);
                     }
                 }, year, month, day); // set date picker to current date
+        calendar.add(Calendar.DATE, -30);
         datePicker.getDatePicker().setMinDate(calendar.getTime().getTime());
-        calendar.add(Calendar.DATE, 30);
+        calendar.add(Calendar.DATE, 60);
         datePicker.getDatePicker().setMaxDate(calendar.getTime().getTime());
         datePicker.show();
 
@@ -727,6 +742,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if(response.isSuccessful()){
                             Toast.makeText(getApplicationContext(),"Response received!",Toast.LENGTH_SHORT).show();
                             StaticData.setUpdate("yes");
+                            dialog.dismiss();
+                            hideFAB(container);
+                            isCardOn=false;
                         }
                         else{
                             Toast.makeText(getApplicationContext(),"No response from server!",Toast.LENGTH_SHORT).show();
