@@ -31,7 +31,7 @@ public class WalletDataModel {
 
     @SerializedName("balance")
     @Expose
-    private String balance;
+    private int balance;
 
     @SerializedName("oldBalance")
     @Expose
@@ -92,11 +92,11 @@ public class WalletDataModel {
         this.currency = currency;
     }
 
-    public String getBalance() {
+    public int getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(int balance) {
         this.balance = balance;
     }
 

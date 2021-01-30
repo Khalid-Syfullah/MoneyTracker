@@ -9,7 +9,7 @@
         android:id="@+id/transaction_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:text="Breakfast"
         android:textColor="#707070"
         android:textSize="16sp"
@@ -21,13 +21,14 @@
         android:id="@+id/transaction_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="04 January 2020"
         android:textColor="#EC6194"
         android:textSize="12sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/transaction_icon"
-        app:layout_constraintStart_toEndOf="@+id/transaction_icon" />
+        app:layout_constraintStart_toStartOf="@+id/transaction_title"
+        app:layout_constraintTop_toBottomOf="@+id/transaction_title" />
 
     <TextView
         android:id="@+id/transaction_cost"
@@ -44,8 +45,8 @@
 
     <ImageView
         android:id="@+id/transaction_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"

@@ -6,6 +6,6 @@ public interface RecyclerItemClickInterface {
 
     void onItemClick(int position);
     void onItemClick(Drawable position, String name);
-    void onItemClick(String name);
+
 
 }

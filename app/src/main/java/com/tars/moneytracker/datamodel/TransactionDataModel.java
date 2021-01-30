@@ -16,7 +16,7 @@ public class TransactionDataModel {
 
     @SerializedName("category")
     @Expose
-    private String category;
+    private int category;
 
     @SerializedName("wallet")
     @Expose
@@ -38,7 +38,7 @@ public class TransactionDataModel {
     @Expose
     private String serverMsg;
 
-    public TransactionDataModel(String email, String title, String amount, String transaction, String category, String wallet, String date)  {
+    public TransactionDataModel(String email, String title, String amount, String transaction, int category, String wallet, String date)  {
         this.email = email;
         this.title = title;
         this.amount = amount;
@@ -61,7 +61,7 @@ public class TransactionDataModel {
         return title;
     }
 
-    public String getCategory() {
+    public int getCategory() {
         return category;
     }
 

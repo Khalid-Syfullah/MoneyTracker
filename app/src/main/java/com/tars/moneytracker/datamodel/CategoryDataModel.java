@@ -9,6 +9,10 @@ public class CategoryDataModel {
     @Expose
     private String title;
 
+    @SerializedName("iconId")
+    @Expose
+    private int iconID;
+
     @SerializedName("email")
     @Expose
     private String email;
@@ -18,15 +22,25 @@ public class CategoryDataModel {
     private String serverMsg;
 
 
-    public CategoryDataModel(String title, String email) {
+
+
+    public CategoryDataModel(String title, int iconID, String email) {
         this.title = title;
+        this.iconID = iconID;
+        this.email = email;
+    }
+
+    public CategoryDataModel( String email) {
+
         this.email = email;
     }
 
     public String getTitle() {
         return title;
     }
-
+    public int getIconId() {
+        return iconID;
+    }
     public void setTitle(String title) {
         this.title = title;
     }

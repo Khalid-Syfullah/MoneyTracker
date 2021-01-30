@@ -40,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeFragment extends Fragment implements RecyclerItemClickInterface {
+public class HomeFragment extends Fragment  {
 
     private HomeViewModel homeViewModel;
     private WalletViewModel walletViewModel;
@@ -118,24 +118,7 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
     }
 
 
-    @Override
-    public void onItemClick(int position) {
-        Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_SHORT).show();
 
-    }
-
-    @Override
-    public void onItemClick(Drawable position, String name) {
-
-    }
-
-    @Override
-    public void onItemClick(String name) {
-
-        if(name.equals("updated")){
-            fetchWalletData();
-        }
-    }
 
     public void fetchOverviewData(){
         RetroInterface retroInterface = RestClient.createRestClient();
@@ -190,7 +173,7 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
     public void fetchGoalData(){
 
         RetroInterface retroInterface = RestClient.createRestClient();
-        Call<ArrayList<GoalDataModel>> call = retroInterface.getGoalData();
+        Call<ArrayList<GoalDataModel>> call = retroInterface.getGoalData(new GoalDataModel(StaticData.LoggedInUserEmail));
         call.enqueue(new Callback<ArrayList<GoalDataModel>>() {
             @Override
             public void onResponse(Call<ArrayList<GoalDataModel>> call, Response<ArrayList<GoalDataModel>> response) {
@@ -205,7 +188,7 @@ public class HomeFragment extends Fragment implements RecyclerItemClickInterface
 
             @Override
             public void onFailure(Call<ArrayList<GoalDataModel>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Connection failed", Toast.LENGTH_SHORT).show();
+//              Toast.makeText(getContext(), "Connection failed", Toast.LENGTH_SHORT).show();
             }
         });
 

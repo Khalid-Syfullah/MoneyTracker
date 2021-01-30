@@ -1,6 +1,7 @@
 package com.tars.moneytracker.ui.transaction.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,12 +37,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionsViewHol
 
         ctx = parent.getContext();
         View view = LayoutInflater.from(ctx).inflate(R.layout.child_transaction, parent, false);
-        TransactionsViewHolder viewHolder= new TransactionsViewHolder(view){
-            @Override
-            public String toString() {
-                return super.toString();
-            }
-        };
+        TransactionsViewHolder viewHolder= new TransactionsViewHolder(view);
         return viewHolder;
     }
 
@@ -54,8 +50,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionsViewHol
 
         holder.title.setText(transactionDataModel.getTitle());
         holder.date.setText(transactionDataModel.getDate());
-        holder.amount.setText(transactionDataModel.getAmount() + " BDT");
-        holder.icon.setImageResource(R.drawable.ic_home_black_24dp);
+        if(transactionDataModel.getTransaction().toLowerCase().equals("income")){
+            holder.amount.setText("+ "+transactionDataModel.getAmount() + " BDT");
+            holder.amount.setTextColor(ctx.getColor(R.color.lightTeal));
+        }
+        else {
+            holder.amount.setText("- "+transactionDataModel.getAmount() + " BDT");
+            holder.amount.setTextColor(Color.RED);
+        }
+
+        holder.icon.setImageResource(transactionDataModel.getCategory());
 
     }
 

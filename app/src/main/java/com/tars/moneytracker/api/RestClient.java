@@ -20,6 +20,7 @@ import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
 import com.tars.moneytracker.ui.transaction.adapters.TransactionAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.CategoryIconClickInterface;
 import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class RestClient {
 
     private static Retrofit retrofit=null;
 
-    private static String baseUrl="http://192.168.1.8:8800";
+    private static String baseUrl="http://192.168.0.6:8800";
 
     public static RetroInterface createRestClient(){
         if(retrofit==null){
@@ -104,6 +105,18 @@ public class RestClient {
 
 
     public static void insertTransaction(Context context, @Body TransactionDataModel transactionDataModel) {
+        RetroInterface retroInterface = createRestClient();
+        Call<TransactionDataModel> call = retroInterface.insertTransactionData(transactionDataModel);
+
+        call.enqueue(new Callback<TransactionDataModel>() {
+            @Override
+            public void onResponse(Call<TransactionDataModel> call, Response<TransactionDataModel> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(context,"Response received!",Toast.LENGTH_SHORT).show();
+                    StaticData.setUpdate("yes");
+                }
+                else{
+                    Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
 
     }
 
@@ -490,7 +503,7 @@ public class RestClient {
     public static void getGoals(Context context, RecyclerView recyclerView){
 
         RetroInterface retroInterface = createRestClient();
-        Call<ArrayList<GoalDataModel>> call = retroInterface.getGoalData();
+        Call<ArrayList<GoalDataModel>> call = retroInterface.getGoalData(new GoalDataModel(StaticData.LoggedInUserEmail));
 
         call.enqueue(new Callback<ArrayList<GoalDataModel>>() {
             @Override
@@ -539,7 +552,7 @@ public class RestClient {
     public static void getCategories(Context context, RecyclerView recyclerView){
 
         RetroInterface retroInterface = createRestClient();
-        Call<ArrayList<CategoryDataModel>> call = retroInterface.getCategoryData();
+        Call<ArrayList<CategoryDataModel>> call = retroInterface.getCategoryData(new CategoryDataModel(StaticData.LoggedInUserEmail));
 
         call.enqueue(new Callback<ArrayList<CategoryDataModel>>() {
             @Override
@@ -557,7 +570,12 @@ public class RestClient {
 
 
                     if(categoryDataModels.size() > 0){
-                        categoriesAdapter = new CategoriesAdapter(context, categoryDataModels);
+                        categoriesAdapter = new CategoriesAdapter(context, categoryDataModels, new CategoryIconClickInterface() {
+                            @Override
+                            public void onItemClick(int tag) {
+
+                            }
+                        });
                         recyclerView.setAdapter(categoriesAdapter);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
                         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
