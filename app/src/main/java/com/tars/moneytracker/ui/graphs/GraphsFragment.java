@@ -57,7 +57,7 @@ public class GraphsFragment extends Fragment {
     private GraphDataModel graphDataModel;
     private String overviewTimeline, categoryTimeline, creditsTimeline;
     private String timeline="daily", type="overview";
-    ArrayList<String> dailyList,weeklyList,monthlyList;
+    ArrayList<String> dailyList,weeklyList,monthlyList,categoryList;
     ArrayList<Float> amountList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -164,17 +164,9 @@ public class GraphsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 overviewTimeline = timelineSpinner.getSelectedItem().toString();
-                if(overviewTimeline.equals("Daily")){
-                    timeline = "daily";
-                }
-                else if(overviewTimeline.equals("Weekly")){
-                    timeline = "weekly";
-                }
-                else if(overviewTimeline.equals("Monthly")){
-                    timeline = "monthly";
-                }
 
                 if(overviewTimeline.equals("Daily")){
+                    timeline = "daily";
 
                     mBarChart.clearChart();
 
@@ -226,6 +218,7 @@ public class GraphsFragment extends Fragment {
 
                 }
                 else if(overviewTimeline.equals("Weekly")){
+                    timeline = "weekly";
 
                     RetroInterface retroInterface = RestClient.createRestClient();
                     Call<GraphDataModel> call = retroInterface.getGraphOverviewData(new GraphDataModel(timeline,type, StaticData.LoggedInUserEmail, dailyList, weeklyList, monthlyList));
@@ -273,6 +266,7 @@ public class GraphsFragment extends Fragment {
 
                 }
                 else if(overviewTimeline.equals("Monthly")){
+                    timeline = "monthly";
 
                     RetroInterface retroInterface = RestClient.createRestClient();
                     Call<GraphDataModel> call = retroInterface.getGraphOverviewData(new GraphDataModel(timeline,type, StaticData.LoggedInUserEmail, dailyList, weeklyList, monthlyList));
@@ -342,6 +336,74 @@ public class GraphsFragment extends Fragment {
         PieChart pieChart = v.findViewById(R.id.graphs_category_piechart);
         Spinner categorySpinner = v.findViewById(R.id.graphs_category_spinner);
         categoryTimeline = categorySpinner.getSelectedItem().toString();
+
+        if(categoryTimeline.equals("Daily")){
+            timeline = "daily";
+        }
+        else if(categoryTimeline.equals("Weekly")){
+            timeline = "weekly";
+        }
+        else if(categoryTimeline.equals("Monthly")){
+            timeline = "monthly";
+        }
+
+        type = "overview";
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                categoryTimeline = categorySpinner.getSelectedItem().toString();
+                if(categoryTimeline.equals("Daily")){
+                    timeline = "daily";
+                }
+                else if(categoryTimeline.equals("Weekly")){
+                    timeline = "weekly";
+
+                    RetroInterface retroInterface = RestClient.createRestClient();
+                    Call<GraphDataModel> call = retroInterface.getGraphCategoryList(new GraphDataModel(StaticData.LoggedInUserEmail));
+                    call.enqueue(new Callback<GraphDataModel>() {
+                        @Override
+                        public void onResponse(Call<GraphDataModel> call, Response<GraphDataModel> response) {
+                            if(response.isSuccessful()){
+                                graphDataModel = response.body();
+
+                                categoryList = new ArrayList<>();
+                                categoryList = graphDataModel.getCategoryList();
+
+                                Toast.makeText(getContext(),categoryList+"",Toast.LENGTH_SHORT).show();
+
+
+                            }
+                            else{
+                                Toast.makeText(getContext(),"No response from server!",Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<GraphDataModel> call, Throwable t) {
+                            Toast.makeText(getContext(),"No Retrofit Connection!",Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+                }
+                else if(categoryTimeline.equals("Monthly")){
+                    timeline = "monthly";
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
+
+
 
 
         float time[] = {55, 95, 30 , 360 - (55+95+30)};

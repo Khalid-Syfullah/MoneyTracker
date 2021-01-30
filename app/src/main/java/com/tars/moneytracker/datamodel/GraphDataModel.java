@@ -55,7 +55,14 @@ public class GraphDataModel {
     @Expose
     ArrayList<String> monthlyOverviewSpendingDate;
 
+    @SerializedName("categoryList")
+    @Expose
+    ArrayList<String> categoryList;
 
+
+    public GraphDataModel(String email) {
+        this.email = email;
+    }
 
     public GraphDataModel(String timeline, String type, String email) {
         this.timeline = timeline;
@@ -77,6 +84,10 @@ public class GraphDataModel {
         this.dailyList = dailyList;
         this.weeklyList = weeklyList;
         this.monthlyList = monthlyList;
+    }
+
+    public ArrayList<String> getCategoryList() {
+        return categoryList;
     }
 
     public ArrayList<Float> getWeeklyOverviewSpendingAmount() {

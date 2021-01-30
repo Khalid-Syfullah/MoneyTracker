@@ -2,6 +2,7 @@ var express = require("express")
 var app = express()
 var mongoose = require("mongoose")
 var bodyParser = require("body-parser")
+const { ifError } = require("assert")
 
 
 var userSchema = new mongoose.Schema({
@@ -487,7 +488,6 @@ app.post('/api/getGraphOverviewData', async function(req,res){
 })
    
 
-
 app.post('/api/getGraphCategoricalData', async function(req,res){
 
     var dailySpendingAmount = []
@@ -525,7 +525,24 @@ app.post('/api/getGraphCategoricalData', async function(req,res){
     }
 })
 
+app.post('/api/getCategories',function(req,res){
 
+    var categoryList = []
+    Category.find({email: req.body.email})
+    .then(function(results){
+        
+        if(results.length>0){
+            for(var result of results){
+                categoryList.push(result.title)
+            }
+        }
+        
+        console.log({categoryList: categoryList})
+        res.send({categoryList: categoryList})
+
+       
+    })
+})
 
 
 

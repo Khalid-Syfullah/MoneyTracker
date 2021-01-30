@@ -59,6 +59,8 @@ public interface RetroInterface {
     @POST("/api/getGraphCategoricalData")
     Call<GraphDataModel> getGraphCategoricalData(@Body GraphDataModel graphDataModel);
 
+    @POST("/api/getCategories")
+    Call<GraphDataModel> getGraphCategoryList(@Body GraphDataModel graphDataModel);
 
 
 
