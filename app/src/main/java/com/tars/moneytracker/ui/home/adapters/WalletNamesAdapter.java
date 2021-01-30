@@ -10,19 +10,27 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tars.moneytracker.MainActivity;
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.RecyclerItemClickInterface;
+import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.viewHolders.WalletNamesViewHolder;
+
+import java.util.ArrayList;
 
 public class WalletNamesAdapter extends RecyclerView.Adapter<WalletNamesViewHolder> {
     Context context;
-    RecyclerItemClickInterface recyclerItemClickInterface;
+    ArrayList<WalletDataModel> walletDataModels;
+    WalletNamesClickListener walletNamesClickListener;
     int selectedPosition=-1;
 
-    public WalletNamesAdapter(Context context,RecyclerItemClickInterface recyclerItemClickInterface) {
+    public WalletNamesAdapter(Context context,ArrayList<WalletDataModel> walletDataModels,WalletNamesClickListener walletNamesClickListener) {
         this.context = context;
-        this.recyclerItemClickInterface=recyclerItemClickInterface;
+        this.walletDataModels=walletDataModels;
+        this.walletNamesClickListener=walletNamesClickListener;
     }
+
+
 
     @NonNull
     @Override
@@ -34,14 +42,16 @@ public class WalletNamesAdapter extends RecyclerView.Adapter<WalletNamesViewHold
 
     @Override
     public void onBindViewHolder(@NonNull WalletNamesViewHolder holder, int position) {
+        holder.walletName.setText(walletDataModels.get(position).getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedPosition=position;
+
                holder.walletName.setBackgroundColor(context.getColor(R.color.lightTeal));
-               holder.walletName.setText("clicked");
+
                 notifyDataSetChanged();
-                recyclerItemClickInterface.onItemClick(holder.walletName.getText().toString());
+               walletNamesClickListener.onItemClick(holder.walletName.getText().toString());
             }
         });
         if(selectedPosition==position){
@@ -58,7 +68,7 @@ public class WalletNamesAdapter extends RecyclerView.Adapter<WalletNamesViewHold
 
     @Override
     public int getItemCount() {
-        return 5;
+        return walletDataModels.size();
     }
 
 

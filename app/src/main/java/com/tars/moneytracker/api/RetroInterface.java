@@ -47,10 +47,10 @@ public interface RetroInterface {
     Call<ArrayList<WalletDataModel>> getWalletData(@Body WalletDataModel walletDataModel);
 
     @POST("/api/getGoalData")
-    Call<ArrayList<GoalDataModel>> getGoalData();
+    Call<ArrayList<GoalDataModel>> getGoalData(@Body GoalDataModel goalDataModel);
 
     @POST("/api/getCategoryData")
-    Call<ArrayList<CategoryDataModel>> getCategoryData();
+    Call<ArrayList<CategoryDataModel>> getCategoryData(@Body CategoryDataModel categoryDataModel);
 
 
 

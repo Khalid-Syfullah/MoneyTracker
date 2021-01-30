@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -31,6 +30,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 
 import androidx.navigation.Navigation;
@@ -41,19 +42,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.api.RetroInterface;
+import com.tars.moneytracker.datamodel.CategoryDataModel;
 import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
+import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.adapters.WalletNamesAdapter;
+import com.tars.moneytracker.ui.home.adapters.WalletNamesClickListener;
 import com.tars.moneytracker.ui.notes.NotesFragment;
 import com.tars.moneytracker.ui.notification.NotificationFragment;
 import com.tars.moneytracker.ui.profile.ProfileFragment;
+import com.tars.moneytracker.ui.wallet.WalletViewModel;
+import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.CategoryIconClickInterface;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,RecyclerItemClickInterface{
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
     public static boolean isPopupExpense=false;
     public static boolean isCardOn=false,isTypeCardOn=false,isPopupWalletOn=false;
@@ -65,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CardView wallet_typeContainer;
     private Button incomeBtn,expenseBtn,submitBtn;
     private TextView navHeaderProfileBtn, navHeaderUserName, popupDate,popupWalletNameTextView;
-    private ImageView menuBtn, notificationBtn, navHeaderProfileIcon, popupTypeIcon,popupWalletIcon,okBtn;
+    private ImageView menuBtn, notificationBtn, navHeaderProfileIcon, popupTypeIcon,popupWalletIcon;
     private EditText popupTitleEditText,popupAmountEditText;
 
     private DrawerLayout drawerLayout;
@@ -74,11 +87,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BottomNavigationView bottomNavigationView;
     private NavigationView drawerNavigationView;
     private RecyclerView popupTypeRecyclerView;
+    WalletViewModel walletViewModel;
+    ArrayList<CategoryDataModel> categoryDataModels;
 
     SharedPreferences langPrefs;
     String date="not_selected";
     String lang="not set";
-    String popUpWalletName,popupExpenseType;
+    String popUpWalletName="not set";
+    int popupIncomeExpenseType =-1;
     public static final String Language_pref="Language";
     public static final String Selected_language="Selected Language";
 
@@ -92,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         container=findViewById(R.id.income_expense_card_container);
         outsideCard=findViewById(R.id.outside_card);
 
+        walletViewModel=new ViewModelProvider(this).get(WalletViewModel.class);
+        categoryDataModels=new ArrayList<>();
         drawerNavigationView = findViewById(R.id.nav_drawer_view);
         bottomNavigationView = findViewById(R.id.nav_view);
         View headerView = drawerNavigationView.getHeaderView(0);
@@ -115,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navHeaderProfileIcon=headerView.findViewById(R.id.nav_header_image);
         navHeaderProfileBtn = headerView.findViewById(R.id.view_profile_button);
         wallet_typeContainer=findViewById(R.id.transaction_popup_type_card);
-        okBtn=findViewById(R.id.okImageBtn);
+
         popupWalletNameTextView=findViewById(R.id.transaction_popup_card_walletName);
 
         navHeaderUserName.setText(StaticData.LoggedInUserName.toUpperCase());
@@ -138,11 +156,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popupTitleEditText.setOnClickListener(this);
         popupAmountEditText.setOnClickListener(this);
         popupDate.setOnClickListener(this);
-        okBtn.setOnClickListener(this);
 
         drawerNavigationView.setNavigationItemSelectedListener(this);
         bottomNavigationView.setItemIconTintList(null);
+        fetchCategoryData();
+        fetchWalletData();
+        StaticData.getUpdate().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if(s.equals("yes")) {
 
+                    fetchCategoryData();
+                    StaticData.setUpdate("no");
+                }
+
+            }
+        });
+
+
+        walletViewModel.getCategoryLiveData().observe(this, categoryDataModel ->  {
+
+               categoryDataModels=categoryDataModel;
+
+        } );
 
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -360,10 +396,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(!isPopupWalletOn){
                     revealFAB(wallet_typeContainer);
                     wallet_typeContainer.setVisibility(View.VISIBLE);
-                    WalletNamesAdapter walletNamesAdapter=new WalletNamesAdapter(this,this);
+                    walletViewModel.getWallets().observe(this, new Observer<ArrayList<WalletDataModel>>() {
+                        @Override
+                        public void onChanged(ArrayList<WalletDataModel> walletDataModels) {
+
+                            popupTypeRecyclerView.setAdapter(new WalletNamesAdapter(MainActivity.this,walletDataModels, new WalletNamesClickListener() {
+                                @Override
+                                public void onItemClick(String name) {
+                                    popupWalletNameTextView.setText(name);
+                                    popUpWalletName=name;
+                                    hideFABSmall(wallet_typeContainer);
+                                    isPopupWalletOn=false;
+
+                                }
+                            }));
+                        }
+                    });
 
 
-                    popupTypeRecyclerView.setAdapter(walletNamesAdapter);
+
+
                     popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
                     isPopupWalletOn=true;
                 }
@@ -376,6 +428,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(!isPopupWalletOn){
                     revealFAB(wallet_typeContainer);
                     wallet_typeContainer.setVisibility(View.VISIBLE);
+                    CategoriesAdapter categoriesAdapter=new CategoriesAdapter(this, categoryDataModels, new CategoryIconClickInterface() {
+                        @Override
+                        public void onItemClick(int tag) {
+                            popupTypeIcon.setImageResource(tag);
+                            popupTypeIcon.setTag(tag);
+                            popupIncomeExpenseType =tag;
+                            hideFABSmall(wallet_typeContainer);
+                            isPopupWalletOn=false;
+                        }
+                    });
+                    popupTypeRecyclerView.setAdapter(categoriesAdapter);
+                    popupTypeRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
                     isPopupWalletOn=true;
                 }
                 else {
@@ -384,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 break;
-            case R.id.okImageBtn:
+
 
             case R.id.income_expense_card_container:
 
@@ -588,7 +652,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void verificationForUpload() {
 
-        String title="", amount="", type="", category="Food", wallet="bKash", date="";
+        String title="", amount="", type="", date="";
+
+
+        String wallet="";
+
+        if(popUpWalletName.equals("not set")){
+            popupWalletNameTextView.setError("Choose wallet");
+        }
+        else {
+            wallet=popUpWalletName;
+        }
+        if(popupIncomeExpenseType ==-1){
+            popupTitleEditText.setError("select a category icon");
+        }
 
         if(isPopupExpense){
             type="Expense";
@@ -626,22 +703,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
-        if(!title.isEmpty() && !amount.isEmpty() && !type.isEmpty() && !category.isEmpty() && !wallet.isEmpty() && !date.isEmpty()){
-            submitAlertDialog(StaticData.LoggedInUserEmail,title,amount,type,category,wallet,date);
+        if(!title.isEmpty() && !amount.isEmpty() && !type.isEmpty() && !(popupIncomeExpenseType==-1) && !wallet.isEmpty() && !date.isEmpty()){
+            submitAlertDialog(StaticData.LoggedInUserEmail,title,amount,type,popupIncomeExpenseType,wallet,date);
         }
 
 
 
     }
 
-    private void submitAlertDialog(String email,String title, String amount,String type, String category, String wallet, String date) {
+    private void submitAlertDialog(String email, String title, String amount, String type, int category, String wallet, String date) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage(getResources().getString(R.string.are_you_sure));
         builder.setCancelable(false);
         builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 TransactionDataModel transactionDataModel = new TransactionDataModel(email,title,amount,type,category,wallet,date);
-                RestClient.insertTransaction(MainActivity.this,transactionDataModel);
+                RetroInterface retroInterface = RestClient.createRestClient();
+                Call<TransactionDataModel> call = retroInterface.insertTransactionData(transactionDataModel);
+
+                call.enqueue(new Callback<TransactionDataModel>() {
+                    @Override
+                    public void onResponse(Call<TransactionDataModel> call, Response<TransactionDataModel> response) {
+                        if(response.isSuccessful()){
+                            Toast.makeText(getApplicationContext(),"Response received!",Toast.LENGTH_SHORT).show();
+                            StaticData.setUpdate("yes");
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"No response from server!",Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<TransactionDataModel> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(),"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
         })
                 .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -654,25 +752,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
     }
+    public void fetchCategoryData(){
+
+        RetroInterface retroInterface = RestClient.createRestClient();
+
+        Call<ArrayList<CategoryDataModel>> call = retroInterface.getCategoryData(new CategoryDataModel(StaticData.LoggedInUserEmail));
+        call.enqueue(new Callback<ArrayList<CategoryDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<CategoryDataModel>> call, Response<ArrayList<CategoryDataModel>> response) {
+                walletViewModel.setCategoryLiveData(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<CategoryDataModel>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 
+    }
+    public void fetchWalletData(){
+        RetroInterface retroInterface = RestClient.createRestClient();
+        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData(new WalletDataModel(StaticData.LoggedInUserEmail));
 
+        call.enqueue(new Callback<ArrayList<WalletDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<WalletDataModel>> call, Response<ArrayList<WalletDataModel>> response) {
+                if(response.isSuccessful()) {
+                    walletViewModel.setWalletLiveData(response.body());
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "response failed", Toast.LENGTH_SHORT).show();
+                }
 
-    @Override
-    public void onItemClick(int position) {
+            }
 
-        Toast.makeText(this, Integer.toString(position), Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailure(Call<ArrayList<WalletDataModel>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Connection failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    @Override
-    public void onItemClick(Drawable position, String name) {
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        popupTypeIcon.setImageDrawable(position);
-    }
 
-    @Override
-    public void onItemClick(String name) {
-        popupWalletNameTextView.setText(name);
-    }
+
+
+
 }

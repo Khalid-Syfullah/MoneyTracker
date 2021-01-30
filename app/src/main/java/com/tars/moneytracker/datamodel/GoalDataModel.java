@@ -91,6 +91,9 @@ public class GoalDataModel {
         this.date = date;
         this.oldDate = oldDate;
     }
+    public GoalDataModel(String email){
+        this.email=email;
+    }
 
     public GoalDataModel(String email, String title, String targetAmount, String acquiredAmount, String currency, String date) {
         this.email = email;

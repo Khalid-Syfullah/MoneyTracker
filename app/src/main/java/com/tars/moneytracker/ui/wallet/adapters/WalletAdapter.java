@@ -55,7 +55,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletViewHolder>{
         walletDataModel = walletDataModels.get(position);
 
         holder.walletName.setText(walletDataModel.getTitle());
-        holder.walletBalance.setText(walletDataModel.getBalance());
+        holder.walletBalance.setText(Integer.toString(walletDataModel.getBalance()));
         holder.walletCurrency.setText(walletDataModel.getCurrency());
         holder.walletType.setText(walletDataModel.getType());
 

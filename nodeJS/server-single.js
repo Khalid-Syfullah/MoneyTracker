@@ -19,7 +19,7 @@ var overviewSchema = new mongoose.Schema({
 var transactionSchema = new mongoose.Schema({
     email: {type: String, required: true},
     title: {type: String, required: true},
-    category: {type: String, required: true},
+    category: {type: Number, required: true},
     wallet: {type: String, required: true},
     date: {type: String, required: true},
     amount: {type: Number, required: true},
@@ -32,7 +32,7 @@ var walletSchema = new mongoose.Schema({
     title: {type: String, required: true},
     type: {type: String, required: true},
     currency: {type: String, required: true},
-    balance: {type: String, required: true},
+    balance: {type: Number, required: true},
     email:{type:String, required: true}
 })
 
@@ -49,7 +49,8 @@ var goalSchema = new mongoose.Schema({
 
 var categorySchema = new mongoose.Schema({
     title: {type: String, required: true},
-    email: {type: String, required: true}
+    email: {type: String, required: true},
+    iconId:{type: Number,required:true}
 })
 
 var User = mongoose.model("user",userSchema)
@@ -167,17 +168,63 @@ app.post('/api/insertTransactionData', function(req,res){
     transaction.category = req.body.category;
     transaction.wallet = req.body.wallet;
     transaction.date = req.body.date;
+    var newbalance=0;
+    var updateQuery;
 
-    transaction.save()
-    .then(function(data){
-        console.log("Transaction inserted")
+    Wallet.find({email:req.body.email,title: req.body.wallet}).then((data)=>{
+        newbalance=data[0].balance
         console.log(data)
-        res.send({message: "Transaction successful"})
+        console.log(data[0].balance,newbalance)
+        if(transaction.transaction=="Income"){
+            updateQuery={$set: {balance: data[0].balance + transaction.amount}}
+              // newbalance=newbalance+ transaction.amount
+      
+          }
+          else{
+            
+              updateQuery={$set: {balance: data[0].balance - transaction.amount}}
+          }
+
+        Wallet.updateOne({email: req.body.email,title:req.body.wallet}, updateQuery)
+        .then(function(results){
+            console.log("Wallet updated")
+            console.log(results)
+
+            transaction.save()
+            .then(function(data){
+                console.log("Transaction inserted")
+                console.log(data)
+                
+                
+               
+                res.send({serverMsg: "Transaction successful"})
+        
+        
+            })
+            .catch(function(err){
+                console.log(req.body)
+                res.send({serverMsg: "Transaction failed"})
+            })
+
+            
+            
+        })
+        .catch(function(err){
+            console.log(err)
+            console.log("Wallet update failed")
+            
+        })
+    }).catch((err)=>{
+        console.log(err)
     })
-    .catch(function(err){
-        console.log("Transaction failed")
-        res.send({message: "Transaction failed"})
-    })
+   
+
+   
+   
+  
+   
+
+  
 })
 
 
@@ -249,16 +296,18 @@ app.post('/api/insertCategoryData', function(req,res){
     
     category.title = req.body.title
     category.email = req.body.email
+    category.iconId=req.body.iconId
+    
 
     category.save()
     .then(function(data){
         console.log("Category inserted")
         console.log(data)
-        res.send({message: "Category inserted"})
+        res.send({serverMsg: "Category inserted"})
     })
     .catch(function(err){
         console.log("Category insertion failed")
-        res.send({message: "Category insertion failed"})
+        res.send({serverMsg: "Category insertion failed"})
     })
 })
 
@@ -324,7 +373,7 @@ app.post('/api/getTransactionData', function(req,res){
 app.post('/api/getWalletData', function(req,res){
 
 
-    Wallet.find()
+    Wallet.find({email:req.body.email})
     .then(function(data){
         console.log("Wallets found")
         console.log(data)
@@ -341,7 +390,7 @@ app.post('/api/getWalletData', function(req,res){
 app.post('/api/getGoalData', function(req,res){
 
 
-    Goal.find()
+    Goal.find({email:req.body.email})
     .then(function(data){
         console.log("Goals found")
         console.log(data)
@@ -358,7 +407,7 @@ app.post('/api/getGoalData', function(req,res){
 app.post('/api/getCategoryData', function(req,res){
 
 
-    Category.find()
+    Category.find({email:req.body.email})
     .then(function(data){
         console.log("Category found")
         console.log(data)
@@ -366,7 +415,7 @@ app.post('/api/getCategoryData', function(req,res){
     })
     .catch(function(err){
         console.log("Error found")
-        res.send({message: "Error found"})
+        res.send({serverMsg: "Error found"})
     })
 })
 

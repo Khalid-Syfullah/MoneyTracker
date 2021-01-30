@@ -38,6 +38,7 @@ import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.home.adapters.GoalsAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.CategoriesAdapter;
+import com.tars.moneytracker.ui.wallet.adapters.CategoryIconClickInterface;
 import com.tars.moneytracker.ui.wallet.adapters.CategoryIconsAdapter;
 import com.tars.moneytracker.ui.wallet.adapters.WalletAdapter;
 
@@ -49,11 +50,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WalletFragment extends Fragment implements RecyclerItemClickInterface {
+public class WalletFragment extends Fragment  {
 
     private WalletViewModel walletViewModel;
     private RecyclerView myWalletsRecyclerView, myGoalsRecyclerView,categoryRecyclerView;
     private ImageView addWalletBtn,addGoalsBtn,addCategoriesBtn;
+
+    int iconId=-1;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -116,7 +119,12 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         walletViewModel.getCategoryLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<CategoryDataModel>>() {
             @Override
             public void onChanged(ArrayList<CategoryDataModel> categoryDataModels) {
-                categoryRecyclerView.setAdapter(new CategoriesAdapter(getContext(),categoryDataModels));
+                categoryRecyclerView.setAdapter(new CategoriesAdapter(getContext(), categoryDataModels, new CategoryIconClickInterface() {
+                    @Override
+                    public void onItemClick(int tag) {
+
+                    }
+                }));
             }
         } );
 
@@ -171,7 +179,7 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
     public void fetchGoalData(){
 
         RetroInterface retroInterface = RestClient.createRestClient();
-        Call<ArrayList<GoalDataModel>> call = retroInterface.getGoalData();
+        Call<ArrayList<GoalDataModel>> call = retroInterface.getGoalData(new GoalDataModel(StaticData.LoggedInUserEmail));
         call.enqueue(new Callback<ArrayList<GoalDataModel>>() {
             @Override
             public void onResponse(Call<ArrayList<GoalDataModel>> call, Response<ArrayList<GoalDataModel>> response) {
@@ -191,7 +199,8 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
     public void fetchCategoryData(){
 
         RetroInterface retroInterface = RestClient.createRestClient();
-        Call<ArrayList<CategoryDataModel>> call = retroInterface.getCategoryData();
+
+        Call<ArrayList<CategoryDataModel>> call = retroInterface.getCategoryData(new CategoryDataModel(StaticData.LoggedInUserEmail));
         call.enqueue(new Callback<ArrayList<CategoryDataModel>>() {
             @Override
             public void onResponse(Call<ArrayList<CategoryDataModel>> call, Response<ArrayList<CategoryDataModel>> response) {
@@ -328,6 +337,7 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
                     public void onResponse(Call<GoalDataModel> call, Response<GoalDataModel> response) {
                         if(response.isSuccessful()){
                             Toast.makeText(context,"Response received!",Toast.LENGTH_SHORT).show();
+                            StaticData.setUpdate("yes");
                         }
                         else{
                             Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
@@ -356,13 +366,20 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
         View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_category_alert,null);
 
+
         RecyclerView icons=dialog.findViewById(R.id.new_category_choose_icon_recycler);
 
         EditText categoryName = dialog.findViewById(R.id.category_alert_category_name);
         Button saveBtn = dialog.findViewById(R.id.category_alert_save_button);
         Button deleteBtn = dialog.findViewById(R.id.category_alert_delete_button);
 
-        icons.setAdapter(new CategoryIconsAdapter());
+        icons.setAdapter(new CategoryIconsAdapter(getContext(), new CategoryIconClickInterface() {
+            @Override
+            public void onItemClick(int tag) {
+                iconId=tag;
+
+            }
+        }));
         icons.setLayoutManager(new GridLayoutManager(getActivity(),3));
 
 
@@ -374,10 +391,40 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
             @Override
             public void onClick(View v){
 
-                String name = categoryName.getText().toString();
+                if(iconId==-1){
+                    Toast.makeText(context, "select Icon", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    String name = categoryName.getText().toString();
+                    if(!name.isEmpty()){
+                        CategoryDataModel categoryDataModel = new CategoryDataModel(name,iconId, StaticData.LoggedInUserEmail);
+                        RetroInterface retroInterface = RestClient.createRestClient();
+                        Call<CategoryDataModel> call = retroInterface.insertCategoryData(categoryDataModel);
 
-                CategoryDataModel categoryDataModel = new CategoryDataModel(name, StaticData.LoggedInUserEmail);
-                RestClient.insertCategory(context,categoryDataModel);
+                        call.enqueue(new Callback<CategoryDataModel>() {
+                            @Override
+                            public void onResponse(Call<CategoryDataModel> call, Response<CategoryDataModel> response) {
+                                if(response.isSuccessful()){
+                                    Toast.makeText(context,"Category Added",Toast.LENGTH_SHORT).show();
+                                    StaticData.setUpdate("yes");
+                                }
+                                else{
+                                    Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<CategoryDataModel> call, Throwable t) {
+                                Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+                    }
+
+
+                }
             }
         });
 
@@ -397,10 +444,7 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
 
 
 
-    @Override
-    public void onItemClick(int position) {
-        Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_SHORT).show();
-    }
+
 
 
 
@@ -439,13 +483,5 @@ public class WalletFragment extends Fragment implements RecyclerItemClickInterfa
     }
 
 
-    @Override
-    public void onItemClick(Drawable position, String name) {
 
-    }
-
-    @Override
-    public void onItemClick(String name) {
-
-    }
 }
