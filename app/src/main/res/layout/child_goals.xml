@@ -57,7 +57,7 @@
 
 
             android:layout_marginStart="16dp"
-            android:gravity="center"
+            android:gravity="start"
             android:text="Buy a new PC"
             android:textColor="@color/white"
             android:textSize="16sp"

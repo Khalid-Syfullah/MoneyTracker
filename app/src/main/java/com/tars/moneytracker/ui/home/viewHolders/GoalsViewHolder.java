@@ -26,6 +26,7 @@ import com.tars.moneytracker.datamodel.GoalDataModel;
 import com.tars.moneytracker.datamodel.StaticData;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -60,24 +61,112 @@ public class GoalsViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
         }
 
-        private void showGoalsAlertDialog(Context context) {
+//    AlertDialog.Builder builder=new AlertDialog.Builder(getContext(),R.style.CustomAlertDialog);
+//    View dialog=LayoutInflater.from(getContext()).inflate(R.layout.new_goal_alert,null);
+//
+//
+//    EditText titleText = dialog.findViewById(R.id.goal_alert_title_editText);
+//    EditText targetAmountText = dialog.findViewById(R.id.goal_alert_target_amount_editText);
+//    Spinner walletSpinner = dialog.findViewById(R.id.goal_alert_wallet_spinner);
+//    TextView dateText = dialog.findViewById(R.id.goal_alert_dateTextView);
+//    Spinner currencies=dialog.findViewById(R.id.goal_alert_currency_spinner);
+//    Button saveBtn = dialog.findViewById(R.id.goal_alert_save_button);
+//    Button deleteBtn = dialog.findViewById(R.id.goal_alert_delete_button);
+//
+//    String[] currencyItems=getResources().getStringArray(R.array.currencies);
+//    ArrayAdapter<String> currencyAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, currencyItems);
+//
+//        currencies.setAdapter(currencyAdapter);
+//        currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+//
+//    ArrayList<String> walletNames=new ArrayList<>();
+//        for(int i=0;i<walletDataModelss.size();i++){
+//        walletNames.add(walletDataModelss.get(i).getTitle());
+//    }
+//
+//    ArrayAdapter<String> walletAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, walletNames);
+//        walletSpinner.setAdapter(walletAdapter);
+//        walletAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+//
+//
+//        builder.setView(dialog);
+//    AlertDialog alertDialog = builder.create();
+//        alertDialog.show();
+//
+//        dateText.setOnClickListener(new View.OnClickListener(){
+//        @Override
+//        public void onClick(View v){
+//            chooseDate(context,dateText);
+//        }
+//    });
+//
+//        saveBtn.setOnClickListener(new View.OnClickListener(){
+//        @Override
+//        public void onClick(View v){
+//
+//            String title = titleText.getText().toString();
+//            String targetAmount = targetAmountText.getText().toString();
+//            String wallet = walletSpinner.getSelectedItem().toString();
+//            String currency = currencies.getSelectedItem().toString();
+//            String date = dateText.getText().toString();
+//
+//
+//            GoalDataModel goalDataModel = new GoalDataModel(StaticData.LoggedInUserEmail,title, targetAmount,wallet, currency, date);
+//            RetroInterface retroInterface = RestClient.createRestClient();
+//            Call<GoalDataModel> call = retroInterface.insertGoalData(goalDataModel);
+//
+//            call.enqueue(new Callback<GoalDataModel>() {
+//                @Override
+//                public void onResponse(Call<GoalDataModel> call, Response<GoalDataModel> response) {
+//                    if(response.isSuccessful()){
+//                        Toast.makeText(context,"Response received!",Toast.LENGTH_SHORT).show();
+//                        StaticData.setUpdate("yes");
+//                    }
+//                    else{
+//                        Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<GoalDataModel> call, Throwable t) {
+//                    Toast.makeText(context,"No Retrofit connection!",Toast.LENGTH_SHORT).show();
+//
+//                }
+//            });
+//        }
+//    });
+//
+//        deleteBtn.setOnClickListener(new View.OnClickListener(){
+//        @Override
+//        public void onClick(View v){
+//            alertDialog.dismiss();
+//        }
+//    });
+//}
 
-            AlertDialog.Builder builder=new AlertDialog.Builder(context, R.style.CustomAlertDialog);
-            View dialog= LayoutInflater.from(context).inflate(R.layout.new_goal_alert,null);
 
-            goalAlertTitleEditText=dialog.findViewById(R.id.goal_alert_title_editText);
-            goalAlertTargetAmountEditText=dialog.findViewById(R.id.goal_alert_target_amount_editText);
-            goalAlertAcquiredAmountEditText=dialog.findViewById(R.id.goal_alert_acquired_amount_editText);
-            goalAlertDateText=dialog.findViewById(R.id.goal_alert_dateTextView);
-            Button saveBtn = dialog.findViewById(R.id.goal_alert_save_button);
-            Button deleteBtn = dialog.findViewById(R.id.goal_alert_delete_button);
+    private void showGoalsAlertDialog(Context context) {
+            AlertDialog.Builder builder=new AlertDialog.Builder(context,R.style.CustomAlertDialog);
+    View dialog=LayoutInflater.from(context).inflate(R.layout.new_goal_alert,null);
 
-            goalAlertTitleEditText.setText(goalTitleText.getText().toString());
+
+    EditText titleText = dialog.findViewById(R.id.goal_alert_title_editText);
+    EditText targetAmountText = dialog.findViewById(R.id.goal_alert_target_amount_editText);
+    Spinner walletSpinner = dialog.findViewById(R.id.goal_alert_wallet_spinner);
+    TextView dateText = dialog.findViewById(R.id.goal_alert_dateTextView);
+    Spinner currencies=dialog.findViewById(R.id.goal_alert_currency_spinner);
+    Button saveBtn = dialog.findViewById(R.id.goal_alert_save_button);
+    Button deleteBtn = dialog.findViewById(R.id.goal_alert_delete_button);
+
+
+
+            titleText.setText(goalTitleText.getText().toString());
             goalAlertAcquiredAmountEditText.setText(goalAcquiredAmountText.getText().toString());
-            goalAlertTargetAmountEditText.setText(targetAmount);
-            goalAlertDateText.setText(goalDateText.getText().toString());
+            targetAmountText.setText(targetAmount);
+            dateText.setText(goalDateText.getText().toString());
 
-            Spinner currencies=dialog.findViewById(R.id.goal_alert_currency_spinner);
+             currencies=dialog.findViewById(R.id.goal_alert_currency_spinner);
             String[] currencyItems=context.getResources().getStringArray(R.array.currencies);
 
 
@@ -107,7 +196,7 @@ public class GoalsViewHolder extends RecyclerView.ViewHolder implements View.OnC
                     String title = goalAlertTitleEditText.getText().toString();
                     String targetAmount = goalAlertTargetAmountEditText.getText().toString();
                     String acquiredAmount = goalAlertAcquiredAmountEditText.getText().toString();
-                    String currency = currencies.getSelectedItem().toString();
+//                    String currency = currencies.getSelectedItem().toString();
                     String date = goalAlertDateText.getText().toString();
 
                     GoalDataModel goalDataModel = new GoalDataModel(StaticData.LoggedInUserEmail,title,oldTitle,targetAmount,oldTargetAmount,acquiredAmount,oldAcquiredAmount,currency,oldCurrency, date, oldDate);
@@ -145,7 +234,7 @@ public class GoalsViewHolder extends RecyclerView.ViewHolder implements View.OnC
                     String title = goalAlertTitleEditText.getText().toString();
                     String targetAmount = goalAlertTargetAmountEditText.getText().toString();
                     String acquiredAmount = goalAlertAcquiredAmountEditText.getText().toString();
-                    String currency = currencies.getSelectedItem().toString();
+//                    String currency = currencies.getSelectedItem().toString();
                     String date = goalAlertDateText.getText().toString();
 
 

@@ -25,13 +25,13 @@ public class GoalDataModel {
     @Expose
     private String oldTargetAmount;
 
-    @SerializedName("acquiredAmount")
+    @SerializedName("wallet")
     @Expose
-    private String acquiredAmount;
+    private String wallet;
 
-    @SerializedName("oldAcquiredAmount")
+    @SerializedName("oldWallet")
     @Expose
-    private String oldAcquiredAmount;
+    private String oldWallet;
 
     @SerializedName("currency")
     @Expose
@@ -49,43 +49,25 @@ public class GoalDataModel {
     @Expose
     private String oldDate;
 
-    @SerializedName("progress")
-    @Expose
-    private int progress;
 
-    @SerializedName("oldProgress")
-    @Expose
-    private int oldProgress;
 
 
     @SerializedName("serverMsg")
     @Expose
     private String serverMsg;
 
-    public int getProgress() {
-        return progress;
-    }
 
-    public void setProgress(int progress) {
-        this.progress = progress;
-    }
 
-    public int getOldProgress() {
-        return oldProgress;
-    }
 
-    public void setOldProgress(int oldProgress) {
-        this.oldProgress = oldProgress;
-    }
 
-    public GoalDataModel(String email, String title, String oldTitle, String targetAmount, String oldTargetAmount, String acquiredAmount, String oldAcquiredAmount, String currency, String oldCurrency, String date, String oldDate) {
+    public GoalDataModel(String email, String title, String oldTitle, String targetAmount, String oldTargetAmount, String wallet, String oldWallet, String currency, String oldCurrency, String date, String oldDate) {
         this.email = email;
         this.title = title;
         this.oldTitle = oldTitle;
         this.targetAmount = targetAmount;
         this.oldTargetAmount = oldTargetAmount;
-        this.acquiredAmount = acquiredAmount;
-        this.oldAcquiredAmount = oldAcquiredAmount;
+        this.wallet = wallet;
+        this.oldWallet = oldWallet;
         this.currency = currency;
         this.oldCurrency = oldCurrency;
         this.date = date;
@@ -95,11 +77,11 @@ public class GoalDataModel {
         this.email=email;
     }
 
-    public GoalDataModel(String email, String title, String targetAmount, String acquiredAmount, String currency, String date) {
+    public GoalDataModel(String email, String title, String targetAmount, String wallet, String currency, String date) {
         this.email = email;
         this.title = title;
         this.targetAmount = targetAmount;
-        this.acquiredAmount = acquiredAmount;
+        this.wallet = wallet;
         this.currency = currency;
         this.date = date;
     }
@@ -136,21 +118,7 @@ public class GoalDataModel {
         this.oldTargetAmount = oldTargetAmount;
     }
 
-    public String getAcquiredAmount() {
-        return acquiredAmount;
-    }
 
-    public void setAcquiredAmount(String acquiredAmount) {
-        this.acquiredAmount = acquiredAmount;
-    }
-
-    public String getOldAcquiredAmount() {
-        return oldAcquiredAmount;
-    }
-
-    public void setOldAcquiredAmount(String oldAcquiredAmount) {
-        this.oldAcquiredAmount = oldAcquiredAmount;
-    }
 
     public String getOldCurrency() {
         return oldCurrency;
@@ -190,10 +158,26 @@ public class GoalDataModel {
     @Override
     public String toString() {
         return "GoalDataModel{" +
-                "title='" + title + '\'' +
+                "email='" + email + '\'' +
+                ", title='" + title + '\'' +
+                ", oldTitle='" + oldTitle + '\'' +
                 ", targetAmount='" + targetAmount + '\'' +
+                ", oldTargetAmount='" + oldTargetAmount + '\'' +
+                ", wallet='" + wallet + '\'' +
+                ", oldWallet='" + oldWallet + '\'' +
                 ", currency='" + currency + '\'' +
+                ", oldCurrency='" + oldCurrency + '\'' +
                 ", date='" + date + '\'' +
+                ", oldDate='" + oldDate + '\'' +
+                ", serverMsg='" + serverMsg + '\'' +
                 '}';
+    }
+
+    public String getWallet() {
+        return wallet;
+    }
+
+    public String getOldWallet() {
+        return oldWallet;
     }
 }

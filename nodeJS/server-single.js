@@ -40,10 +40,10 @@ var walletSchema = new mongoose.Schema({
 var goalSchema = new mongoose.Schema({
     title: {type: String, required: true},
     targetAmount: {type: Number, required: true},
-    acquiredAmount: {type: Number, required: true},
+    wallet: {type: String, required: true},
     currency: {type: String,required: true},
     date: {type: String, required: true},
-    progress: {type: Number},
+  
     email: {type: String, required: true}
 })
 
@@ -272,21 +272,21 @@ app.post('/api/insertGoalData', function(req,res){
     
     goal.title = req.body.title
     goal.targetAmount = req.body.targetAmount
-    goal.acquiredAmount = req.body.acquiredAmount
+    goal.wallet = req.body.wallet
     goal.currency = req.body.currency
     goal.date = req.body.date
-    goal.progress = req.body.acquiredAmount / req.body.targetAmount * 100
+    // goal.progress = req.body.acquiredAmount / req.body.targetAmount * 100
     goal.email = req.body.email
 
     goal.save()
     .then(function(data){
         console.log("Goal inserted")
         console.log(data)
-        res.send({message: "Goal inserted"})
+        res.send({serverMsg: "Goal inserted"})
     })
     .catch(function(err){
         console.log("Goal insertion failed")
-        res.send({message: "Goal insertion failed"})
+        res.send({serverMsg: "Goal insertion failed"})
     })
 })
 
@@ -658,19 +658,19 @@ app.post('/api/updateGoalData', function(req,res){
     var oldGoal = {
     title: req.body.oldTitle,
     targetAmount: req.body.oldTargetAmount,
-    acquiredAmount: req.body.oldAcquiredAmount,
+    wallet: req.body.oldWallet,
     currency: req.body.oldCurrency,
     date: req.body.oldDate,
-    progress: req.body.oldAcquiredAmount / req.body.oldTargetAmount * 100
+    
     }
 
     var newGoal = {
         title: req.body.title,
         targetAmount: req.body.targetAmount,
-        acquiredAmount: req.body.acquiredAmount,
+        wallet: req.body.wallet,
         currency: req.body.currency,
         date: req.body.date,
-        progress: req.body.acquiredAmount / req.body.targetAmount * 100
+        
         }
 
     console.log("Old Goal:")

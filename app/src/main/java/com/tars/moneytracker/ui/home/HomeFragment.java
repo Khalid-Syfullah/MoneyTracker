@@ -47,6 +47,8 @@ public class HomeFragment extends Fragment  {
     private OverviewDataModel overviewDataModel;
     private RecyclerView walletRecyclerView,goalsRecyclerView;
     private TextView spentText, remainingText, limitText;
+    private ArrayList<WalletDataModel> walletDataModelss;
+    ArrayList<GoalDataModel> goalDataModelss;
 
 
 
@@ -55,6 +57,8 @@ public class HomeFragment extends Fragment  {
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         walletViewModel=new ViewModelProvider(this).get(WalletViewModel.class);
+        walletDataModelss=new ArrayList<>();
+        goalDataModelss=new ArrayList<>();
 
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -92,13 +96,16 @@ public class HomeFragment extends Fragment  {
         walletViewModel.getWallets().observe(getViewLifecycleOwner(), new Observer<ArrayList<WalletDataModel>>() {
             @Override
             public void onChanged(ArrayList<WalletDataModel> walletDataModels) {
+                walletDataModelss=walletDataModels;
                 walletRecyclerView.setAdapter(new WalletAdapter(getContext(),walletDataModels));
+                goalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModelss,walletDataModels));
             }
         });
         walletViewModel.getGoalLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<GoalDataModel>>() {
             @Override
             public void onChanged(ArrayList<GoalDataModel> goalDataModels) {
-                goalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels));
+                goalDataModelss=goalDataModels;
+                goalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels,walletDataModelss));
             }
         });
         StaticData.getUpdate().observe(getViewLifecycleOwner(), new Observer<String>() {

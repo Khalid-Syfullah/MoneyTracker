@@ -20,10 +20,12 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
 
     GoalDataModel goalDataModel;
     ArrayList<GoalDataModel> goalDataModels;
+    ArrayList<WalletDataModel> walletDataModels;
 
-    public GoalsAdapter(Context context, ArrayList<GoalDataModel> goalDataModels) {
+    public GoalsAdapter(Context context, ArrayList<GoalDataModel> goalDataModels,ArrayList<WalletDataModel> walletDataModels) {
         this.context = context;
         this.goalDataModels = goalDataModels;
+        this.walletDataModels=walletDataModels;
 
     }
 
@@ -34,37 +36,40 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
 
 
         View view= LayoutInflater.from(context).inflate(R.layout.child_goals,parent,false);
-        GoalsViewHolder mvh=new GoalsViewHolder(view, context) {
-            @Override
-            public String toString() {
-                return super.toString();
-            }
-        };
+        GoalsViewHolder mvh=new GoalsViewHolder(view, context);
         return mvh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull GoalsViewHolder holder, int position) {
 
+        int walletBalance=0;
         goalDataModel = goalDataModels.get(position);
+
+        for(int i=0;i<walletDataModels.size();i++){
+            if(walletDataModels.get(i).getTitle().equals(goalDataModel.getWallet())){
+                walletBalance=walletDataModels.get(i).getBalance();
+            }
+        }
 
         holder.goalTitleText.setText(goalDataModel.getTitle());
         holder.currency = goalDataModel.getCurrency();
 
         if(holder.currency.equals("USD")) {
             holder.goalTargetAmountText.setText(goalDataModel.getTargetAmount() +" USD");
-            holder.goalAcquiredAmountText.setText(goalDataModel.getAcquiredAmount());
+            holder.goalAcquiredAmountText.setText(walletBalance);
         }
         else if(holder.currency.equals("BDT")){
             holder.goalTargetAmountText.setText(goalDataModel.getTargetAmount() + " BDT");
-            holder.goalAcquiredAmountText.setText(goalDataModel.getAcquiredAmount());
+            holder.goalAcquiredAmountText.setText(String.valueOf(walletBalance));
         }
         holder.goalDateText.setText(goalDataModel.getDate());
-        holder.goalProgressText.setText(goalDataModel.getProgress()+"");
-        holder.goalProgressBar.setProgress(goalDataModel.getProgress());
+        holder.goalProgressBar.setProgress(100*walletBalance/Integer.valueOf(goalDataModel.getTargetAmount()));
+        holder.goalProgressText.setText(String.valueOf(100*walletBalance/Integer.valueOf(goalDataModel.getTargetAmount())) + "%");
+
 
         holder.targetAmount = goalDataModel.getTargetAmount();
-        holder.acquiredAmount = goalDataModel.getAcquiredAmount();
+
     }
 
     @Override
