@@ -20,6 +20,9 @@ import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.StaticData;
 import com.tars.moneytracker.datamodel.WalletDataModel;
 import com.tars.moneytracker.ui.wallet.WalletFragment;
+import com.tars.moneytracker.ui.wallet.WalletViewModel;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,12 +33,14 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
     String titleText,oldTitle,oldType,oldCurrency;
 
     public TextView walletName, walletBalance,walletCurrency,walletType;
+    WalletViewModel walletViewModel;
 
-    public WalletViewHolder(@NonNull View itemView,Context context) {
+    public WalletViewHolder(@NonNull View itemView, Context context, WalletViewModel walletViewModel) {
         super(itemView);
 
         itemView.setOnClickListener(this);
         this.context=context;
+        this.walletViewModel=walletViewModel;
         walletName = itemView.findViewById(R.id.walletName);
         walletBalance = itemView.findViewById(R.id.balance_amount);
         walletCurrency=itemView.findViewById(R.id.child_wallet_currency);
@@ -105,6 +110,7 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
                         if(response.isSuccessful()){
                             StaticData.setUpdate("yes");
                             alertDialog.dismiss();
+                            fetchWalletData();
                         }
                         else{
                             Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
@@ -139,7 +145,7 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
                     public void onResponse(Call<WalletDataModel> call, Response<WalletDataModel> response) {
                         if(response.isSuccessful()){
                             Toast.makeText(context,response.body().getServerMsg(),Toast.LENGTH_SHORT).show();
-                            StaticData.setUpdate("yes");
+                            fetchWalletData();
                         }
                         else{
                             Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
@@ -162,6 +168,25 @@ public class WalletViewHolder extends RecyclerView.ViewHolder implements View.On
 
 
 
+    }
+    public void fetchWalletData(){
+        RetroInterface retroInterface = RestClient.createRestClient();
+        Call<ArrayList<WalletDataModel>> call = retroInterface.getWalletData(new WalletDataModel(StaticData.LoggedInUserEmail));
+
+        call.enqueue(new Callback<ArrayList<WalletDataModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<WalletDataModel>> call, Response<ArrayList<WalletDataModel>> response) {
+                if(response.isSuccessful()) {
+                    walletViewModel.setWalletLiveData(response.body());
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<WalletDataModel>> call, Throwable t) {
+            }
+        });
     }
 
 }

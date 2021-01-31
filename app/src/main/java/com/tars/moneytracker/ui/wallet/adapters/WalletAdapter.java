@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tars.moneytracker.R;
 import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.datamodel.WalletDataModel;
+import com.tars.moneytracker.ui.wallet.WalletViewModel;
 import com.tars.moneytracker.ui.wallet.viewHolders.WalletViewHolder;
 
 import java.util.ArrayList;
@@ -24,12 +25,14 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletViewHolder>{
     Context ctx;
     WalletDataModel walletDataModel;
     ArrayList<WalletDataModel> walletDataModels;
+    WalletViewModel walletViewModel;
 
 
 
-    public WalletAdapter(Context ctx, ArrayList<WalletDataModel> walletDataModels) {
+    public WalletAdapter(Context ctx, ArrayList<WalletDataModel> walletDataModels, WalletViewModel walletViewModel) {
         this.ctx = ctx;
         this.walletDataModels = walletDataModels;
+        this.walletViewModel = walletViewModel;
     }
 
     @NonNull
@@ -38,12 +41,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletViewHolder>{
 
 
         View view=LayoutInflater.from(ctx).inflate(R.layout.child_wallet,parent,false);
-        WalletViewHolder mvh=new WalletViewHolder(view,ctx) {
-            @Override
-            public String toString() {
-                return super.toString();
-            }
-        };
+        WalletViewHolder mvh=new WalletViewHolder(view,ctx,walletViewModel) ;
         return mvh;
     }
 

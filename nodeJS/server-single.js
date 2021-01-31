@@ -759,10 +759,10 @@ app.post('/api/deleteGoalData', function(req,res){
         email: req.body.email,
         title: req.body.title,
         targetAmount: req.body.targetAmount,
-        acquiredAmount: req.body.acquiredAmount,
+        wallet: req.body.wallet,
         currency: req.body.currency,
         date: req.body.date,
-        progress: req.body.acquiredAmount / req.body.targetAmount * 100
+       
 
   
     }
@@ -773,11 +773,11 @@ app.post('/api/deleteGoalData', function(req,res){
     .then(function(results){
         console.log("Goal Deleted")
         console.log(results)
-        res.send(goal)
+        res.send({serverMsg:"deleted"})
     })
     .catch(function(err){
         console.log("Goal Delete Failed")
-        res.send({message: "Goal Delete Failed"})
+        res.send({serverMsg: "Goal Delete Failed"})
     })
 
 

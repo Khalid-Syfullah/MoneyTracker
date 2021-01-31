@@ -108,8 +108,8 @@ public class WalletFragment extends Fragment  {
             @Override
             public void onChanged(ArrayList<WalletDataModel> walletDataModels) {
                 walletDataModelss=walletDataModels;
-                myWalletsRecyclerView.setAdapter(new WalletAdapter(getActivity(),walletDataModels));
-                myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModelss,walletDataModels));
+                myWalletsRecyclerView.setAdapter(new WalletAdapter(getActivity(),walletDataModels,walletViewModel));
+                myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModelss,walletDataModels,walletViewModel));
             }
         });
 
@@ -118,7 +118,7 @@ public class WalletFragment extends Fragment  {
             public void onChanged(ArrayList<GoalDataModel> goalDataModels) {
                 goalDataModelss=goalDataModels;
 
-                myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels,walletDataModelss));
+                myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels,walletDataModelss,walletViewModel));
             }
         } );
 

@@ -97,21 +97,21 @@ public class HomeFragment extends Fragment  {
             @Override
             public void onChanged(ArrayList<WalletDataModel> walletDataModels) {
                 walletDataModelss=walletDataModels;
-                walletRecyclerView.setAdapter(new WalletAdapter(getContext(),walletDataModels));
-                goalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModelss,walletDataModels));
+                walletRecyclerView.setAdapter(new WalletAdapter(getContext(),walletDataModels,walletViewModel));
+                goalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModelss,walletDataModels,walletViewModel));
             }
         });
         walletViewModel.getGoalLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<GoalDataModel>>() {
             @Override
             public void onChanged(ArrayList<GoalDataModel> goalDataModels) {
                 goalDataModelss=goalDataModels;
-                goalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels,walletDataModelss));
+                goalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels,walletDataModelss,walletViewModel));
             }
         });
         StaticData.getUpdate().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                if(s.equals("yes")) {
+                if(!s.equals("no")) {
                     fetchWalletData();
                     fetchGoalData();
                    
