@@ -109,6 +109,7 @@
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/home_overview_label_spent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/home_overview_label_Remaining"
@@ -125,6 +126,7 @@
 
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/home_overview_spent_amount"
                         app:layout_constraintEnd_toEndOf="@+id/home_overview_label_limit"
                         app:layout_constraintStart_toStartOf="@+id/home_overview_label_limit"

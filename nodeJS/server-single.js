@@ -319,14 +319,14 @@ app.post('/api/insertCategoryData', function(req,res){
 
 
 
-app.post('/api/getOverviewData', function(req,res){
+app.post('/api/getOverviewData', async function(req,res){
 
     var overview = new Overview();
     overview.spent = 0;
     overview.remaining = 0;
     overview.limit = 0;
 
-    Transaction.find({email:req.body.email})
+   await Transaction.find({email:req.body.email, transaction: 'Expense'})
     .then(function(results){
 
         if(results.length>0){
@@ -338,8 +338,8 @@ app.post('/api/getOverviewData', function(req,res){
             for(result of results){
 
                 overview.spent += result.amount
-                overview.remaining += result.amount
-                overview.limit += result.amount
+                // overview.remaining += result.amount
+                // overview.limit += result.amount
 
                 console.log("Transactions :")
                 console.log(result)
@@ -349,13 +349,45 @@ app.post('/api/getOverviewData', function(req,res){
 
         }
 
-        res.send(overview)
+        
 
     })
     .catch(function(err){
         res.send({serverMsg: "Response error"})
 
     })
+
+    await Wallet.find({email:req.body.email}).then(function(results){
+
+        if(results.length>0){
+           
+
+            console.log("Overview found")
+            console.log(overview)
+
+            for(result of results){
+
+                overview.remaining += result.balance
+                // overview.remaining += result.amount
+                // overview.limit += result.amount
+
+                console.log("Transactions :")
+                console.log(result)
+            }
+
+
+
+        }
+
+        
+
+    })
+    .catch(function(err){
+        res.send({serverMsg: "Response error"})
+
+    })
+
+    res.send(overview)
     
     
 })

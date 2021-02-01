@@ -181,7 +181,7 @@ public class NotesFragment extends Fragment {
             public void onResponse(Call<NoteDataModel> call, Response<NoteDataModel> response) {
                 if(response.isSuccessful()){
                     notesViewModel.setNoteLiveData(response.body());
-                    
+
                 }
 
             }
