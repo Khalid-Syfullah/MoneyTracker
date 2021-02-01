@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionInflater;
 
 import com.tars.moneytracker.R;
-import com.tars.moneytracker.RecyclerItemClickInterface;
 import com.tars.moneytracker.api.RestClient;
 import com.tars.moneytracker.api.RetroInterface;
 import com.tars.moneytracker.datamodel.CategoryDataModel;
@@ -56,6 +54,9 @@ public class WalletFragment extends Fragment  {
     private RecyclerView myWalletsRecyclerView, myGoalsRecyclerView,categoryRecyclerView;
     private ImageView addWalletBtn,addGoalsBtn,addCategoriesBtn;
 
+    private ArrayList<WalletDataModel> walletDataModelss;
+    ArrayList<GoalDataModel> goalDataModelss;
+
     int iconId=-1;
 
 
@@ -64,7 +65,8 @@ public class WalletFragment extends Fragment  {
         TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
         setEnterTransition(transitionInflater.inflateTransition(R.transition.fade));
         setExitTransition(transitionInflater.inflateTransition(R.transition.fade));
-
+        walletDataModelss=new ArrayList<>();
+        goalDataModelss=new ArrayList<>();
 
         walletViewModel =
                 new ViewModelProvider(this).get(WalletViewModel.class);
@@ -105,14 +107,18 @@ public class WalletFragment extends Fragment  {
         walletViewModel.getWallets().observe(getViewLifecycleOwner(), new Observer<ArrayList<WalletDataModel>>() {
             @Override
             public void onChanged(ArrayList<WalletDataModel> walletDataModels) {
-                myWalletsRecyclerView.setAdapter(new WalletAdapter(getActivity(),walletDataModels));
+                walletDataModelss=walletDataModels;
+                myWalletsRecyclerView.setAdapter(new WalletAdapter(getActivity(),walletDataModels,walletViewModel));
+                myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModelss,walletDataModels,walletViewModel));
             }
         });
 
         walletViewModel.getGoalLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<GoalDataModel>>() {
             @Override
             public void onChanged(ArrayList<GoalDataModel> goalDataModels) {
-                myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels));
+                goalDataModelss=goalDataModels;
+
+                myGoalsRecyclerView.setAdapter(new GoalsAdapter(getContext(),goalDataModels,walletDataModelss,walletViewModel));
             }
         } );
 
@@ -293,7 +299,7 @@ public class WalletFragment extends Fragment  {
 
         EditText titleText = dialog.findViewById(R.id.goal_alert_title_editText);
         EditText targetAmountText = dialog.findViewById(R.id.goal_alert_target_amount_editText);
-        EditText acquiredAmountText = dialog.findViewById(R.id.goal_alert_acquired_amount_editText);
+        Spinner walletSpinner = dialog.findViewById(R.id.goal_alert_wallet_spinner);
         TextView dateText = dialog.findViewById(R.id.goal_alert_dateTextView);
         Spinner currencies=dialog.findViewById(R.id.goal_alert_currency_spinner);
         Button saveBtn = dialog.findViewById(R.id.goal_alert_save_button);
@@ -304,6 +310,15 @@ public class WalletFragment extends Fragment  {
 
         currencies.setAdapter(currencyAdapter);
         currencyAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
+
+        ArrayList<String> walletNames=new ArrayList<>();
+        for(int i=0;i<walletDataModelss.size();i++){
+            walletNames.add(walletDataModelss.get(i).getTitle());
+        }
+
+        ArrayAdapter<String> walletAdapter = new ArrayAdapter<String>(getContext(), R.layout.custom_spinner, walletNames);
+        walletSpinner.setAdapter(walletAdapter);
+        walletAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown);
 
 
         builder.setView(dialog);
@@ -323,12 +338,12 @@ public class WalletFragment extends Fragment  {
 
                 String title = titleText.getText().toString();
                 String targetAmount = targetAmountText.getText().toString();
-                String acquiredAmount = acquiredAmountText.getText().toString();
+                String wallet = walletSpinner.getSelectedItem().toString();
                 String currency = currencies.getSelectedItem().toString();
                 String date = dateText.getText().toString();
 
 
-                GoalDataModel goalDataModel = new GoalDataModel(StaticData.LoggedInUserEmail,title, targetAmount,acquiredAmount, currency, date);
+                GoalDataModel goalDataModel = new GoalDataModel(StaticData.LoggedInUserEmail,title, targetAmount,wallet, currency, date);
                 RetroInterface retroInterface = RestClient.createRestClient();
                 Call<GoalDataModel> call = retroInterface.insertGoalData(goalDataModel);
 
