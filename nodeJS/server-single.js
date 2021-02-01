@@ -53,7 +53,10 @@ var categorySchema = new mongoose.Schema({
     iconId:{type: Number, required: true},
     email: {type: String, required: true}
 })
-
+var noteSchema = new mongoose.Schema({
+    note: {type: String, required: true},
+    email: {type: String, required: true}
+})
 
 var User = mongoose.model("user",userSchema)
 var Overview = mongoose.model("overview",overviewSchema)
@@ -61,6 +64,7 @@ var Transaction = mongoose.model("transaction",transactionSchema)
 var Wallet = mongoose.model("wallet",walletSchema)
 var Goal = mongoose.model("goal",goalSchema)
 var Category = mongoose.model("category",categorySchema)
+var Note = mongoose.model("note",noteSchema)
 
 var url = "mongodb://localhost/moneytracker"
 
@@ -936,11 +940,64 @@ app.post('/api/deleteCategoryData', function(req,res){
     })
     .catch(function(err){
         console.log("Category Delete Failed")
-        res.send({message: "Category Delete Failed"})
+        res.send({serverMsg: "Category Delete Failed"})
     })
     
    
 })
+
+    
+   
+})
+app.post('/api/getNoteData', function(req,res){
+
+    Note.find({email:req.body.email})
+    .then(function(data){
+        console.log("Note found")
+        console.log(data)
+        res.send(data[0])
+    })
+    .catch(function(err){
+        console.log("Error found")
+        res.send({serverMsg: "Error found"})
+    })
+})
+
+
+
+
+app.post('/api/updateNoteData', function(req,res){
+    
+    var note = {
+        email: req.body.email,
+        note: req.body.note
+    }
+
+    var notes=new Note();
+
+    notes.email=req.body.email
+    notes.note=req.body.note
+
+    Note.find({email:req.body.email},(err,data)=>{
+        if(data.length>0){
+            Note.updateOne({email: req.body.email}, note)
+            .then(function(results){
+                console.log("Note updated")
+                console.log(results)
+                res.send(newWallet)
+            })
+            .catch(function(err){
+                console.log("Note update failed")
+                res.send({serverMsg: "Note update failed"})
+            })
+        }
+        else{
+            notes.save().then((result)=>{
+
+            })
+        }
+    })
+
 
     
    
