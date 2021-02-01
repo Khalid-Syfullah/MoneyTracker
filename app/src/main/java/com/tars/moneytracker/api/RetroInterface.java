@@ -4,6 +4,7 @@ import com.tars.moneytracker.datamodel.CategoryDataModel;
 import com.tars.moneytracker.datamodel.GoalDataModel;
 import com.tars.moneytracker.datamodel.GraphDataModel;
 import com.tars.moneytracker.datamodel.HomeDataModel;
+import com.tars.moneytracker.datamodel.NoteDataModel;
 import com.tars.moneytracker.datamodel.OverviewDataModel;
 import com.tars.moneytracker.datamodel.TransactionDataModel;
 import com.tars.moneytracker.datamodel.UserDataModel;
@@ -96,6 +97,12 @@ public interface RetroInterface {
 
     @POST("/api/deleteCategoryData")
     Call<CategoryDataModel> deleteCategoryData(@Body CategoryDataModel categoryDataModel);
+
+    @POST("/api/getNoteData")
+    Call<NoteDataModel> getNoteData(@Body NoteDataModel noteDataModel);
+
+    @POST("/api/updateNoteData")
+    Call<NoteDataModel> updateNoteData(@Body NoteDataModel noteDataModel);
 
 
 

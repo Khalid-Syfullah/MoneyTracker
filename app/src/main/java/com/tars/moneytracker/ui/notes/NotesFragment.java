@@ -1,6 +1,7 @@
 package com.tars.moneytracker.ui.notes;
 
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.Animator;
@@ -16,18 +17,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.tars.moneytracker.R;
+import com.tars.moneytracker.api.RestClient;
+import com.tars.moneytracker.api.RetroInterface;
+import com.tars.moneytracker.datamodel.NoteDataModel;
+import com.tars.moneytracker.datamodel.OverviewDataModel;
+import com.tars.moneytracker.datamodel.StaticData;
+import com.tars.moneytracker.ui.home.HomeViewModel;
 import com.tars.moneytracker.ui.notification.NotificationFragment;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotesFragment extends Fragment {
 
-    private NotesViewModel mViewModel;
+    private NotesViewModel notesViewModel;
     private View view;
-    private ImageView closeBtn;
+    private ImageView closeBtn,noteSave;
     private boolean animationDone = false;
+    String note="";
+    private EditText noteEditText;
+
 
     public static NotesFragment newInstance() {
         return new NotesFragment();
@@ -39,6 +54,46 @@ public class NotesFragment extends Fragment {
 
         view =  inflater.inflate(R.layout.fragment_notes, container, false);
         closeBtn = view.findViewById(R.id.notes_close);
+        noteEditText=view.findViewById(R.id.notes_editText);
+        fetchNoteData();
+        NotesViewModel notesViewModel= new ViewModelProvider(this).get(NotesViewModel.class);
+
+        notesViewModel.getNoteData().observe(getViewLifecycleOwner(), new Observer<NoteDataModel>() {
+            @Override
+            public void onChanged(NoteDataModel noteDataModel) {
+                noteEditText.setText(noteDataModel.getNote());
+            }
+        });
+
+        noteSave=view.findViewById(R.id.notes_save);
+
+
+
+        noteSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                note=noteEditText.getText().toString();
+                RetroInterface retroInterface = RestClient.createRestClient();
+                NoteDataModel noteDataModel=new NoteDataModel(StaticData.LoggedInUserEmail,note);
+                Call<NoteDataModel> call = retroInterface.updateNoteData(noteDataModel);
+
+                call.enqueue(new Callback<NoteDataModel>() {
+                    @Override
+                    public void onResponse(Call<NoteDataModel> call, Response<NoteDataModel> response) {
+                        if(response.isSuccessful()){
+                            notesViewModel.setNoteLiveData(noteDataModel);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<NoteDataModel> call, Throwable t) {
+
+
+                    }
+                });
+            }
+        });
 
         closeBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -67,7 +122,7 @@ public class NotesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(NotesViewModel.class);
+        notesViewModel = new ViewModelProvider(this).get(NotesViewModel.class);
         revealFAB(view);
 
     }
@@ -114,6 +169,30 @@ public class NotesFragment extends Fragment {
             }
         });
         anim.start();
+    }
+
+    private void fetchNoteData(){
+        RetroInterface retroInterface = RestClient.createRestClient();
+        NoteDataModel noteDataModel = new NoteDataModel(StaticData.LoggedInUserEmail);
+        Call<NoteDataModel> call = retroInterface.getNoteData(noteDataModel);
+
+        call.enqueue(new Callback<NoteDataModel>() {
+            @Override
+            public void onResponse(Call<NoteDataModel> call, Response<NoteDataModel> response) {
+                if(response.isSuccessful()){
+                    notesViewModel.setNoteLiveData(response.body());
+                    
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<NoteDataModel> call, Throwable t) {
+
+
+
+            }
+        });
     }
 
 }

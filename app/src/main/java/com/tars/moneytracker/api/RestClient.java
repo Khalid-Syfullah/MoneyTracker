@@ -36,7 +36,7 @@ public class RestClient {
 
     private static Retrofit retrofit = null;
 
-    private static String baseUrl = "http://192.168.0.6:8800";
+    private static String baseUrl = "http://192.168.1.8:8800";
 
     public static RetroInterface createRestClient() {
         if (retrofit == null) {
