@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NotificationsViewHolder extends RecyclerView.ViewHolder {
 
+
     public NotificationsViewHolder(@NonNull View itemView) {
         super(itemView);
     }

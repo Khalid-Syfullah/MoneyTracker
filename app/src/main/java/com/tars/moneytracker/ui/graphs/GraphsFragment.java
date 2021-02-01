@@ -57,7 +57,7 @@ public class GraphsFragment extends Fragment {
     private GraphDataModel graphDataModel;
     private String overviewTimeline, categoryTimeline, creditsTimeline;
     private String timeline="daily", type="overview";
-    ArrayList<String> dailyList,weeklyList,monthlyList;
+    ArrayList<String> dailyList,weeklyList,monthlyList,categoryList;
     ArrayList<Float> amountList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -164,17 +164,9 @@ public class GraphsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 overviewTimeline = timelineSpinner.getSelectedItem().toString();
-                if(overviewTimeline.equals("Daily")){
-                    timeline = "daily";
-                }
-                else if(overviewTimeline.equals("Weekly")){
-                    timeline = "weekly";
-                }
-                else if(overviewTimeline.equals("Monthly")){
-                    timeline = "monthly";
-                }
 
                 if(overviewTimeline.equals("Daily")){
+                    timeline = "daily";
 
                     mBarChart.clearChart();
 
@@ -226,6 +218,7 @@ public class GraphsFragment extends Fragment {
 
                 }
                 else if(overviewTimeline.equals("Weekly")){
+                    timeline = "weekly";
 
                     RetroInterface retroInterface = RestClient.createRestClient();
                     Call<GraphDataModel> call = retroInterface.getGraphOverviewData(new GraphDataModel(timeline,type, StaticData.LoggedInUserEmail, dailyList, weeklyList, monthlyList));
@@ -273,6 +266,7 @@ public class GraphsFragment extends Fragment {
 
                 }
                 else if(overviewTimeline.equals("Monthly")){
+                    timeline = "monthly";
 
                     RetroInterface retroInterface = RestClient.createRestClient();
                     Call<GraphDataModel> call = retroInterface.getGraphOverviewData(new GraphDataModel(timeline,type, StaticData.LoggedInUserEmail, dailyList, weeklyList, monthlyList));
@@ -343,37 +337,214 @@ public class GraphsFragment extends Fragment {
         Spinner categorySpinner = v.findViewById(R.id.graphs_category_spinner);
         categoryTimeline = categorySpinner.getSelectedItem().toString();
 
+        type = "categorical";
 
-        float time[] = {55, 95, 30 , 360 - (55+95+30)};
-        String activity[] ={"Jan","Feb","March",""};
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                categoryTimeline = categorySpinner.getSelectedItem().toString();
+                if(categoryTimeline.equals("Daily")){
+                    timeline = "daily";
 
-        //pupulating list of PieEntires
-        List<PieEntry> pieEntires = new ArrayList<>();
-        for( int i = 0 ; i<time.length;i++){
-            pieEntires.add(new PieEntry(time[i],activity[i]));
-        }
-        PieDataSet dataSet = new PieDataSet(pieEntires,"");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        PieData data = new PieData(dataSet);
-        //Get the chart
-        pieChart.setData(data);
-        pieChart.invalidate();
-        pieChart.setCenterText("50% \n ");
-        pieChart.setDrawEntryLabels(false);
-        pieChart.setContentDescription("");
-        //pieChart.setDrawMarkers(true);
-        //pieChart.setMaxHighlightDistance(34);
-        pieChart.setEntryLabelTextSize(12);
-        pieChart.setHoleRadius(75);
+                    RetroInterface retroInterface = RestClient.createRestClient();
+                    Call<GraphDataModel> call = retroInterface.getGraphCategoricalData(new GraphDataModel(timeline,type, StaticData.LoggedInUserEmail, dailyList, weeklyList, monthlyList));
+                    call.enqueue(new Callback<GraphDataModel>() {
+                        @Override
+                        public void onResponse(Call<GraphDataModel> call, Response<GraphDataModel> response) {
+                            if(response.isSuccessful()){
+                                graphDataModel = response.body();
 
-        //legend attributes
-        Legend legend = pieChart.getLegend();
-        legend.setForm(Legend.LegendForm.CIRCLE);
-        legend.setTextSize(12);
-        legend.setFormSize(20);
-        legend.setFormToTextSpace(2);
+                                amountList = new ArrayList<>();
+                                categoryList = new ArrayList<>();
+                                amountList = graphDataModel.getDailyCategoricalSpendingAmount();
+                                categoryList = graphDataModel.getCategoryList();
 
-        pieChart.animateXY(1000,1000);
+                                List<PieEntry> pieEntires = new ArrayList<>();
+                                for( int i = 0 ; i<amountList.size();i++){
+                                    pieEntires.add(new PieEntry(amountList.get(i),categoryList.get(i)));
+                                }
+                                PieDataSet dataSet = new PieDataSet(pieEntires,"");
+                                dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                                PieData data = new PieData(dataSet);
+                                pieChart.setData(data);
+                                pieChart.invalidate();
+                                if(categoryList.size() == 1) {
+                                    pieChart.setCenterText(categoryList.size() + " category");
+                                }
+                                else{
+                                    pieChart.setCenterText(categoryList.size() + " categories");
+
+                                }
+                                pieChart.setDrawEntryLabels(false);
+                                pieChart.setContentDescription("Daily Categorical Spending");
+                                //pieChart.setDrawMarkers(true);
+                                //pieChart.setMaxHighlightDistance(34);
+                                pieChart.setEntryLabelTextSize(12);
+                                pieChart.setHoleRadius(75);
+
+                                Legend legend = pieChart.getLegend();
+                                legend.setForm(Legend.LegendForm.CIRCLE);
+                                legend.setTextSize(12);
+                                legend.setFormSize(20);
+                                legend.setFormToTextSpace(2);
+
+                                pieChart.animateXY(1000,1000);
+
+                            }
+                            else{
+                                Toast.makeText(getContext(),"No response from server!",Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<GraphDataModel> call, Throwable t) {
+                            Toast.makeText(getContext(),"No Retrofit Connection!",Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }
+                else if(categoryTimeline.equals("Weekly")){
+                    timeline = "weekly";
+
+                    RetroInterface retroInterface = RestClient.createRestClient();
+                    Call<GraphDataModel> call = retroInterface.getGraphCategoricalData(new GraphDataModel(timeline,type, StaticData.LoggedInUserEmail, dailyList, weeklyList, monthlyList));
+                    call.enqueue(new Callback<GraphDataModel>() {
+                        @Override
+                        public void onResponse(Call<GraphDataModel> call, Response<GraphDataModel> response) {
+                            if(response.isSuccessful()){
+                                graphDataModel = response.body();
+
+                                amountList = new ArrayList<>();
+                                categoryList = new ArrayList<>();
+                                amountList = graphDataModel.getWeeklyCategoricalSpendingAmount();
+                                categoryList = graphDataModel.getCategoryList();
+
+
+                                List<PieEntry> pieEntires = new ArrayList<>();
+                                for( int i = 0 ; i<amountList.size();i++){
+                                    pieEntires.add(new PieEntry(amountList.get(i),categoryList.get(i)));
+                                }
+                                PieDataSet dataSet = new PieDataSet(pieEntires,"");
+                                dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                                PieData data = new PieData(dataSet);
+                                pieChart.setData(data);
+                                pieChart.invalidate();
+                                if(categoryList.size() == 1) {
+                                    pieChart.setCenterText(categoryList.size() + " category");
+                                }
+                                else{
+                                    pieChart.setCenterText(categoryList.size() + " categories");
+
+                                }
+                                pieChart.setDrawEntryLabels(false);
+                                pieChart.setContentDescription("Weekly Categorical Spending");
+                                //pieChart.setDrawMarkers(true);
+                                //pieChart.setMaxHighlightDistance(34);
+                                pieChart.setEntryLabelTextSize(12);
+                                pieChart.setHoleRadius(75);
+
+                                Legend legend = pieChart.getLegend();
+                                legend.setForm(Legend.LegendForm.CIRCLE);
+                                legend.setTextSize(12);
+                                legend.setFormSize(20);
+                                legend.setFormToTextSpace(2);
+
+                                pieChart.animateXY(1000,1000);
+
+                            }
+                            else{
+                                Toast.makeText(getContext(),"No response from server!",Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<GraphDataModel> call, Throwable t) {
+                            Toast.makeText(getContext(),"No Retrofit Connection!",Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+                }
+                else if(categoryTimeline.equals("Monthly")){
+                    timeline = "monthly";
+
+                    RetroInterface retroInterface = RestClient.createRestClient();
+                    Call<GraphDataModel> call = retroInterface.getGraphCategoricalData(new GraphDataModel(timeline,type, StaticData.LoggedInUserEmail, dailyList, weeklyList, monthlyList));
+                    call.enqueue(new Callback<GraphDataModel>() {
+                        @Override
+                        public void onResponse(Call<GraphDataModel> call, Response<GraphDataModel> response) {
+                            if(response.isSuccessful()){
+                                graphDataModel = response.body();
+
+                                amountList = new ArrayList<>();
+                                categoryList = new ArrayList<>();
+                                amountList = graphDataModel.getMonthlyCategoricalSpendingAmount();
+                                categoryList = graphDataModel.getCategoryList();
+
+
+                                List<PieEntry> pieEntires = new ArrayList<>();
+                                for( int i = 0 ; i<amountList.size();i++){
+                                    pieEntires.add(new PieEntry(amountList.get(i),categoryList.get(i)));
+                                }
+                                PieDataSet dataSet = new PieDataSet(pieEntires,"");
+                                dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                                PieData data = new PieData(dataSet);
+                                pieChart.setData(data);
+                                pieChart.invalidate();
+                                if(categoryList.size() == 1) {
+                                    pieChart.setCenterText(categoryList.size() + " category");
+                                }
+                                else{
+                                    pieChart.setCenterText(categoryList.size() + " categories");
+
+                                }
+                                pieChart.setDrawEntryLabels(false);
+                                pieChart.setContentDescription("Monthly Categorical Spending");
+                                //pieChart.setDrawMarkers(true);
+                                //pieChart.setMaxHighlightDistance(34);
+                                pieChart.setEntryLabelTextSize(12);
+                                pieChart.setHoleRadius(75);
+
+                                Legend legend = pieChart.getLegend();
+                                legend.setForm(Legend.LegendForm.CIRCLE);
+                                legend.setTextSize(12);
+                                legend.setFormSize(20);
+                                legend.setFormToTextSpace(2);
+
+                                pieChart.animateXY(1000,1000);
+
+                            }
+                            else{
+                                Toast.makeText(getContext(),"No response from server!",Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<GraphDataModel> call, Throwable t) {
+                            Toast.makeText(getContext(),"No Retrofit Connection!",Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
+
+
+
+
+
 
     }
 /*

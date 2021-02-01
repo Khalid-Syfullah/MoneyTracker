@@ -2,6 +2,7 @@ var express = require("express")
 var app = express()
 var mongoose = require("mongoose")
 var bodyParser = require("body-parser")
+const { ifError } = require("assert")
 
 
 var userSchema = new mongoose.Schema({
@@ -32,7 +33,7 @@ var walletSchema = new mongoose.Schema({
     title: {type: String, required: true},
     type: {type: String, required: true},
     currency: {type: String, required: true},
-    balance: {type: Number, required: true},
+    balance: {type: String, required: true},
     email:{type:String, required: true}
 })
 
@@ -49,8 +50,8 @@ var goalSchema = new mongoose.Schema({
 
 var categorySchema = new mongoose.Schema({
     title: {type: String, required: true},
-    email: {type: String, required: true},
-    iconId:{type: Number,required:true}
+    iconId:{type: Number, required: true},
+    email: {type: String, required: true}
 })
 var noteSchema = new mongoose.Schema({
     note: {type: String, required: true},
@@ -173,63 +174,17 @@ app.post('/api/insertTransactionData', function(req,res){
     transaction.category = req.body.category;
     transaction.wallet = req.body.wallet;
     transaction.date = req.body.date;
-    var newbalance=0;
-    var updateQuery;
 
-    Wallet.find({email:req.body.email,title: req.body.wallet}).then((data)=>{
-        newbalance=data[0].balance
+    transaction.save()
+    .then(function(data){
+        console.log("Transaction inserted")
         console.log(data)
-        console.log(data[0].balance,newbalance)
-        if(transaction.transaction=="Income"){
-            updateQuery={$set: {balance: data[0].balance + transaction.amount}}
-              // newbalance=newbalance+ transaction.amount
-      
-          }
-          else{
-            
-              updateQuery={$set: {balance: data[0].balance - transaction.amount}}
-          }
-
-        Wallet.updateOne({email: req.body.email,title:req.body.wallet}, updateQuery)
-        .then(function(results){
-            console.log("Wallet updated")
-            console.log(results)
-
-            transaction.save()
-            .then(function(data){
-                console.log("Transaction inserted")
-                console.log(data)
-                
-                
-               
-                res.send({serverMsg: "Transaction successful"})
-        
-        
-            })
-            .catch(function(err){
-                console.log(req.body)
-                res.send({serverMsg: "Transaction failed"})
-            })
-
-            
-            
-        })
-        .catch(function(err){
-            console.log(err)
-            console.log("Wallet update failed")
-            
-        })
-    }).catch((err)=>{
-        console.log(err)
+        res.send({message: "Transaction successful"})
     })
-   
-
-   
-   
-  
-   
-
-  
+    .catch(function(err){
+        console.log("Transaction failed")
+        res.send({message: "Transaction failed"})
+    })
 })
 
 
@@ -300,19 +255,18 @@ app.post('/api/insertCategoryData', function(req,res){
     var category = new Category();
     
     category.title = req.body.title
+    category.iconId = req.body.iconId
     category.email = req.body.email
-    category.iconId=req.body.iconId
-    
 
     category.save()
     .then(function(data){
         console.log("Category inserted")
         console.log(data)
-        res.send({serverMsg: "Category inserted"})
+        res.send({message: "Category inserted"})
     })
     .catch(function(err){
         console.log("Category insertion failed")
-        res.send({serverMsg: "Category insertion failed"})
+        res.send({message: "Category insertion failed"})
     })
 })
 
@@ -410,7 +364,7 @@ app.post('/api/getTransactionData', function(req,res){
 app.post('/api/getWalletData', function(req,res){
 
 
-    Wallet.find({email:req.body.email})
+    Wallet.find()
     .then(function(data){
         console.log("Wallets found")
         console.log(data)
@@ -427,7 +381,7 @@ app.post('/api/getWalletData', function(req,res){
 app.post('/api/getGoalData', function(req,res){
 
 
-    Goal.find({email:req.body.email})
+    Goal.find()
     .then(function(data){
         console.log("Goals found")
         console.log(data)
@@ -444,7 +398,7 @@ app.post('/api/getGoalData', function(req,res){
 app.post('/api/getCategoryData', function(req,res){
 
 
-    Category.find({email:req.body.email})
+    Category.find()
     .then(function(data){
         console.log("Category found")
         console.log(data)
@@ -452,7 +406,7 @@ app.post('/api/getCategoryData', function(req,res){
     })
     .catch(function(err){
         console.log("Error found")
-        res.send({serverMsg: "Error found"})
+        res.send({message: "Error found"})
     })
 })
 
@@ -572,45 +526,226 @@ app.post('/api/getGraphOverviewData', async function(req,res){
 })
    
 
-
 app.post('/api/getGraphCategoricalData', async function(req,res){
 
     var dailySpendingAmount = []
+    var sumCategory = []
     var weeklySpendingAmount = []
     var monthlySpendingAmount = []
+    var dailyCategory = []
+    var weeklyCategory = []
+    var monthlyCategory = []
+    var categoryList = []
+    var categoryIdList = []
+    var sum = 0
+    
+    await Category.find({email: req.body.email})
+    .then(function(results){
+        
+        if(results.length>0){
+            for(var result of results){
+                categoryList.push(result.title)
+                categoryIdList.push(result.iconId)
+            }
+        }
+        
+        console.log({categoryList: categoryList})
+       
+    })
 
 
     if(req.body.timeline == "daily"){
 
         console.log("CATEGORICAL: START DAILY")
 
-        for(var date of req.body.dailyList){
-
-
-            await Transaction.find({email:req.body.email, date: date})
-            .then(function(results){
-                
-                for(result of results){
-                    if(result.category=="Food"){
-                        sum += result.amount
-    
+        for(var category of categoryIdList){
+            for(var date of req.body.dailyList){
+                await Transaction.find({email:req.body.email, date: date, category: category})
+                .then(function(results){
+                    console.log(results)
+                    
+                    for(var result of results){
+                        if(result.transaction=="Expense"){
+                            sum += result.amount
+                        }
                     }
-                }
-    
-                if(sum != 0){
-                    dailySpendingAmount.push(sum)
-                    sum = 0
-                }
-                else{
-                    dailySpendingAmount.push(0)
-                }
-            })
+        
+                    if(sum != 0){
+                        dailySpendingAmount.push(sum)
+                        sum = 0
+                    }
+                    else{
+                        dailySpendingAmount.push(0)
+                    }
+                })
+            }
+
+            dailyCategory.push(category)
+            
         }
+
+        var j=0
+
+        for(var i=1;i<categoryList.length+1;i++){
+            sumCategory[i-1] = 0
+            while(j<i*req.body.dailyList.length){
+                sumCategory[i-1] += dailySpendingAmount[j]
+                j++
+            }
+        }
+        
+
+        
+
+       
+        console.log("Daily Categorical Spending:")
+        console.log({
+            dailyCategoricalSpendingAmount:sumCategory,
+            categoryList:categoryList,
+            dailyCategoricalSpendingDate:req.body.dailyList})
+                
+        res.send({
+            dailyCategoricalSpendingAmount:sumCategory,
+            categoryList:categoryList,
+            dailyCategoricalSpendingDate:req.body.dailyList})
+
+
+    }
+
+    if(req.body.timeline == "weekly"){
+
+        console.log("CATEGORICAL: START DAILY")
+
+        for(var category of categoryIdList){
+            for(var date of req.body.weeklyList){
+                await Transaction.find({email:req.body.email, date: date, category: category})
+                .then(function(results){
+                    console.log(results)
+                    
+                    for(var result of results){
+                        if(result.transaction=="Expense"){
+                            sum += result.amount
+                        }
+                    }
+        
+                    if(sum != 0){
+                        weeklySpendingAmount.push(sum)
+                        sum = 0
+                    }
+                    else{
+                        weeklySpendingAmount.push(0)
+                    }
+                })
+            }
+
+            weeklyCategory.push(category)
+            
+        }
+
+        var j=0
+
+        for(var i=1;i<categoryList.length+1;i++){
+            sumCategory[i-1] = 0
+            while(j<i*req.body.weeklyList.length){
+                sumCategory[i-1] += weeklySpendingAmount[j]
+                j++
+            }
+        }
+        
+        
+
+       
+        console.log("Weekly Categorical Spending:")
+        console.log({
+            weeklyCategoricalSpendingAmount:sumCategory,
+            categoryList:categoryList,
+            weeklyCategoricalSpendingDate:req.body.weeklyList})
+                
+        res.send({
+            weeklyCategoricalSpendingAmount:sumCategory,
+            categoryList:categoryList,
+            weeklyCategoricalSpendingDate:req.body.weeklyList})
+
+
+    }
+
+    if(req.body.timeline == "monthly"){
+
+        console.log("CATEGORICAL: START MONTHLY")
+
+        for(var category of categoryIdList){
+            for(var date of req.body.monthlyList){
+                await Transaction.find({email:req.body.email, date: date, category: category})
+                .then(function(results){
+                    console.log(results)
+                    
+                    for(var result of results){
+                        if(result.transaction=="Expense"){
+                            sum += result.amount
+                        }
+                    }
+        
+                    if(sum != 0){
+                        monthlySpendingAmount.push(sum)
+                        sum = 0
+                    }
+                    else{
+                        monthlySpendingAmount.push(0)
+                    }
+                })
+            }
+
+            monthlyCategory.push(category)
+            
+        }
+
+        var j=0
+
+        for(var i=1;i<categoryList.length+1;i++){
+            sumCategory[i-1] = 0
+            while(j<i*req.body.monthlyList.length){
+                sumCategory[i-1] += monthlySpendingAmount[j]
+                j++
+            }
+        }
+        
+
+        
+
+       
+        console.log("Monthly Categorical Spending:")
+        console.log({
+            monthlyCategoricalSpendingAmount:sumCategory,
+            categoryList:categoryList,
+            monthlyCategoricalSpendingDate:req.body.monthlyList})
+                
+        res.send({
+            monthlyCategoricalSpendingAmount:sumCategory,
+            categoryList:categoryList,
+            monthlyCategoricalSpendingDate:req.body.monthlyList})
+
 
     }
 })
 
+app.post('/api/getCategories',function(req,res){
 
+    var categoryList = []
+    Category.find({email: req.body.email})
+    .then(function(results){
+        
+        if(results.length>0){
+            for(var result of results){
+                categoryList.push(result.title)
+            }
+        }
+        
+        console.log({categoryList: categoryList})
+        res.send({categoryList: categoryList})
+
+       
+    })
+})
 
 
 

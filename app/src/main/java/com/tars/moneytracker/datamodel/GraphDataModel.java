@@ -57,6 +57,42 @@ public class GraphDataModel {
 
 
 
+    @SerializedName("dailyCategoricalSpendingAmount")
+    @Expose
+    ArrayList<Float> dailyCategoricalSpendingAmount;
+
+    @SerializedName("dailyCategoricalSpendingDate")
+    @Expose
+    ArrayList<String> dailyCategoricalSpendingDate;
+
+    @SerializedName("weeklyCategoricalSpendingAmount")
+    @Expose
+    ArrayList<Float> weeklyCategoricalSpendingAmount;
+
+    @SerializedName("weeklyCategoricalSpendingDate")
+    @Expose
+    ArrayList<String> weeklyCategoricalSpendingDate;
+
+    @SerializedName("monthlyCategoricalSpendingAmount")
+    @Expose
+    ArrayList<Float> monthlyCategoricalSpendingAmount;
+
+    @SerializedName("monthlyCategoricalSpendingDate")
+    @Expose
+    ArrayList<String> monthlyCategoricalSpendingDate;
+
+
+    @SerializedName("categoryList")
+    @Expose
+    ArrayList<String> categoryList;
+
+
+
+
+    public GraphDataModel(String email) {
+        this.email = email;
+    }
+
     public GraphDataModel(String timeline, String type, String email) {
         this.timeline = timeline;
         this.type = type;
@@ -77,6 +113,34 @@ public class GraphDataModel {
         this.dailyList = dailyList;
         this.weeklyList = weeklyList;
         this.monthlyList = monthlyList;
+    }
+
+    public ArrayList<Float> getDailyCategoricalSpendingAmount() {
+        return dailyCategoricalSpendingAmount;
+    }
+
+    public ArrayList<String> getDailyCategoricalSpendingDate() {
+        return dailyCategoricalSpendingDate;
+    }
+
+    public ArrayList<Float> getWeeklyCategoricalSpendingAmount() {
+        return weeklyCategoricalSpendingAmount;
+    }
+
+    public ArrayList<String> getWeeklyCategoricalSpendingDate() {
+        return weeklyCategoricalSpendingDate;
+    }
+
+    public ArrayList<Float> getMonthlyCategoricalSpendingAmount() {
+        return monthlyCategoricalSpendingAmount;
+    }
+
+    public ArrayList<String> getMonthlyCategoricalSpendingDate() {
+        return monthlyCategoricalSpendingDate;
+    }
+
+    public ArrayList<String> getCategoryList() {
+        return categoryList;
     }
 
     public ArrayList<Float> getWeeklyOverviewSpendingAmount() {

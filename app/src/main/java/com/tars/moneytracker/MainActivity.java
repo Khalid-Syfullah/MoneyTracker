@@ -499,8 +499,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (id == R.id.shareApp){
             Intent shareIntent=new Intent((Intent.ACTION_SEND));
             shareIntent.setType("text/plain");
-            String shareBody="Blood and Plasma Banking solution app: Plasma+\n http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName();
-            String shareSub="Plasma+";
+            String shareBody="CashTrack app: Plasma+\n http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName();
+            String shareSub="CashTrack+";
             shareIntent.putExtra(Intent.EXTRA_SUBJECT,shareSub);
             shareIntent.putExtra(Intent.EXTRA_TEXT,shareBody);
             startActivity(Intent.createChooser(shareIntent,"Share Using"));
@@ -508,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (id == R.id.emailUs){
 
-            String email = "ece.lab.ruet@gmail.com";
+            String email = "tarsbinary@gmail.com";
             String subject = "Contact Us";
             String body = "Please share your valuable thoughts with us.";
             Intent intent = new Intent(Intent.ACTION_SENDTO);
@@ -520,7 +520,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         else if(id == R.id.sendReview){
-            Uri uri = Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLSd_PgXtE8sYdaxCIp4pPXM6IqU7ZvoA963iBksFejGIOUYH6g/viewform?usp=sf_link");
+            Uri uri = Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLSd3RqJLIIQ5iot2rqdhBJIEogKZQj8h484rMWbAF4spy1fWBQ/viewform?usp=sf_link");
             Intent review = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(review);
         }

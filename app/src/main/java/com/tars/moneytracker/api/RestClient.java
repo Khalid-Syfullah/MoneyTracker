@@ -36,7 +36,8 @@ public class RestClient {
 
     private static Retrofit retrofit = null;
 
-    private static String baseUrl = "http://192.168.1.8:8800";
+    private static String baseUrl="http://192.168.224.28:8800";
+
 
     public static RetroInterface createRestClient() {
         if (retrofit == null) {
@@ -47,7 +48,8 @@ public class RestClient {
         return retrofit.create(RetroInterface.class);
 
     }
-}
+  }
+
 //    public static void loginUser(Context context, @Body UserDataModel userDataModel) {
 //        RetroInterface retroInterface = createRestClient();
 //        Call<UserDataModel> call = retroInterface.loginUser(userDataModel);
