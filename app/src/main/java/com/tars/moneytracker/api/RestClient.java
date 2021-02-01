@@ -36,7 +36,7 @@ public class RestClient {
 
     private static Retrofit retrofit=null;
 
-    private static String baseUrl="http://192.168.0.6:8800";
+    private static String baseUrl="http://192.168.224.28:8800";
 
     public static RetroInterface createRestClient(){
         if(retrofit==null){
@@ -105,18 +105,6 @@ public class RestClient {
 
 
     public static void insertTransaction(Context context, @Body TransactionDataModel transactionDataModel) {
-        RetroInterface retroInterface = createRestClient();
-        Call<TransactionDataModel> call = retroInterface.insertTransactionData(transactionDataModel);
-
-        call.enqueue(new Callback<TransactionDataModel>() {
-            @Override
-            public void onResponse(Call<TransactionDataModel> call, Response<TransactionDataModel> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(context,"Response received!",Toast.LENGTH_SHORT).show();
-                    StaticData.setUpdate("yes");
-                }
-                else{
-                    Toast.makeText(context,"No response from server!",Toast.LENGTH_SHORT).show();
 
     }
 
